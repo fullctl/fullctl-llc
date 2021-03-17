@@ -1,5 +1,5 @@
 project_name: "fullctl"
-project_repo: ""
+project_repo: "https://github.com/fullctl/fullctl"
 version: "0.1.0.1"
 project_description: "Core classes and functions for service applications"
 project_license: "Apache-2.0"

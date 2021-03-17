@@ -22,16 +22,16 @@ ctl:
     - name: git_template
       type: git
       config:
-        repo_url: git@github.com:20c/ctl-tmpl-django
+        repo_url: git@github.com:20c/ctl-tmpl-python
         branch: origin/gh_1
 
     # template for copying template assets
 
-    - name: django_template
+    - name: python_template
       type: template
       config:
         # template root directory (path)
-        source: "{{ ctx.cachedir }}/github.com/20c/ctl-tmpl-django"
+        source: "{{ ctx.cachedir }}/github.com/20c/ctl-tmpl-python"
         # template output directory (path)
         output: "{{ ctx.home }}/.."
         walk_dirs:
@@ -66,8 +66,8 @@ ctl:
             action:
               name: pull
 
-          - stage: django_template
-            plugin: django_template
+          - stage: python_template
+            plugin: python_template
     
 
     - type: changelog
