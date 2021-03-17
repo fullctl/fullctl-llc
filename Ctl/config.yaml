@@ -1,6 +1,75 @@
 
 ctl:
   plugins:
+
+
+    - type: command
+      name: printenv
+      config:
+        shell: true
+        command:
+          - "echo \"ctx.home: {{ ctx.home }}\""
+          - "echo \"ctx.tmpdir: {{ ctx.tmpdir }}\""
+          - "echo \"ctx.cachedir: {{ ctx.cachedir }}\""
+          - "echo \"ctx.userhome: {{ ctx.userhome }}\""
+          - "echo \"{{ input.plugin }}\""
+          - "echo \"{{ plugin.git_template }}\""
+          - "echo \"{{ plugin.copy }}\""
+          - "echo \"{{ ctx.config }}\""
+
+    # git repo for copying setup
+
+    - name: git_template
+      type: git
+      config:
+        repo_url: git@github.com:20c/ctl-tmpl-django
+        branch: origin/gh_1
+
+    # template for copying template assets
+
+    - name: django_template
+      type: template
+      config:
+        # template root directory (path)
+        source: "{{ ctx.cachedir }}/github.com/20c/ctl-tmpl-django"
+        # template output directory (path)
+        output: "{{ ctx.home }}/.."
+        walk_dirs:
+          - .
+        vars:
+          - Ctl/tmplvars.yaml
+        ignore:
+          - \.git/
+    
+    # command to remove temporary files
+
+    - name: clean
+      type: command
+      config:
+        shell: true
+        command:
+          - rm -rf Ctl/tmp
+
+    # chain plugin for entire template process
+
+    - name: chain_template
+      type: chain
+      config:
+        chain:
+          - stage: git_clone
+            plugin: git_template
+            action:
+              name: clone
+
+          - stage: git_pull
+            plugin: git_template
+            action:
+              name: pull
+
+          - stage: django_template
+            plugin: django_template
+    
+
     - type: changelog
       name: changelog
     - type: venv

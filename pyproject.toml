@@ -41,9 +41,15 @@ bandit = "^1.6.2"
 black = "^20.8b1"
 isort = "^5.7.0"
 flake8 = "^3.8.4"
+
 markdown = "*"
 markdown-include = ">=0.5,<1"
 mkdocs = ">=1.0.0,<2.0.0"
+
+# ctl
+ctl = "^1.0.0"
+jinja2 = "^2.11.2"
+tmpl = "^0.3.0"
 
 [tool.poetry.plugins."markdown.extensions"]
 pymdgen = "pymdgen.md:Extension"
