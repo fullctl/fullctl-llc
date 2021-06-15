@@ -891,4 +891,12 @@ div.login input {
 }
 
 
+/*
+ * error page
+ */
+
+div.page_error {
+  text-align: center;
+  margin: 50px;
+}
 

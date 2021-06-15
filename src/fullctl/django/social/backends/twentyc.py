@@ -22,7 +22,7 @@ class TwentycOAuth2(BaseOAuth2):
             raise AuthFailed(self, "User is not verified")
 
         return {
-            "username": response.get("given_name"),
+            "username": response.get("user_name"),
             "email": response.get("email") or "",
             "first_name": response.get("given_name"),
             "last_name": response.get("family_name"),

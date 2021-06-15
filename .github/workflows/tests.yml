@@ -32,10 +32,7 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       - name: Run linters
         run: |
-          source .venv/bin/activate
-          flake8 .
-          black . --check
-          isort .
+            poetry run pre-commit run --all-files
 
   test:
     needs: linting
@@ -43,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest", "macos-latest" ]
-        python-version: [ "3.6", "3.7", "3.8", "3.9" ]
+        python-version: [ "3.7", "3.8", "3.9" ]
         #django-version: [ "django>=2.2,<3", "django>=3.1,<4" ]
     runs-on: ${{ matrix.os }}
     steps:

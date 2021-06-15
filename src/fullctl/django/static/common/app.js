@@ -467,4 +467,12 @@ fullctl.application.Orgctl.PermissionsModal = $tc.extend(
   fullctl.application.Modal
 );
 
+$.fn.grainy_toggle = function(namespace, level) {
+  if(grainy.check(namespace, level)) {
+    this.show();
+  } else {
+    this.hide();
+  }
+};
+
 })(jQuery, twentyc.cls);

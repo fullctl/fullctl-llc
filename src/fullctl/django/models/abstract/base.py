@@ -53,7 +53,7 @@ class PdbRefModel(HandleRefModel):
 
     @classmethod
     def create_from_pdb(cls, pdb_object, save=True, **fields):
-        """ create object from peeringdb instance """
+        """create object from peeringdb instance"""
 
         if not isinstance(pdb_object, cls.PdbRef.model):
             raise ValueError(_(f"Expected {cls.PdbRef.model} instance"))
@@ -68,7 +68,7 @@ class PdbRefModel(HandleRefModel):
 
     @property
     def pdb(self):
-        """ returns PeeringDB object """
+        """returns PeeringDB object"""
         if not hasattr(self, "_pdb"):
             filters = {}
             for k, v in self.PdbRef.fields.items():

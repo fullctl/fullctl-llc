@@ -9,9 +9,9 @@ def test_list_orgs(db, dj_account_objects):
     assert response.status_code == 200
     data = response.json()["data"]
     assert len(data) == len(dj_account_objects.orgs)
-    assert set([d["name"] for d in data]) == set(
-        [org.display_name for org in dj_account_objects.orgs]
-    )
+    assert {d["name"] for d in data} == {
+        org.display_name for org in dj_account_objects.orgs
+    }
 
 
 # Currently there is no user list endpoint.

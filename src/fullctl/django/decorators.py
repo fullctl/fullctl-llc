@@ -55,7 +55,6 @@ class load_instance:
         def wrapped(request, *args, **kwargs):
 
             org = request.org
-            print("ORG", org)
             if not public and org not in Organization.accessible(request.user):
                 raise django.http.Http404()
 

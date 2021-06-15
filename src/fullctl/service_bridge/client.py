@@ -2,8 +2,20 @@ import requests
 
 
 class ServiceBridgeError(IOError):
-    def __init__(self, bridge, status):
+    def __init__(self, bridge, status, data=None):
         super().__init__(f"Service bridge error: {bridge} [{status}]")
+        self.data = data
+
+    @property
+    def errors(self):
+        if not self.data:
+            return {}
+
+        return self.data["errors"]
+
+    def has_error(self, key, text):
+        errors = ";".join(self.errors.get(key, []))
+        return text.lower() in errors.lower()
 
 
 class AuthError(ServiceBridgeError):
@@ -25,6 +37,8 @@ class Bridge:
             return response.json().get("data")
         elif status in [401, 403]:
             raise AuthError(self, status)
+        elif status in [400]:
+            raise ServiceBridgeError(self, 400, data=response.json())
         else:
             raise ServiceBridgeError(self, status)
 
@@ -51,6 +65,9 @@ class AaaCtl(Bridge):
 
         sub = self.require_subscription(product_name)
 
+        if not sub:
+            return False
+
         if not sub["pay"]:
             for item in sub.get("items"):
                 if item["name"].lower() == product_name and item["cost"] > 0:
@@ -67,5 +84,11 @@ class AaaCtl(Bridge):
                     return row
 
         payload = {"product": product_name}
-        data = self.post(f"billing/org/{self.org}/subscribe/", data=payload)
+        try:
+            data = self.post(f"billing/org/{self.org}/subscribe/", data=payload)
+        except ServiceBridgeError as exc:
+            if exc.has_error("product", "unknown"):
+                return {}
+            else:
+                raise
         return data[0]

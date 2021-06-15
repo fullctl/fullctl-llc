@@ -35,6 +35,7 @@ fullctl.user = {
 }
 
 fullctl.org = {
+  id : {{ request.org.permission_id }},
   slug : "{{ request.org.slug }}",
   name : "{{ request.org.name }}"
 }
@@ -138,7 +139,9 @@ fullctl.permissions = {{ permissions|safe }}
 </div>
 {% endblock %}
 
-{% if not permissions.read_instance %}
+{% block "error_content" %}{% endblock %}
+
+{% if not permissions.read_instance and request.org %}
 <div class="row">
   <div class="col-4"></div>
   <div class="col-4">

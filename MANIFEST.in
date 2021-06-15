@@ -1,6 +1,0 @@
-include LICENSE
-include Ctl/VERSION
-recursive-include Ctl *.txt
-recursive-include src/fullctl *.py 
-recursive-include src/fullctl/django/static *.*
-recursive-include src/fullctl/django/templates *.*

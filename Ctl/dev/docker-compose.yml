@@ -1,0 +1,72 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres:12"
+    environment:
+      POSTGRES_DB: fullctl
+      POSTGRES_USER: fullctl
+      POSTGRES_PASSWORD: devPASSWORD
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+
+  aaactl_web:
+    build:
+      context: ../../../aaactl
+      dockerfile: Dockerfile
+    command: runserver 0.0.0.0:8000
+    env_file:
+      - .env
+      - ../../../aaactl/Ctl/dev/.env
+    environment:
+      DATABASE_PASSWORD: devPASSWORD
+      DATABASE_HOST: postgres
+      # defaults
+      DATABASE_USER: account_service
+      DATABASE_NAME: account_service
+      # DATABASE_PORT: 5432
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    ports:
+      # this needs to be set in the shell, compose env vars aren't read yet
+      - "${AAACTL_PORT:-8000}:8000"
+    volumes:
+      - ../../src/fullctl:/srv/service/main/fullctl
+      - ../../../aaactl/src:/srv/service/main
+
+  ixctl_web:
+    build:
+      context: ../../../ixctl
+      dockerfile: Dockerfile
+    command: runserver 0.0.0.0:8001
+    env_file:
+      - .env
+      - ../../../ixctl/Ctl/dev/.env
+    environment:
+      DATABASE_PASSWORD: devPASSWORD
+      DATABASE_HOST: postgres
+      # defaults
+      # DATABASE_USER: account_service
+      # DATABASE_NAME: account_service
+      # DATABASE_PORT: 5432
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    ports:
+      # this needs to be set in the shell, compose env vars aren't read yet
+      - "${IXCTL_PORT:-8001}:8001"
+    volumes:
+      - ../../src/fullctl:/srv/service/main/fullctl
+      - ../../../ixctl/src:/srv/service/main
+
+volumes:
+  postgres_data:

@@ -132,7 +132,7 @@ class TaskContainer(HandleRefModel):
 
     @property
     def task_class(self):
-        """ override this """
+        """override this"""
         return Task
 
     @property

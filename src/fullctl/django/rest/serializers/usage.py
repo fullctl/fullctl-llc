@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from fullctl.django.rest.decorators import serializer_registry
 
 Serializers, register = serializer_registry()

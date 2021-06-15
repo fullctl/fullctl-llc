@@ -235,28 +235,3 @@ class OrganizationUser(HandleRefModel):
 
     def __str__(self):
         return f"{self.user.username} <{self.user.email}>"
-
-
-@reversion.register
-@grainy_model(namespace="org")
-class APIKey(HandleRefModel):
-    """
-    Describes an APIKey
-
-    These are managed in account.20c.com, but will also be cached here
-
-    Creation should always happen at account.20c.com
-    """
-
-    key = models.CharField(max_length=255, unique=True)
-    user = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name="key_set"
-    )
-
-    class Meta:
-        db_table = "fullctl_apikey"
-        verbose_name = _("API Key")
-        verbose_name_plural = _("API Keys")
-
-    class HandleRef:
-        tag = "key"

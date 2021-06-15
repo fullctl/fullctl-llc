@@ -1,0 +1,5 @@
+{% load i18n %}
+<div>{% trans "Requesting IP address" %}: <strong>{{ error.ip_address }}</strong></div>
+<div>{% trans "Error location" %}: <strong>{{ error.path }}</strong></div>
+<div>{% trans "Referring page" %}: <strong>{{ error.referer|default:"No referer" }}</strong></div>
+<div>{% trans "Time of error" %}: <strong>{{ error.timestamp }}</strong>

@@ -1,18 +1,32 @@
 from django.conf import settings
 
+from fullctl.django.auth import RemotePermissionsError
+
+
+def conf(request):
+
+    return {
+        "google_analytics_id": getattr(settings, "GOOGLE_ANALYTICS_ID", None),
+    }
+
 
 def account_service(request):
 
     context = {}
+
+    if hasattr(request, "org"):
+        org_slug = request.org.slug
+    else:
+        org_slug = ""
 
     # TODO abstract so other auth services can be
     # defined
     context.update(
         account_service={
             "urls": {
-                "billing_setup": f"{settings.OAUTH_TWENTYC_HOST}/billing/setup?org={request.org.slug}",
+                "billing_setup": f"{settings.OAUTH_TWENTYC_HOST}/billing/setup?org={org_slug}",
                 "create_org": f"{settings.OAUTH_TWENTYC_HOST}/account/org/create/",
-                "manage_org": f"{settings.OAUTH_TWENTYC_HOST}/account/?org={request.org.slug}",
+                "manage_org": f"{settings.OAUTH_TWENTYC_HOST}/account/?org={org_slug}",
             },
         },
         # TODO: deprecated
@@ -27,9 +41,23 @@ def account_service(request):
 
 
 def permissions(request):
+
+    # in case of a RemotePermissionsError being set in the
+    # `error_response` attribute of the request, we DO NOT
+    # want to attempt to retrieve permissions again
+    #
+    # at this point we are looking to render an error page
+
+    error_response = getattr(request, "error_response", False)
+    if isinstance(error_response, RemotePermissionsError):
+        return {"permissions": {}}
+
     context = {}
 
     ops = [("c", "create"), ("r", "read"), ("u", "update"), ("d", "delete")]
+
+    if not hasattr(request, "org"):
+        return {"permissions": {}}
 
     is_accessible = request.org in request.org.accessible(request.user)
 

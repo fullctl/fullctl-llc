@@ -1,7 +1,19 @@
-from rest_framework import authentication, exceptions
+from rest_framework import authentication
 
-from fullctl.django.auth import permissions
-from fullctl.django.models import APIKey
+
+class APIKey:
+    def __init__(self, key):
+        self.key = key
+
+    @property
+    def is_authenticated(self):
+        if self.key:
+            return True
+        return False
+
+    @property
+    def id(self):
+        return self.key[:8]
 
 
 class APIKeyAuthentication(authentication.BaseAuthentication):
@@ -15,13 +27,8 @@ class APIKeyAuthentication(authentication.BaseAuthentication):
                 if auth[0].lower() in ["token", "bearer"]:
                     key = auth[1]
 
-        try:
-            if key:
-                api_key = APIKey.objects.get(key=key)
-                request.api_key = api_key
-                permissions(api_key.user)
-                return (api_key.user, None)
-            else:
-                return None
-        except APIKey.DoesNotExist:
-            raise exceptions.AuthenticationFailed("Invalid api key")
+        if key:
+            request.api_key = key
+            return (APIKey(key), None)
+        else:
+            return None

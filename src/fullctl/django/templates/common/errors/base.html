@@ -1,0 +1,19 @@
+{% extends "common/app/base.html" %}
+{% block "app_content" %}{% endblock %}
+{% block "error_content" %}
+<div class="page_error">
+  <h1>{% block error_title %}{% endblock %}{% block error_status %} (#{{ error.status }}){% endblock %}</h1>
+  <pi class="error_descr">
+  {% block error_descr %}
+  {% endblock %}
+  </p>
+  <p class="error_details">
+  {% block error_details %}
+  {% endblock %}
+  </p>
+
+  {% block return_home %}
+  <a href="{% block return_home_url %}/{% endblock %}">{% block return_home_label %}{% endblock %}</a>
+  {% endblock %}
+</div>
+{% endblock %}
