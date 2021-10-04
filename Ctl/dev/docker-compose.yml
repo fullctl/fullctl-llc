@@ -90,6 +90,7 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../peerctl/src:/srv/service/main
+      - ../../../pdbctl/src:/srv/service/venv/lib/python3.9/site-packages/pdbctl
 
 
   devicectl_web:
@@ -113,6 +114,29 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../devicectl/src:/srv/service/main
+
+
+  pdbctl_web:
+    build:
+      context: ../../../pdbctl
+      dockerfile: Dockerfile
+    command: runserver 0.0.0.0:6001
+    env_file:
+      - .env
+      - ../../../pdbctl/Ctl/dev/.env
+    environment:
+      DATABASE_PASSWORD: devPASSWORD
+      DATABASE_HOST: postgres
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    ports:
+      # this needs to be set in the shell, compose env vars aren't read yet
+      - "${PDBCTL_PORT:-6001}:6001"
+    volumes:
+      - ../../src/fullctl:/srv/service/main/fullctl
+      - ../../../pdbctl/src:/srv/service/main
 
 
 volumes:

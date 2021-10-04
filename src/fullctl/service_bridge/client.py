@@ -1,3 +1,5 @@
+import json
+import time
 import requests
 
 
@@ -22,8 +24,12 @@ class ServiceBridgeError(IOError):
 class AuthError(ServiceBridgeError):
     pass
 
-
 class Bridge:
+
+    # set to > 0 if you want the bridge to cache GET
+    # responses for the specified duration (seconds)
+    cache_duration = 0
+
     class Meta:
         service = "base"
 
@@ -31,10 +37,12 @@ class Bridge:
     def auth_headers(self):
         return {"Authorization": f"token {self.key}"}
 
-    def __init__(self, host, key, org_slug):
+    def __init__(self, host, key, org_slug, **kwargs):
         self.url = f"{host}/api"
         self.org = org_slug
         self.key = key
+        self.cache = kwargs.get("cache", None)
+        self.cache_duration = kwargs.get("cache_duration", 5)
 
     def _data(self, response):
         status = response.status_code
@@ -54,9 +62,29 @@ class Bridge:
             kwargs["headers"] = self.auth_headers
         return kwargs
 
+    def cached(self, url, now, params):
+        if self.cache is None:
+            return None
+        data, timestamp = self.cache.get(url, {}).get(params, (None, 0))
+        if now - timestamp > self.cache_duration:
+            return None
+        return data
+
     def get(self, endpoint, **kwargs):
         url = f"{self.url}/{endpoint}"
-        return self._data(requests.get(url, **self._requests_kwargs(**kwargs)))
+        now = time.time()
+        params = json.dumps(kwargs)
+
+        cached_data = self.cached(url, now, params)
+        if cached_data:
+            return cached_data
+
+        data = self._data(requests.get(url, **self._requests_kwargs(**kwargs)))
+
+        if self.cache is not None:
+            self.cache.setdefault(url, {})[params] = (data, now)
+
+        return data
 
     def post(self, endpoint, **kwargs):
         url = f"{self.url}/{endpoint}"
