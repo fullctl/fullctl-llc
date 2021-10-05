@@ -25,7 +25,7 @@ class Pdbctl(Bridge):
         if not key:
             key = settings.SERVICE_KEY
 
-        kwargs.setdefault("cache_duration", 50)
+        kwargs.setdefault("cache_duration", 5)
         kwargs.setdefault("cache", CACHE)
 
         super().__init__(
