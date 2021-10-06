@@ -16,6 +16,12 @@ body {
   border-color: #770505;
 }
 
+.alert-success {
+  color: #7eff9c;
+  background-color: #46a15c;
+  border-color: #11461d;
+}
+
 path.ixctl {
   fill: #3f99ff;
 }

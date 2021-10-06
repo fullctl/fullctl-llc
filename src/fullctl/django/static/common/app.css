@@ -30,6 +30,10 @@ a[data-action]:hover,
   white-space: nowrap;
 }
 
+.center {
+  text-align: center;
+}
+
 .right {
   text-align: right;
 }
