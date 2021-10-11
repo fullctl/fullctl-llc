@@ -7,7 +7,7 @@ import fullctl.django.views
 
 urlpatterns = []
 
-if "django_peeringdb" in settings.INSTALLED_APPS:
+if getattr(settings, "PDBCTL_HOST", None):
 
     import fullctl.django.autocomplete.pdb
 

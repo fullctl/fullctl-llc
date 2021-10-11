@@ -2,8 +2,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_handleref.models import HandleRefModel as SoftDeleteHandleRefModel
 
-from fullctl.django.inet.util import pdb_lookup
-
 __all__ = [
     "HandleRefModel",
     "PdbRefModel",
@@ -53,15 +51,12 @@ class PdbRefModel(HandleRefModel):
         abstract = True
 
     class PdbRef:
-        model = SoftDeleteHandleRefModel
-        fields = {"pk": "pdb_id"}
+        pdbctl = None
+        fields = {"id": "pdb_id"}
 
     @classmethod
     def create_from_pdb(cls, pdb_object, save=True, **fields):
         """create object from peeringdb instance"""
-
-        if not isinstance(pdb_object, cls.PdbRef.model):
-            raise ValueError(_(f"Expected {cls.PdbRef.model} instance"))
 
         for k, v in cls.PdbRef.fields.items():
             fields[v] = getattr(pdb_object, k, k)
@@ -72,6 +67,10 @@ class PdbRefModel(HandleRefModel):
         return instance
 
     @property
+    def pdb_ref_tag(self):
+        return self.PdbRef.pdbctl.ref_tag
+
+    @property
     def pdb(self):
         """returns PeeringDB object"""
         if not hasattr(self, "_pdb"):
@@ -80,5 +79,11 @@ class PdbRefModel(HandleRefModel):
                 if v and hasattr(self, v):
                     v = getattr(self, v)
                 filters[k] = v
-            self._pdb = pdb_lookup(self.PdbRef.model, **filters)
+
+            self._pdb = self.PdbRef.pdbctl().first(**filters)
+            if self._pdb is None:
+                raise KeyError(
+                    f"Cannot find peeringdb reference for {self.pdb_ref_tag}: {filters}"
+                )
+
         return self._pdb
