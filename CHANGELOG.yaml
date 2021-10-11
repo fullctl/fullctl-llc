@@ -11,7 +11,9 @@
   added:
   - asn autocomplete lookup from peering db data
 Unreleased:
-  added: []
+  added:
+    - pdbctl service bridge
+    - pdbctl integration
   changed: []
   deprecated: []
   fixed: []

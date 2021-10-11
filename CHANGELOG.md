@@ -2,6 +2,11 @@
 
 
 ## Unreleased
+### Added
+- pdbctl service bridge
+- pdbctl integration
+### Removed
+- support for python 3.6
 
 
 ## 0.3.0
