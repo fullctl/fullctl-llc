@@ -1,5 +1,7 @@
 import json
+import os
 import time
+import urllib.parse
 
 import requests
 
@@ -24,6 +26,10 @@ class ServiceBridgeError(IOError):
 
 class AuthError(ServiceBridgeError):
     pass
+
+
+# Location of test data
+TEST_DATA_PATH = "."
 
 
 class Bridge:
@@ -72,10 +78,25 @@ class Bridge:
             return None
         return data
 
+    def test_data(self, path, params):
+        if params:
+            param_str = "/" + urllib.parse.quote(urllib.parse.urlencode(params))
+        else:
+            param_str = ""
+        file_path = os.path.join(TEST_DATA_PATH, f"{path.rstrip('/')}{param_str}.json")
+        with open(file_path) as fh:
+            return json.load(fh)["data"]
+
     def get(self, endpoint, **kwargs):
         url = f"{self.url}/{endpoint}"
+
+        # if the url starts with a test:// protocol, attempt
+        # to load test data from path instead.
+        if url.startswith("test://"):
+            return self.test_data(url.split("://")[1], kwargs.get("params"))
+
         now = time.time()
-        params = json.dumps(kwargs)
+        params = json.dumps(kwargs.get("params"))
 
         cached_data = self.cached(url, now, params)
         if cached_data:

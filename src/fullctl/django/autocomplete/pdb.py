@@ -1,33 +1,22 @@
-import django_peeringdb.models.concrete as pdb_models
 from dal import autocomplete
+
+import fullctl.service_bridge.pdbctl as pdbctl
 
 
 class peeringdb_ix(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = pdb_models.IXLan.objects.filter(status="ok")
-        if self.q:
-            qs = qs.filter(ix__name__istartswith=self.q)
+        if not self.q:
+            return []
+        qs = [o for o in pdbctl.InternetExchange().objects(q=self.q)]
         return qs
 
-    def get_result_label(self, ixlan):
-        if ixlan.name:
-            return f"{ixlan.ix.name} - {ixlan.name}"
-        return ixlan.ix.name
+    def get_result_label(self, ix):
+        return ix.name
 
 
 class peeringdb_asn(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = pdb_models.Network.objects.filter(status="ok")
-        if self.q:
-            try:
-                int(self.q)
-                qs = qs.filter(asn__istartswith=self.q)
-            except ValueError:
-                qs = qs.filter(name__istartswith=self.q)
-
-        if not qs.count():
-            return [pdb_models.Network(asn=self.q, name="Unknown ASN")]
-
+        qs = pdbctl.Network().objects(q=self.q)
         return qs
 
     def get_result_label(self, item):
@@ -39,7 +28,5 @@ class peeringdb_asn(autocomplete.Select2QuerySetView):
 
 class peeringdb_org(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = pdb_models.Organization.objects.filter(status="ok")
-        if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+        qs = pdbctl.Organization().objects(q=self.q)
         return qs
