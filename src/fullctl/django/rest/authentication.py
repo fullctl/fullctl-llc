@@ -36,7 +36,6 @@ def key_from_request(request):
 
 
 class APIKeyAuthentication(authentication.BaseAuthentication):
-
     def authenticate(self, request):
         key = key_from_request(request)
         if key:

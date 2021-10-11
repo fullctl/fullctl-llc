@@ -82,7 +82,8 @@ class PdbRefModel(HandleRefModel):
 
             self._pdb = self.PdbRef.pdbctl().first(**filters)
             if self._pdb is None:
-                raise KeyError(f"Cannot find peeringdb reference for {self.pdb_ref_tag}: {filters}")
-
+                raise KeyError(
+                    f"Cannot find peeringdb reference for {self.pdb_ref_tag}: {filters}"
+                )
 
         return self._pdb
