@@ -5,6 +5,9 @@ from peeringdb.client import Client
 from fullctl.django.management.commands.base import CommandInterface
 
 
+PDB_API_URL = getattr(settings, "PDB_API_URL", "https://www.peeringdb.com/api")
+
+
 class Command(CommandInterface):
 
     """
@@ -14,7 +17,7 @@ class Command(CommandInterface):
     always_commit = True
 
     def add_arguments(self, parser):
-        parser.add_argument("--pdburl", default="https://www.peeringdb.com/api")
+        parser.add_argument("--pdburl", default=PDB_API_URL)
 
     def run(self, *args, **kwargs):
         self.pdburl = kwargs.get("pdburl")
@@ -23,6 +26,7 @@ class Command(CommandInterface):
         self.sync()
 
     def sync(self):
+        self.log_info(f"Syncing from {self.pdburl}")
         settings.USE_TZ = False
         config = {
             "sync": {
