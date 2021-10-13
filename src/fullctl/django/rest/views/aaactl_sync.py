@@ -14,7 +14,7 @@ import fullctl.django.models as models
 from fullctl.django.rest.core import BadRequest
 from fullctl.django.rest.decorators import grainy_endpoint
 from fullctl.django.rest.mixins import CachedObjectMixin
-from fullctl.django.rest.route.aaactl_sync import route
+from fullctl.django.rest.route.service_bridge import route
 from fullctl.django.rest.serializers.aaactl_sync import Serializers
 
 
@@ -30,6 +30,7 @@ class User(CachedObjectMixin, viewsets.GenericViewSet):
     - last name
     """
 
+    path_prefix = "/aaactl-sync"
     serializer_class = Serializers.user
     queryset = get_user_model().objects.all()
 
@@ -59,6 +60,7 @@ class Organization(CachedObjectMixin, viewsets.GenericViewSet):
     - url slug
     """
 
+    path_prefix = "/aaactl-sync"
     serializer_class = Serializers.org
     queryset = models.Organization.objects.all()
     lookup_field = "remote_id"
@@ -88,6 +90,7 @@ class OrganizationUser(CachedObjectMixin, viewsets.GenericViewSet):
     bridge
     """
 
+    path_prefix = "/aaactl-sync"
     serializer_class = Serializers.orguser
     queryset = get_user_model().objects.all()
 

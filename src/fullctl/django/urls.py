@@ -54,6 +54,13 @@ urlpatterns += [
         ),
     ),
     path(
+        "api/",
+        include(
+            ("fullctl.django.rest.urls.service_bridge", "service_bridge_api"),
+            namespace="service_bridge_api",
+        ),
+    ),
+    path(
         "login/",
         auth_views.LoginView.as_view(template_name="common/auth/login.html"),
         name="login",

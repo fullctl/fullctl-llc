@@ -5,6 +5,9 @@ import urllib.parse
 
 import requests
 
+# Location of test data
+TEST_DATA_PATH = "."
+
 
 class ServiceBridgeError(IOError):
     def __init__(self, bridge, status, data=None):
@@ -28,8 +31,20 @@ class AuthError(ServiceBridgeError):
     pass
 
 
-# Location of test data
-TEST_DATA_PATH = "."
+class DataObject:
+
+    description = "Object"
+
+    @property
+    def pk(self):
+        return self.id
+
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            if isinstance(v, dict):
+                setattr(self, k, DataObject(**v))
+            else:
+                setattr(self, k, v)
 
 
 class Bridge:
@@ -40,10 +55,20 @@ class Bridge:
 
     class Meta:
         service = "base"
+        ref_tag = "base"
+        data_object_cls = DataObject
 
     @property
     def auth_headers(self):
         return {"Authorization": f"token {self.key}"}
+
+    @property
+    def ref_tag(self):
+        return self.Meta.ref_tag
+
+    @property
+    def data_object_cls(self):
+        return self.Meta.data_object_cls
 
     def __init__(self, host, key, org_slug, **kwargs):
         self.url = f"{host}/api"
@@ -120,6 +145,33 @@ class Bridge:
     def delete(self, endpoint, **kwargs):
         url = f"{self.url}/{endpoint}"
         return self._data(requests.delete(url, **self._requests_kwargs(**kwargs)))
+
+    def object(self, id, raise_on_notfound=True, join=None):
+        url = f"{self.ref_tag}/{id}/"
+        params = {}
+
+        if join:
+            params.update(join=join)
+        data = self.get(url, params=params)
+        try:
+            return self.data_object_cls(**data[0])
+        except IndexError:
+            if raise_on_notfound:
+                raise KeyError(f"{self.data_object_cls.description} does not exist")
+            return None
+
+    def objects(self, **kwargs):
+        url = f"{self.ref_tag}"
+        for k, v in kwargs.items():
+            if isinstance(v, list):
+                kwargs[k] = ",".join([str(a) for a in v])
+        data = self.get(url, params=kwargs)
+        for row in data:
+            yield self.data_object_cls(**row)
+
+    def first(self, **kwargs):
+        for o in self.objects(**kwargs):
+            return o
 
 
 class AaaCtl(Bridge):
