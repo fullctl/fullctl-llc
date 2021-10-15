@@ -5,13 +5,13 @@ except ImportError:
     DEFAULT_SERVICE_KEY = ""
 
 from fullctl.service_bridge.client import Bridge, DataObject
+import fullctl.service_bridge.pdbctl as pdbctl
 
 CACHE = {}
 
 class IxctlEntity(DataObject):
     source = "ixctl"
     description = "Ixctl Object"
-
 
 
 class Ixctl(Bridge):
@@ -38,11 +38,31 @@ class Ixctl(Bridge):
         self.url = f"{self.url}/service-bridge/data"
 
 
+class InternetExchangeObject(IxctlEntity):
+    description = "Ixctl Exchange"
+
+
 class InternetExchange(Ixctl):
     class Meta(Ixctl.Meta):
 	    ref_tag = "ix"
+	    data_object_cls = InternetExchangeObject
+
+
+class InternetExchangeMemberObject(IxctlEntity):
+    description = "Ixctl Exchange Member"
+    relationships = {
+        "net" : {
+            "bridge": pdbctl.Network,
+            "filter": ("asn","asn")
+        },
+        "ix": {
+            "bridge": InternetExchange,
+            "filter": ("ix","ix_id")
+        }
+    }
 
 
 class InternetExchangeMember(Ixctl):
     class Meta(Ixctl.Meta):
 	    ref_tag = "member"
+	    data_object_cls = InternetExchangeMemberObject

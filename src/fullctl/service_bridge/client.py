@@ -35,6 +35,7 @@ class DataObject:
 
     source = "__undefined__"
     description = "Object"
+    relationships = {}
 
     @property
     def pk(self):
@@ -47,9 +48,75 @@ class DataObject:
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             if isinstance(v, dict):
-                setattr(self, k, DataObject(**v))
+                if k in self.relationships:
+                    setattr(self, f"_rel_{k}", True)
+                    rel_cls = self.relationships[k]["bridge"].Meta.data_object_cls
+                else:
+                    rel_cls = DataObject
+
+                setattr(self, k, rel_cls(**v))
             else:
                 setattr(self, k, v)
+
+    def __getattr__(self, k, default=None):
+        try:
+            return super().__getattr__(k)
+        except AttributeError:
+            pass
+
+        rel = self.relationships.get(k)
+
+        if not rel:
+            return super().__getattr__(k, default)
+
+        filters = {}
+        filter_key, value_key = rel["filter"]
+        filters[filter_key] = getattr(self, value_key)
+
+        rel_obj = rel["bridge"]().first(**filters)
+        setattr(self, k, rel_obj)
+        setattr(self, f"_rel_{k}", True)
+        return rel_obj
+
+
+    def ref_rel_id(self, rel):
+        rel_id = getattr(self, rel)
+        return f"{self.source}:{rel_id}"
+
+class Relationships:
+
+    @classmethod
+    def preload(cls, name, objects):
+
+        filters = {}
+        if not objects:
+            return
+
+        for obj in objects:
+            rel = obj.relationships.get(name)
+            if not rel:
+                raise AttributeError(f"{name} is not a defined relationship for {obj}")
+
+            if hasattr(obj, f"_rel_{name}"):
+                continue
+
+            field, attr_name = rel["filter"]
+            filters.setdefault(f"{field}s", []).append(getattr(obj, attr_name))
+
+        if not filters:
+            return
+
+        rel_objects = dict([(getattr(o, field),o) for o in rel["bridge"]().objects(**filters)])
+
+        for obj in objects:
+            setattr(obj, name, rel_objects.get(getattr(obj, attr_name)))
+            setattr(obj, f"_rel_{name}", True)
+
+
+
+
+
+
 
 
 class Bridge:
@@ -118,7 +185,7 @@ class Bridge:
             return json.load(fh)["data"]
 
     def get(self, endpoint, **kwargs):
-        url = f"{self.url}/{endpoint}"
+        url = f"{self.url}/{endpoint}/"
 
         # if the url starts with a test:// protocol, attempt
         # to load test data from path instead.
@@ -140,19 +207,19 @@ class Bridge:
         return data
 
     def post(self, endpoint, **kwargs):
-        url = f"{self.url}/{endpoint}"
+        url = f"{self.url}/{endpoint}/"
         return self._data(requests.post(url, **self._requests_kwargs(**kwargs)))
 
     def put(self, endpoint, **kwargs):
-        url = f"{self.url}/{endpoint}"
+        url = f"{self.url}/{endpoint}/"
         return self._data(requests.put(url, **self._requests_kwargs(**kwargs)))
 
     def delete(self, endpoint, **kwargs):
-        url = f"{self.url}/{endpoint}"
+        url = f"{self.url}/{endpoint}/"
         return self._data(requests.delete(url, **self._requests_kwargs(**kwargs)))
 
     def object(self, id, raise_on_notfound=True, join=None):
-        url = f"{self.ref_tag}/{id}/"
+        url = f"{self.ref_tag}/{id}"
         params = {}
 
         if join:

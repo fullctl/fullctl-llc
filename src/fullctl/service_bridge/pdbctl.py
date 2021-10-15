@@ -14,6 +14,7 @@ class PeeringDBEntity(DataObject):
     source = "pdbctl"
 
 
+
 class Pdbctl(Bridge):
 
     """
@@ -47,9 +48,24 @@ class Network(Pdbctl):
         ref_tag = "net"
 
 
+class NetworkIXLanObject(PeeringDBEntity):
+    description = "PeeringDB netixlan"
+    relationships = {
+        "net" : {
+            "bridge": Network,
+            "filter": ("asn","asn")
+        },
+        "ix": {
+            "bridge": InternetExchange,
+            "filter": ("ix","ix_id")
+        }
+    }
+
+
 class NetworkIXLan(Pdbctl):
     class Meta(Pdbctl.Meta):
         ref_tag = "netixlan"
+        data_object_cls = NetworkIXLanObject
 
 
 class NetworkContact(Pdbctl):

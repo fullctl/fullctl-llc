@@ -45,34 +45,55 @@ class SourceOfTruth:
     def objects(self, **kwargs):
 
         _result = []
-        _index = {}
 
         for source, params in self.sources:
             kwargs.update(params)
             try:
                 for obj in source().objects(**kwargs):
-                    key = self.make_key(obj)
-                    if key not in _index:
-                        _result.append(obj)
-                        _index[key] = obj
+                    _result.append(obj)
 
             except ServiceBridgeError as exc:
                 if exc.status == 404:
                     continue
                 raise
 
+        return self.filter_source_of_truth(_result)
+
     def first(self, **kwargs):
         for o in self.objects(**kwargs):
             return o
 
+    def filter_source_of_truth(self, objects):
+        return objects
+
+    def join_relationships(self, objects):
+        return objects
+
 
 class InternetExchangeMember(SourceOfTruth):
-
-    key = ("asn", "ipaddr4", "ipaddr6")
 
     sources = [
         (ixctl.InternetExchangeMember, {"sot":True}),
         (pdbctl.NetworkIXLan, {}),
     ]
+
+    def filter_source_of_truth(self, members):
+        filtered = []
+        pdb_ixctl_map = {}
+
+        for member in members:
+            if member.source == "ixctl":
+                pdb_ixctl_map[member.pdb_ix_id] = True
+
+        for member in members:
+            if member.source == "pdbctl" and member.ix_id in pdb_ixctl_map:
+                continue
+            filtered.append(member)
+
+        return filtered
+
+
+
+
 
 
