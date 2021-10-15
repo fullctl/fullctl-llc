@@ -78,13 +78,12 @@ class DataObject:
         setattr(self, f"_rel_{k}", True)
         return rel_obj
 
-
     def ref_rel_id(self, rel):
         rel_id = getattr(self, rel)
         return f"{self.source}:{rel_id}"
 
-class Relationships:
 
+class Relationships:
     @classmethod
     def preload(cls, name, objects):
 
@@ -106,17 +105,13 @@ class Relationships:
         if not filters:
             return
 
-        rel_objects = dict([(getattr(o, field),o) for o in rel["bridge"]().objects(**filters)])
+        rel_objects = dict(
+            [(getattr(o, field), o) for o in rel["bridge"]().objects(**filters)]
+        )
 
         for obj in objects:
             setattr(obj, name, rel_objects.get(getattr(obj, attr_name)))
             setattr(obj, f"_rel_{name}", True)
-
-
-
-
-
-
 
 
 class Bridge:

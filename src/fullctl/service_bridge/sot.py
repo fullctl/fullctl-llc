@@ -6,21 +6,15 @@ exists in pdbctl (peeringdb data) or ixctl, but could be extended on
 further down the line
 """
 
+import fullctl.service_bridge.ixctl as ixctl
+import fullctl.service_bridge.pdbctl as pdbctl
 from fullctl.service_bridge.client import ServiceBridgeError
 
-import fullctl.service_bridge.pdbctl as pdbctl
-import fullctl.service_bridge.ixctl as ixctl
-
 SOURCE_MAP = {
-    "member": {
-        "pdbctl": pdbctl.NetworkIXLan,
-        "ixctl": ixctl.InternetExchangeMember
-    },
-    "ix": {
-        "pdbctl": pdbctl.InternetExchange,
-        "ixctl": ixctl.InternetExchange
-    }
+    "member": {"pdbctl": pdbctl.NetworkIXLan, "ixctl": ixctl.InternetExchangeMember},
+    "ix": {"pdbctl": pdbctl.InternetExchange, "ixctl": ixctl.InternetExchange},
 }
+
 
 class SourceOfTruth:
     sources = []
@@ -73,7 +67,7 @@ class SourceOfTruth:
 class InternetExchangeMember(SourceOfTruth):
 
     sources = [
-        (ixctl.InternetExchangeMember, {"sot":True}),
+        (ixctl.InternetExchangeMember, {"sot": True}),
         (pdbctl.NetworkIXLan, {}),
     ]
 
@@ -91,9 +85,3 @@ class InternetExchangeMember(SourceOfTruth):
             filtered.append(member)
 
         return filtered
-
-
-
-
-
-

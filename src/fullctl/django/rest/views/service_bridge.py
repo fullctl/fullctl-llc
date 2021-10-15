@@ -1,5 +1,4 @@
 from django.utils.translation import gettext_lazy as _
-from django.db.models import Q
 from fullctl.django.rest.core import BadRequest
 from fullctl.django.rest.decorators import grainy_endpoint
 from rest_framework import viewsets

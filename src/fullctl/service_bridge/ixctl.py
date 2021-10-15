@@ -1,13 +1,15 @@
 try:
     from django.conf import settings
+
     DEFAULT_SERVICE_KEY = settings.SERVICE_KEY
 except ImportError:
     DEFAULT_SERVICE_KEY = ""
 
-from fullctl.service_bridge.client import Bridge, DataObject
 import fullctl.service_bridge.pdbctl as pdbctl
+from fullctl.service_bridge.client import Bridge, DataObject
 
 CACHE = {}
+
 
 class IxctlEntity(DataObject):
     source = "ixctl"
@@ -30,7 +32,6 @@ class Ixctl(Bridge):
         if not key:
             key = DEFAULT_SERVICE_KEY
 
-
         kwargs.setdefault("cache_duration", 5)
         kwargs.setdefault("cache", CACHE)
 
@@ -44,25 +45,19 @@ class InternetExchangeObject(IxctlEntity):
 
 class InternetExchange(Ixctl):
     class Meta(Ixctl.Meta):
-	    ref_tag = "ix"
-	    data_object_cls = InternetExchangeObject
+        ref_tag = "ix"
+        data_object_cls = InternetExchangeObject
 
 
 class InternetExchangeMemberObject(IxctlEntity):
     description = "Ixctl Exchange Member"
     relationships = {
-        "net" : {
-            "bridge": pdbctl.Network,
-            "filter": ("asn","asn")
-        },
-        "ix": {
-            "bridge": InternetExchange,
-            "filter": ("ix","ix_id")
-        }
+        "net": {"bridge": pdbctl.Network, "filter": ("asn", "asn")},
+        "ix": {"bridge": InternetExchange, "filter": ("ix", "ix_id")},
     }
 
 
 class InternetExchangeMember(Ixctl):
     class Meta(Ixctl.Meta):
-	    ref_tag = "member"
-	    data_object_cls = InternetExchangeMemberObject
+        ref_tag = "member"
+        data_object_cls = InternetExchangeMemberObject

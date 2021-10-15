@@ -1,5 +1,6 @@
 try:
     from django.conf import settings
+
     DEFAULT_SERVICE_KEY = settings.SERVICE_KEY
 except ImportError:
     DEFAULT_SERVICE_KEY = ""
@@ -12,7 +13,6 @@ CACHE = {}
 class PeeringDBEntity(DataObject):
     description = "PeeringDB Object"
     source = "pdbctl"
-
 
 
 class Pdbctl(Bridge):
@@ -51,14 +51,8 @@ class Network(Pdbctl):
 class NetworkIXLanObject(PeeringDBEntity):
     description = "PeeringDB netixlan"
     relationships = {
-        "net" : {
-            "bridge": Network,
-            "filter": ("asn","asn")
-        },
-        "ix": {
-            "bridge": InternetExchange,
-            "filter": ("ix","ix_id")
-        }
+        "net": {"bridge": Network, "filter": ("asn", "asn")},
+        "ix": {"bridge": InternetExchange, "filter": ("ix", "ix_id")},
     }
 
 
