@@ -31,7 +31,7 @@ class Pdbctl(Bridge):
         if not key:
             key = DEFAULT_SERVICE_KEY
 
-        kwargs.setdefault("cache_duration", 5)
+        kwargs.setdefault("cache_duration", 10)
         kwargs.setdefault("cache", CACHE)
 
         super().__init__(settings.PDBCTL_HOST, key, org, **kwargs)
@@ -42,10 +42,13 @@ class InternetExchange(Pdbctl):
     class Meta(Pdbctl.Meta):
         ref_tag = "ix"
 
+class NetworkObject(PeeringDBEntity):
+    description = "PeeringDB net"
 
 class Network(Pdbctl):
     class Meta(Pdbctl.Meta):
         ref_tag = "net"
+        data_object_cls = NetworkObject
 
 
 class NetworkIXLanObject(PeeringDBEntity):

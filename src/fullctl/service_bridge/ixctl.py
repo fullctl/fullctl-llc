@@ -32,7 +32,7 @@ class Ixctl(Bridge):
         if not key:
             key = DEFAULT_SERVICE_KEY
 
-        kwargs.setdefault("cache_duration", 5)
+        kwargs.setdefault("cache_duration", 10)
         kwargs.setdefault("cache", CACHE)
 
         super().__init__(settings.IXCTL_HOST, key, org, **kwargs)
