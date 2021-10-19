@@ -62,20 +62,10 @@ class InternetExchangeMember(Ixctl):
         ref_tag = "member"
         data_object_cls = InternetExchangeMemberObject
 
-
-    def set_mac_address(self, member_id,  mac_address, source):
-        data = {
-            "mac_address": mac_address,
-            "source": source
-        }
+    def set_mac_address(self, member_id, mac_address, source):
+        data = {"mac_address": mac_address, "source": source}
         self.put(f"data/member/{member_id}/sync/mac-address", data=data)
 
     def set_as_macro(self, asn, as_macro, source):
-        data = {
-            "as_macro": as_macro,
-            "asn": asn,
-            "source": source
-        }
+        data = {"as_macro": as_macro, "asn": asn, "source": source}
         self.put(f"data/member/sync/as-macro", data=data)
-
-

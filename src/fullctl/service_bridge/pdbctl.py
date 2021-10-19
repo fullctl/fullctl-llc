@@ -42,8 +42,10 @@ class InternetExchange(Pdbctl):
     class Meta(Pdbctl.Meta):
         ref_tag = "ix"
 
+
 class NetworkObject(PeeringDBEntity):
     description = "PeeringDB net"
+
 
 class Network(Pdbctl):
     class Meta(Pdbctl.Meta):
