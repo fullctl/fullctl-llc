@@ -1,5 +1,7 @@
 
 ## fullctl services development instance
+[Poetry](https://python-poetry.org/) is a python package manager it can be acquired by following the instructions [here](https://python-poetry.org/docs/)
+(for macOS run `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -`) later commands will assume that t is installed on your system
 
 ## Code Quality
 
