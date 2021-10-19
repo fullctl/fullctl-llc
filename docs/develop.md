@@ -84,6 +84,53 @@ semanage port -m -t http_port_t -p tcp 8001
 # export AAACTL_PORT=7002
 poetry run Ctl/dev/compose.sh up aaactl_web
 ```
+### Setup recipe
+
+
+```
+git clone git@github.com:fullctl/fullctl
+git clone git@github.com:fullctl/ixctl
+git clone git@github.com:fullctl/aaactl
+git clone git@github.com:fullctl/peerctl
+git clone git@github.com:fullctl/pdbctl
+git clone git@github.com:fullctl/devicectl
+
+cp aaactl/Ctl/dev/example.env aaactl/Ctl/.env
+cp ixctl/Ctl/dev/example.env ixctl/Ctl/.env
+cp peerctl/Ctl/dev/example.env peerctl/Ctl/.env
+cp pdbctl/Ctl/dev/example.env pdbctl/Ctl/.env
+cp devicectl/Ctl/dev/example.env devicectl/Ctl/.env
+```
+
+#### AAACTL setup
+
+```
+cd fullctl
+export AAACTL_PORT=8001
+Ctl/dev/compose.sh up -d postgres
+Ctl/dev/compose.sh up -d aaactl_web
+```
+
+Follow instructions at https://github.com/fullctl/aaactl/blob/prep-release/docs/deploy.md but wherever it says `Ctl/dev/run.sh` replace it with `Ctl/dev/run.sh aaactl_web` and run from within the fullctl directory.
+
+#### PDBCTL setup
+
+Follow instructions at https://github.com/fullctl/pdbctl/blob/prep-release/docs/quickstart.md but wherever it says `Ctl/dev/run.sh` replace it with `Ctl/dev/run.sh pdbctl_web` and run from within the fullctl directory.
+
+```
+export PDBCTL_PORT=8003
+Ctl/dev/compose.sh up -d pdbctl_web
+```
+
+#### IXCTL setup
+
+Follow instructions at https://github.com/fullctl/ixctl/blob/prep-release/docs/quickstart.md but wherever it says `Ctl/dev/run.sh` replace it with `Ctl/dev/run.sh ixctl_web` and run from within the fullctl directory.
+
+```
+export IXCTL_PORT=8002
+Ctl/dev/compose.sh up -d ixctl_web
+```
+
 
 
 ### Bumping release
