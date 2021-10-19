@@ -105,6 +105,8 @@ cp devicectl/Ctl/dev/example.env devicectl/Ctl/.env
 
 #### Database setup
 
+Start with the database, and can keep it running in a window to see the logs.
+
 ```sh
 Ctl/dev/compose.sh up postgres
 ```
