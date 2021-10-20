@@ -98,11 +98,11 @@ git clone git@github.com:fullctl/peerctl
 git clone git@github.com:fullctl/pdbctl
 git clone git@github.com:fullctl/devicectl
 
-cp aaactl/Ctl/dev/example.env aaactl/Ctl/.env
-cp ixctl/Ctl/dev/example.env ixctl/Ctl/.env
-cp peerctl/Ctl/dev/example.env peerctl/Ctl/.env
-cp pdbctl/Ctl/dev/example.env pdbctl/Ctl/.env
-cp devicectl/Ctl/dev/example.env devicectl/Ctl/.env
+cp aaactl/Ctl/dev/example.env aaactl/Ctl/dev/.env
+cp ixctl/Ctl/dev/example.env ixctl/Ctl/dev/.env
+cp peerctl/Ctl/dev/example.env peerctl/Ctl/dev/.env
+cp pdbctl/Ctl/dev/example.env pdbctl/Ctl/dev/.env
+cp devicectl/Ctl/dev/example.env devicectl/Ctl/dev/.env
 ```
 
 #### Database setup
