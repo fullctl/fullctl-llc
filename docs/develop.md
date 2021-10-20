@@ -105,6 +105,8 @@ At this point you will want to go through each service in order and follow its i
 
 **Note:** services will authenticate users through oauth to aaactl, this **requires** HTTPS, we found nginx reverse proxies used with certbot ceritifcates to be the easiest way to provide https for our dev instances.
 
+**CentOS7** sometimes seems to have an issue allowing one container to connect to another, see [this](https://stackoverflow.com/questions/39134551/centos-vm-with-docker-getting-host-unreachable-when-trying-to-connect-to-itself/39211891#39211891) and [this](https://github.com/moby/moby/issues/32138) for possible workarounds.
+
 ### aaactl 
 
 Follow [instructions](https://github.com/fullctl/aaactl/blob/prep-release/docs/deploy.md) for the points listed below:
@@ -124,7 +126,7 @@ Follow [instructions](https://github.com/fullctl/aaactl/blob/prep-release/docs/d
 
 ```
 export AAACTL_PORT=7001
-Ctl/dev/compose.sh up aaactl_web
+poetry run Ctl/dev/compose.sh up aaactl_web
 ```
 
 Your aaactl instance should now be running on port 7001
@@ -141,7 +143,7 @@ Follow [instructions](https://github.com/fullctl/pdbctl/blob/prep-release/docs/q
 
 ```
 export PDBCTL_PORT=7002
-Ctl/dev/compose.sh up pdbctl_web
+poetry run Ctl/dev/compose.sh up pdbctl_web
 ```
 
 Your pdbctl instance should now be running on port 7002
@@ -159,7 +161,7 @@ Follow [instructions](https://github.com/fullctl/ixctl/blob/prep-release/docs/qu
 
 ```
 export IXCTL_PORT=7003
-Ctl/dev/compose.sh up ixctl_web
+poetry run Ctl/dev/compose.sh up ixctl_web
 ```
 
 Your ixctl instance should now be running on port 7003
@@ -178,7 +180,7 @@ Follow [instructions](https://github.com/fullctl/peerctl/blob/prep-release/docs/
 
 ```
 export PEERCTL_PORT=7004
-Ctl/dev/compose.sh up peerctl_web
+poetry run Ctl/dev/compose.sh up peerctl_web
 ```
 
 Your peerctl instance should now be running on port 7004
