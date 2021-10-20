@@ -90,7 +90,6 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../peerctl/src:/srv/service/main
-      - ../../../pdbctl/src:/srv/service/venv/lib/python3.9/site-packages/pdbctl
 
 
   devicectl_web:
