@@ -604,14 +604,6 @@ pycodestyle = ">=2.7.0,<2.8.0"
 pyflakes = ">=2.3.0,<2.4.0"
 
 [[package]]
-name = "future"
-version = "0.18.2"
-description = "Clean single-source support for Python 3 and 2"
-category = "dev"
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-
-[[package]]
 name = "ghp-import"
 version = "2.0.2"
 description = "Copy your docs directly to the gh-pages branch."
@@ -1412,14 +1404,11 @@ python-versions = "*"
 
 [[package]]
 name = "tmpl"
-version = "0.3.0"
-description = "template abstraction and helper functions"
+version = "1.0.0"
+description = "Template abstraction for using multiple template engine backends in same code."
 category = "dev"
 optional = false
-python-versions = "*"
-
-[package.dependencies]
-future = "*"
+python-versions = ">=3.6.1,<4.0"
 
 [[package]]
 name = "tokenize-rt"
@@ -1577,7 +1566,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "c3448a95453f635c54a195da020565b9d8c6559bd07784b7018188f2adc4b52d"
+content-hash = "fccdf43175dbc595d5fef6f465cda877fd2c2c17cc6924338e644310714b5a05"
 
 [metadata.files]
 amqp = [
@@ -1860,9 +1849,6 @@ filelock = [
 flake8 = [
     {file = "flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},
     {file = "flake8-3.9.2.tar.gz", hash = "sha256:07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b"},
-]
-future = [
-    {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
 ]
 ghp-import = [
     {file = "ghp-import-2.0.2.tar.gz", hash = "sha256:947b3771f11be850c852c64b561c600fdddf794bab363060854c1ee7ad05e071"},
@@ -2301,7 +2287,8 @@ texttable = [
     {file = "texttable-1.6.4.tar.gz", hash = "sha256:42ee7b9e15f7b225747c3fa08f43c5d6c83bc899f80ff9bae9319334824076e9"},
 ]
 tmpl = [
-    {file = "tmpl-0.3.0.tar.gz", hash = "sha256:b334f7f1ead0212ea3a55d6548adcb189a236d68eba5d45f199a73dfdf6b075e"},
+    {file = "tmpl-1.0.0-py3-none-any.whl", hash = "sha256:9932ac5fb2d3177948858f425b794904a5b86c786e8afa8e4a4471976fd283f7"},
+    {file = "tmpl-1.0.0.tar.gz", hash = "sha256:71673a2c084de675ce010736f2fd9c83b844e93eaeece6e821a7a868a181e855"},
 ]
 tokenize-rt = [
     {file = "tokenize_rt-4.1.0-py2.py3-none-any.whl", hash = "sha256:b37251fa28c21e8cce2e42f7769a35fba2dd2ecafb297208f9a9a8add3ca7793"},

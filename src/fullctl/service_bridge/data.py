@@ -121,9 +121,7 @@ class Relationships:
         if not filters:
             return
 
-        rel_objects = dict(
-            [(getattr(o, field), o) for o in rel["bridge"]().objects(**filters)]
-        )
+        rel_objects = {getattr(o, field): o for o in rel["bridge"]().objects(**filters)}
 
         for obj in objects:
             setattr(obj, name, rel_objects.get(getattr(obj, attr_name)))
