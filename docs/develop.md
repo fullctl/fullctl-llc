@@ -88,7 +88,7 @@ semanage port -m -t http_port_t -p tcp 8001
 poetry run Ctl/dev/compose.sh up aaactl_web
 ```
 
-#### Developer Environment Setup
+## Developer Environment Setup
 
 Please run the following command to checkout and setup the verious repositories and services that make up a complete fullctl dev environment.
 
@@ -105,7 +105,7 @@ At this point you will want to go through each service in order and follow its i
 
 **Note:** services will authenticate users through oauth to aaactl, this **requires** HTTPS, we found nginx reverse proxies used with certbot ceritifcates to be the easiest way to provide https for our dev instances.
 
-##### aaactl 
+### aaactl 
 
 Follow [instructions](https://github.com/fullctl/aaactl/blob/prep-release/docs/deploy.md) for the points listed below:
 
@@ -120,7 +120,7 @@ Follow [instructions](https://github.com/fullctl/aaactl/blob/prep-release/docs/d
 - Google oauth
 
 
-#### run aaactl
+### run aaactl
 
 ```
 export AAACTL_PORT=7001
@@ -129,7 +129,7 @@ Ctl/dev/compose.sh up aaactl_web
 
 Your aaactl instance should now be running on port 7001
 
-#### pdbctl
+### pdbctl
 
 Follow [instructions](https://github.com/fullctl/pdbctl/blob/prep-release/docs/quickstart.md) for the points listed below:
 
@@ -137,7 +137,7 @@ Follow [instructions](https://github.com/fullctl/pdbctl/blob/prep-release/docs/q
 
 - Authentication and accounts
 
-#### run pdbctl
+### run pdbctl
 
 ```
 export PDBCTL_PORT=7002
@@ -146,7 +146,7 @@ Ctl/dev/compose.sh up pdbctl_web
 
 Your pdbctl instance should now be running on port 7002
 
-#### ixctl
+### ixctl
 
 Follow [instructions](https://github.com/fullctl/ixctl/blob/prep-release/docs/quickstart.md) for the points listed below:
 
@@ -155,7 +155,7 @@ Follow [instructions](https://github.com/fullctl/ixctl/blob/prep-release/docs/qu
 - Authentication and accounts
 - add `PDBCTL_HOST` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7002)
 
-#### run ixctl
+### run ixctl
 
 ```
 export PDBCTL_PORT=7003
@@ -164,7 +164,7 @@ Ctl/dev/compose.sh up ixctl_web
 
 Your ixctl instance should now be running on port 7003
 
-#### peerctl
+### peerctl
 
 Follow [instructions](https://github.com/fullctl/peerctl/blob/prep-release/docs/quickstart.md) for the points listed below:
 
@@ -174,7 +174,7 @@ Follow [instructions](https://github.com/fullctl/peerctl/blob/prep-release/docs/
 - add `PDBCTL_HOST` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7002)
 - add `IXCTL_HOST` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7003)
 
-#### run peerctl
+### run peerctl
 
 ```
 export PDBCTL_PORT=7004
@@ -188,17 +188,6 @@ Your peerctl instance should now be running on port 7004
 export PDBCTL_PORT=8003
 Ctl/dev/compose.sh up -d pdbctl_web
 ```
-
-#### IXCTL setup
-
-Follow instructions at https://github.com/fullctl/ixctl/blob/prep-release/docs/quickstart.md but wherever it says `Ctl/dev/run.sh` replace it with `Ctl/dev/run.sh ixctl_web` and run from within the fullctl directory.
-
-```
-export IXCTL_PORT=8002
-Ctl/dev/compose.sh up -d ixctl_web
-```
-
-
 
 ### Bumping release
 
