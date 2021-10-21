@@ -1,6 +1,7 @@
 from django.conf import settings
 
 from fullctl.django.auth import RemotePermissionsError
+from fullctl.service_bridge.aaactl import ServiceApplication
 
 
 def conf(request):
@@ -13,9 +14,10 @@ def conf(request):
 def account_service(request):
 
     context = {}
+    org = getattr(request, "org", None)
 
-    if hasattr(request, "org"):
-        org_slug = request.org.slug
+    if org:
+        org_slug = org.slug
     else:
         org_slug = ""
 
@@ -35,6 +37,10 @@ def account_service(request):
         service_logo_light=f"{settings.SERVICE_TAG}/logo-lightbg.svg",
         service_tag=settings.SERVICE_TAG,
         service_name=settings.SERVICE_TAG.replace("ctl", ""),
+        service_applications=[
+            svcapp.for_org(org)
+            for svcapp in ServiceApplication().objects(group="fullctl")
+        ],
     )
 
     return context

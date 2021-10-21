@@ -129,6 +129,15 @@ div.header span.header-control span.icon > img {
   opacity: 0.66;
 }
 
+div.header .app-switcher {
+  --background-color: black;
+}
+
+
+div.header .app-switcher .selected .icon-caret-down {
+  background-color: #fff;
+}
+
 div.header .app-switcher .selected.prefixctl.expanded {
   background-color: #244145;
 }

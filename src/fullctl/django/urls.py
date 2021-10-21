@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from django.urls import include, path
+from django.contrib.staticfiles import views as static_file_views
+from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 import fullctl.django.views
@@ -29,6 +30,11 @@ if getattr(settings, "PDBCTL_HOST", None):
         ),
     ]
 
+if settings.DEBUG:
+    # support version ignorant serving of static files
+    urlpatterns += [
+        re_path("^s/[^\/]+/(?P<path>.*)$", static_file_views.serve),
+    ]
 
 urlpatterns += [
     path("_diag", fullctl.django.views.diag),

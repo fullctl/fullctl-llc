@@ -30,6 +30,9 @@ class DataViewSet(viewsets.ModelViewSet):
 
     @grainy_endpoint("service_bridge")
     def retrieve(self, request, pk):
+        return self._retrieve(request, pk)
+
+    def _retrieve(self, request, pk):
         qset = self.get_queryset()
         qset, joins = self.join_relations(qset, request)
 
@@ -41,6 +44,9 @@ class DataViewSet(viewsets.ModelViewSet):
 
     @grainy_endpoint("service_bridge")
     def list(self, request, *args, **kwargs):
+        return self._list(request, *args, **kwargs)
+
+    def _list(self, request, *args, **kwargs):
         qset = self.filter(self.get_queryset(), request)
 
         if not self.filtered and not self.allow_unfiltered:
