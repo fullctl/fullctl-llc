@@ -846,6 +846,22 @@ div.modal span.modal-control > img.caret {
 }
 
 /*
+ * status badge
+ */
+
+span.status-badge {
+    padding: 0px 5px;
+    border: 1px solid;
+    border-radius: 3px;
+    font-size: 13px;
+		text-transform: capitalize;
+}
+
+span.status-badge div.spinner {
+      padding-top: 2px;
+}
+
+/*
  * oauth
  */
 

@@ -431,7 +431,9 @@ twentyc.rest.Widget = twentyc.cls.extend(
         this.loading_shim = $('<div>').addClass("loading-shim")
         this.element.append(this.loading_shim);
       }
-      this.loading_shim.show();
+      if(!this.loading_shim_disabled)
+        this.loading_shim.show();
+
       $(this).trigger("processing");
     },
 

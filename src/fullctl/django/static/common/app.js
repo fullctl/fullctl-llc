@@ -34,6 +34,57 @@ fullctl.formatters.monitor_status = (value) => {
 }
 
 
+fullctl.widget.StatusBadge = $tc.extend(
+  "StatusBadge",
+  {
+
+    StatusBadge : function(base_url, jq, refresh_values) {
+      this.row_id = jq.data("row-id")
+      this.field_name = jq.data("name")
+      this.refresh_time = parseInt(jq.data("refresh") || 1000);
+      this.loading_shim_disabled = true;
+      this.refresh_timer = new twentyc.util.SmartTimeout(()=>{},1000);
+      this.refresh_values = refresh_values;
+      this.Widget(base_url, jq);
+    },
+
+
+    spinner : function() {
+			return $('<div class="spinner loadingio-spinner-bars-k879i8bcs9"><div class="ldio-a9ruqenne8l"><div></div><div></div><div></div><div></div></div></div>');
+    },
+
+    load : function() {
+      return this.get().then((response) => {
+        response.rows((row) => {
+          if(row.id == this.row_id) {
+            var value = row[this.field_name];
+            this.render(value, row);
+          }
+        })
+      });
+    },
+
+    refresh : function() {
+      this.refresh_timer.set(
+        ()=>{this.load()},
+        this.refresh_time
+      );
+    },
+
+    render : function(value, row) {
+      this.element.removeClass().addClass("status-badge "+value)
+      this.element.empty().append($('<span>').text(value));
+      if(this.refresh_values && $.inArray(value, this.refresh_values) == -1) {
+          this.element.append(this.spinner());
+          this.refresh();
+      }
+
+    }
+  },
+  twentyc.rest.Widget
+);
+
+
 fullctl.widget.OrganizationSelect = $tc.extend(
   "OrganizationSelect",
   {
