@@ -257,6 +257,13 @@ def set_default_append(settings_manager):
         },
     }
 
+def set_twentyc_oauth(settings_manager):
+    pass
+
+def set_service_bridges(settings_manager):
+    settings_manager.set_option("AAACTL_HOST", settings_manager.get("OAUTH_TWENTYC_HOST"))
+    settings_manager.set_option("PDBCTL_HOST", "")
+    settings_manager.set_option("IXCTL_HOST", "")
 
 def set_languages_docs(settings_manager):
     settings_manager.set_option("ENABLE_ALL_LANGUAGES", False)
