@@ -28,9 +28,9 @@ services:
     environment:
       DATABASE_PASSWORD: devPASSWORD
       DATABASE_HOST: postgres
-      # defaults
-      DATABASE_USER: aaactl
-      DATABASE_NAME: aaactl
+      # defaults -- setting here overrides .env
+      # DATABASE_USER: aaactl
+      # DATABASE_NAME: aaactl
       # DATABASE_PORT: 5432
     logging:
       options:
