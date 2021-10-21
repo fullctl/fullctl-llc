@@ -9,7 +9,6 @@ import sys
 import confu.util
 
 
-
 def print_debug(*args, **kwargs):
     # XXX
     print(*args, **kwargs)
@@ -28,8 +27,6 @@ def get_locale_name(code):
     return language_map.get(language, code)
 
 
-
-
 def read_file(name):
     with open(name) as fh:
         return fh.read()
@@ -42,13 +39,13 @@ class SettingsManager(confu.util.SettingsManager):
 
     def get(self, name):
         """Get name, raise if not set.
-            Should use _DEFAULT_ARG
+        Should use _DEFAULT_ARG
         """
-#        if key in self.scope:
+        #        if key in self.scope:
         return self.scope[name]
 
     def set_option(self, name, value, envvar_type=None):
-        """ Return the resulting value after setting."""
+        """Return the resulting value after setting."""
         super().set_option(name, value, envvar_type)
         return self.get(name)
 
@@ -62,18 +59,21 @@ class SettingsManager(confu.util.SettingsManager):
         try:
             with open(filename) as f:
                 exec(compile(f.read(), filename, "exec"), self.scope)
-    
+
             print_debug(f"loaded additional settings file '{filename}'")
-    
+
         except FileNotFoundError:
-            print_debug(f"additional settings file '{filename}' was not found, skipping")
+            print_debug(
+                f"additional settings file '{filename}' was not found, skipping"
+            )
 
     def try_include_env(self, suffix=""):
         # look for mainsite/settings/${RELEASE_ENV}.py and load if it exists
         # needs __file__ from caller
-        env_file = os.path.join(os.path.dirname(__file__), f"{self.get('RELEASE_ENV')}.py")
+        env_file = os.path.join(
+            os.path.dirname(__file__), f"{self.get('RELEASE_ENV')}.py"
+        )
         settings.try_include(env_file)
-
 
 
 def set_release_env_v1(settings_manager):
@@ -174,21 +174,21 @@ def set_default_append(settings_manager):
     settings_manager.set_option("DEBUG_EMAIL", DEBUG)
     for template in settings_manager.get("TEMPLATES"):
         template["OPTIONS"]["debug"] = DEBUG
-    #TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG
-
+    # TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG
 
     # use structlog for logging
     import structlog
+
     MIDDLEWARE = settings_manager.get("MIDDLEWARE")
-    
+
     MIDDLEWARE += [
         "django_structlog.middlewares.RequestMiddleware",
     ]
-    
+
     # set these explicitly, not with DEBUG
     DJANGO_LOG_LEVEL = settings_manager.set_option("DJANGO_LOG_LEVEL", "INFO")
     FULLCTL_LOG_LEVEL = settings_manager.set_option("FULLCTL_LOG_LEVEL", "DEBUG")
-    
+
     structlog.configure(
         processors=[
             structlog.stdlib.filter_by_level,
@@ -206,7 +206,7 @@ def set_default_append(settings_manager):
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
-    
+
     # logging define extra formatters and handlers for convenience
     LOGGING = {
         "version": 1,
@@ -272,10 +272,9 @@ def set_languages_docs(settings_manager):
                 if code not in language_dict:
                     name = _(get_locale_name(code))
                     language_dict[code] = name
-    
+
         LANGUAGES = sorted(language_dict.items())
-    
-    
+
     API_DOC_INCLUDES = {}
     API_DOC_PATH = os.path.join(BASE_DIR, "docs", "api")
     for i, j, files in os.walk(API_DOC_PATH):
@@ -283,5 +282,3 @@ def set_languages_docs(settings_manager):
             base, ext = os.path.splitext(file)
             if ext == ".md":
                 API_DOC_INCLUDES[base] = os.path.join(API_DOC_PATH, file)
-    
-
