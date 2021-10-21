@@ -59,7 +59,7 @@ fullctl.permissions = {{ permissions|safe }}
         <div class="others" style="display:none">
           {% for svcapp in service_applications %}
           {%   if svcapp.slug != service_tag %}
-          <a href="{{ svcapp.org_redirect }}"><img class="app-logo" src="{{ svcapp.logo }}" alt="{{ svcapp.slug }}"></a>
+          <a href="{{ svcapp.org_redirect }}"><img class="app-logo" src="{{ svcapp.api_host }}/s/{{ version }}/{{ svcapp.slug }}/logo-darkbg.svg" alt="{{ svcapp.slug }}"></a>
           {%   endif %}
           {% endfor %}
 
