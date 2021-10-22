@@ -256,6 +256,7 @@ class SettingsManager(confu.util.SettingsManager):
                 },
             },
         }
+        self.set_option("LOGGING", LOGGING)
 
     def set_service_bridges(self):
         # no default so we error sooner
