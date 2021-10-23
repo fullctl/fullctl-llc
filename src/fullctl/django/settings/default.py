@@ -29,9 +29,9 @@ settings_manager.set_option(
 )
 settings_manager.set_option("STATIC_URL", f"/s/{PACKAGE_VERSION}/")
 
-settings_manager.set_option("SESSION_COOKIE_NAME", "tcacctsid")
+settings_manager.set_option("SESSION_COOKIE_NAME", f"{SERVICE_TAG}sid")
+settings_manager.set_bool("SESSION_COOKIE_SECURE", True)
 # settings_manager.set_from_env("SESSION_COOKIE_DOMAIN")
-# settings_manager.set_from_env("SESSION_COOKIE_SECURE")
 
 settings_manager.set_option("DEFAULT_FROM_EMAIL", SERVER_EMAIL)
 

@@ -47,9 +47,13 @@ social-auth-app-django = "^3"
 # only needed for ixctl now, compare vs django-inet?
 django-netfields = "<2"
 
+# prod serving
+whitenoise = "^5.2.0"
+uWSGI = "^2.0.19"
+
 confu = "^1.5"
 grainy = "^1.8.1"
-psycopg2-binary = ">2.8,<3"
+psycopg2-binary = "^2.8"
 pyyaml = "^5.4"
 
 # move to aaactl?
@@ -60,10 +64,9 @@ django-peeringdb = "^2.8"
 peeringdb = "^1"
 
 # XXX still used?
-whitenoise = "^5.2.0"
-pip = "*"
-celery = "<6,>=5"
-uWSGI = "^2.0.19"
+# pip = "*"
+# wheel = "*"
+# celery = "<6,>=5"
 
 
 [tool.poetry.dev-dependencies]
