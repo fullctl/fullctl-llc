@@ -37,6 +37,7 @@ a[data-api-action] {
   cursor: pointer;
 }
 
+span.icon.peerctl,
 span.icon.ixctl {
   background-color: #3f99ff;
 }
@@ -212,7 +213,7 @@ span.highlight,
 }
 
 
-.controls,
+div.modal .controls,
 .inner-list {
   background-color: #000;
 }

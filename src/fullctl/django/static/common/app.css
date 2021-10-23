@@ -884,7 +884,9 @@ img.login-google {
 }
 
 
-
+textarea.template-editor {
+  height: 300px;
+}
 
 
 /**
@@ -920,3 +922,8 @@ div.page_error {
   margin: 50px;
 }
 
+
+
+div.create .edit-toggled {
+  display: none;
+}

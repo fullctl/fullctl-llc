@@ -664,6 +664,7 @@ twentyc.rest.Form = twentyc.cls.extend(
 
     fill : function(data) {
       var key, value;
+      this.clear_errors();
       for(key in data) {
         value = data[key];
         this.element.find('[name="'+key+'"]').each(function() {
@@ -673,7 +674,20 @@ twentyc.rest.Form = twentyc.cls.extend(
             $(this).val(value);
           }
         });
+
+        this.element.find('[data-field="'+key+'"]').each(function() {
+          $(this).text(value);
+        });
       }
+    },
+
+
+    reset : function() {
+      var k ,empty = {};
+      for(k in this.payload()) {
+        empty[k] = ""
+      }
+      this.fill(empty);
     },
 
     post_success : function(result) {
@@ -718,7 +732,7 @@ twentyc.rest.Form = twentyc.cls.extend(
       this.Widget_bind(jq);
       this.method = jq.data("api-method") || "POST";
 
-      this.element.find('input,textarea').keydown(function(event){
+      this.element.find('input').keydown(function(event){
         if(event.keyCode == 13) {
           event.preventDefault();
           this.submit();
@@ -728,10 +742,12 @@ twentyc.rest.Form = twentyc.cls.extend(
 
       var widget = this;
 
-      this.element.find('button.submit').click(function() {
+      this.element.find('button.submit,button[data-element="submit"]').click(function(event) {
+        event.preventDefault();
         widget.submit(
           $(this).data("api-method")
         );
+        return false;
       });
     },
 
@@ -812,9 +828,6 @@ twentyc.rest.Input = twentyc.cls.extend(
         if(ev.which != 13)
           return;
 
-        if(this.action === null)
-          return;
-
         var action = this.action;
         var fn = this[this.method.toLowerCase()].bind(this);
 
@@ -844,8 +857,6 @@ twentyc.rest.Button = twentyc.cls.extend(
           return;
 
         this.clear_errors();
-        if(this.action === null)
-          return;
 
         var action = this.action;
         var fn = this[this.method.toLowerCase()].bind(this);
@@ -914,6 +925,10 @@ twentyc.rest.Select = twentyc.cls.extend(
       return null;
     },
 
+    filter : function(item) {
+      return true;
+    },
+
 
     /**
      * loads options from the api
@@ -979,6 +994,7 @@ twentyc.rest.Select = twentyc.cls.extend(
         var name_field = this.name_field
         var id_field = this.id_field
         var selected_field = this.selected_field
+        var widget = this;
 
         select.empty();
 
@@ -989,6 +1005,8 @@ twentyc.rest.Select = twentyc.cls.extend(
 
 
         $(response.content.data).each(function() {
+          if(!widget.filter(this))
+            return;
           var selected = this[selected_field] || false;
           var opt = $('<option>').val(this[id_field]).text(this[name_field])
           if(selected)
@@ -1020,6 +1038,13 @@ twentyc.rest.Select = twentyc.cls.extend(
       return this.options().then(function(response) {
         var select = this.element.empty();
         var options = response.content.data[0].actions.POST[this.drf_name].choices;
+
+        if(this.null_option) {
+          let null_parts = this.null_option.split(";");
+          select.append($('<option>').val(null_parts[0]).text(null_parts[1]));
+        }
+
+
         $(options).each(function() {
           select.append(
             $('<option>').val(this.value).text(this.display_name)
@@ -1182,6 +1207,21 @@ twentyc.rest.List = twentyc.cls.extend(
     },
 
     /**
+     * reload single row
+     */
+
+    reload_row : function(id) {
+      var row = this.find_row(id);
+      if(row) {
+        return this.get(id, this.payload()).then(function(response) {
+          var new_row = this.insert(response.first())
+          new_row.insertAfter(row);
+          row.detach();
+        }.bind(this));
+      }
+    },
+
+    /**
      * insert a new row from object
      *
      * triggers insert:after event
@@ -1254,7 +1294,7 @@ twentyc.rest.List = twentyc.cls.extend(
      */
 
     find_row : function(id) {
-      return this.list_body.find('.row-'+id);
+      return this.list_body.find('.row-'+id.replace(':','\\:'));
     },
 
     action_failure : function(response) {
