@@ -15,6 +15,10 @@ class APIKey:
     def id(self):
         return self.key[:8]
 
+    @property
+    def pk(self):
+        return self.id
+
 
 def key_from_request(request):
     """
