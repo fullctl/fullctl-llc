@@ -33,7 +33,7 @@ if getattr(settings, "PDBCTL_HOST", None):
 if settings.DEBUG:
     # support version ignorant serving of static files
     urlpatterns += [
-        re_path("^s/[^\/]+/(?P<path>.*)$", static_file_views.serve),
+        re_path(r"^s/[^\/]+/(?P<path>.*)$", static_file_views.serve),
     ]
 
 urlpatterns += [
