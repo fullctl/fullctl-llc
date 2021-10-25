@@ -13,7 +13,6 @@ a[data-action],
 
 a[data-action]:hover,
 .action:hover {
-  text-decoration: none;
 }
 
 body {
@@ -28,6 +27,11 @@ button {
   line-height: 16px;
   text-transform: capitalize;
 	text-decoration: underline;
+	text-align: left;
+}
+
+button:focus {
+  outline: none;
 }
 
 .loading-shim {
@@ -61,6 +65,11 @@ button {
 a{
   text-decoration: underline;
 }
+
+a:hover {
+  text-decoration: underline;
+}
+
 
 button {
   cursor: pointer;
@@ -129,6 +138,14 @@ div.loading-anim {
 	margin-left: 8px;
 }
 
+.indent {
+  padding-left: 20px;
+}
+
+.indent-on .indent-toggled {
+  padding-left: 20px;
+}
+
 /**
  * page
  */
@@ -144,7 +161,7 @@ body {
 
 
 div.header {
-
+  min-height: 69px;
 }
 
 div.header-left {
@@ -474,24 +491,29 @@ div.toolbar-field > span.value {
 
 
 
-div.menu .button {
+div.menu .button,
+div.menu .button:hover {
   display: block;
-  margin-bottom: 5px;
   width: 100%;
-  text-align: center;
-  text-decoration: none;
+	border: none;
+  font-family: "Archivo Narrow";
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 16px;
+  text-transform: capitalize;
+	text-decoration: underline;
+	text-align: left;
+	margin: 16px 0px;
 }
 
-div.menu .button,
 div.toolbar .button {
   border: none;
   border-radius: 25px;
-  padding: 12px 18px 12px 18px;
   font-size: 16px;
   line-height: 16px;
   border: none;
-  :0
   outline: none;
+  text-align: left;
 }
 
 div.menu .button .icon,
@@ -748,6 +770,7 @@ div.list-body .secondary .property {
 div.list-body .secondary .property .transparent-field,
 div.list-body .secondary .property .field {
 	padding: 8px;
+	min-height: 42px;
   display: inline-block;
 }
 
@@ -875,16 +898,12 @@ div.flags > span {
  */
 
 .selected-order-header-asc {
-  color: #0099FF;
-  opacity: 1;
 }
 .selected-order-header-asc::after {
   content: " \2191";
 }
 
 .selected-order-header-desc {
-  color: #0099FF;
-  opacity: 1;
 }
 
 .selected-order-header-desc::after {

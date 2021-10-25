@@ -25,7 +25,7 @@ span.active {
 }
 
 path.ixctl {
-  fill: #3f99ff;
+  fill: #D1FF27;
 }
 path,fullctl,
 path.preixctl {
@@ -39,7 +39,7 @@ a[data-api-action] {
 }
 
 span.icon.ixctl {
-  background-color: #3f99ff;
+  background-color: #D1FF27;
 }
 
 span.icon.neutral {
@@ -90,6 +90,8 @@ div.validation-error.non-field-errors {
 a[data-action].ixctl,
 a[data-action].ixctl:hover,
 a.ixctl,
+a.button:hover,
+.menu a.button:hover,
 .ixctl {
   color: #D1FF27;
 }
@@ -207,8 +209,7 @@ div.toolbar div.toolbar-control-group {
 
 div.menu .button,
 div.toolbar .button {
-  color: #0099ff;
-  background-color: #000;
+  color: #D1FF27;
 }
 
 
@@ -237,7 +238,6 @@ div.menu div.section.tabs .active {
 
 div.list-th,
 table thead tr th {
-  color: #bcbec0;
   opacity: 0.4;
 }
 
@@ -249,6 +249,18 @@ div.list-th,
 span.highlight,
 .table td.highlight {
   color: #fff;
+}
+
+div.list-th.selected-order-header-asc,
+table thead th.selected-order-header-asc,
+.selected-order-header-asc {
+  opacity: 1;
+}
+
+div.list-th.selected-order-header-desc,
+table thead th.selected-order-header-desc,
+.selected-order-header-desc {
+  opacity: 1;
 }
 
 .list-body div.secondary,
@@ -515,8 +527,8 @@ tbody.list-footer button {
 }
 
 .status-badge.error {
-  background-color: #2b0e0e !important;
-  border-color: #760505 !important;
+  background-color: #662020 !important;
+  border-color: #d10f0f !important;
 }
 
 
