@@ -1183,6 +1183,8 @@ twentyc.rest.List = twentyc.cls.extend(
       this.formatters = {}
 
       this.Widget(base_url, jq);
+      this.list_head = this.element.find('thead,.list-header').first();
+      this.initialize_sorting();
     },
 
     /**
@@ -1196,6 +1198,9 @@ twentyc.rest.List = twentyc.cls.extend(
      */
 
     load : function() {
+      if(this.sortable)
+        this.apply_ordering();
+
       return this.get(this.action, this.payload()).then(function(response) {
         this.list_body.empty()
         response.rows(function(row, idx) {
@@ -1342,7 +1347,96 @@ twentyc.rest.List = twentyc.cls.extend(
       this.Widget_bind(jq);
 
       this.list_body = jq.find(".list-body")
-    }
+    },
+
+    payload : function() {
+      if(this.ordering) {
+        return { ordering: this.ordering };
+      }
+      return {};
+    },
+
+    /**
+     * sorting
+     */
+
+    initialize_sorting: function() {
+      var widget = this;
+
+      this.sort_headings = this.list_head.find('[data-sort-target]');
+      this.sortable = (this.sort_headings.length > 0);
+
+      if(!this.sortable)
+        return;
+
+      this.sort_headings.click(function (){
+        var button = $(this)
+        widget.sort(button.data("sort-target"), button.data("sort-secondary"));
+      });
+
+      let sort_button = this.sort_headings.filter("[data-sort-initial]");
+      this.sort_target = sort_button.data("sort-target");
+      this.sort_secondary = sort_button.data("sort-secondary");
+
+      this.sort_asc = true;
+      this.ordering = "";
+
+      /*
+      Specific to django-rest-framework: we add "ordering" as a query
+      parameter to the API calls
+      */
+      this.payload = function(){return {ordering: this.ordering}}
+
+      console.log("sort init", this);
+    },
+
+    sort: function(target, secondary) {
+      this.sort_secondary = secondary;
+      if ( target == this.sort_target ){
+          this.sort_asc = !this.sort_asc;
+      } else {
+          this.sort_target = target;
+          this.sort_asc = true;
+      };
+      this.load();
+    },
+
+    apply_ordering : function() {
+      this.ordering = this.return_ordering();
+      this.indicate_ordering();
+    },
+
+    return_ordering: function() {
+      let secondary = (this.sort_secondary ? ","+this.sort_secondary : "")
+      if ( this.sort_asc ){
+        return this.sort_target + secondary;
+      }
+      return "-" + this.sort_target + secondary;
+    },
+
+
+    indicate_ordering : function() {
+      let heading = this.sort_target;
+      let asc = this.sort_asc;
+
+      $(this.sort_headings).each( function() {
+        $(this).find("span").remove();
+        if ( $(this).data("sort-target") == heading ){
+          if ( asc ){
+            $(this).removeClass("selected-order-header-desc")
+            $(this).addClass("selected-order-header-asc");
+          } else {
+            $(this).removeClass("selected-order-header-asc")
+            $(this).addClass("selected-order-header-desc");
+          }
+        } else {
+            $(this).removeClass("selected-order-header-asc");
+            $(this).removeClass("selected-order-header-desc");
+        }
+      })
+    },
+
+
   },
   twentyc.rest.Widget
 );
