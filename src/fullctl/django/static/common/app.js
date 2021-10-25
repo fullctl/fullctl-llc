@@ -16,9 +16,9 @@ fullctl.formatters = {}
 
 fullctl.formatters.pretty_speed = (value) => {
   if(value >= 1000000)
-    value = (value / 1000000).toFixed(2)+"T";
+    value = parseInt(value / 1000000)+"T";
   else if(value >= 1000)
-    value = (value / 1000).toFixed(2)+"G";
+    value = parseInt(value / 1000)+"G";
   else
     value = value+"M";
   return value
