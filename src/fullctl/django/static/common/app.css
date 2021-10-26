@@ -26,9 +26,14 @@ button {
   letter-spacing: 0;
   line-height: 16px;
   text-transform: capitalize;
-	text-decoration: underline;
+	text-decoration: none;
 	text-align: left;
 }
+
+button span.label {
+	text-decoration: underline;
+}
+
 
 button:focus {
   outline: none;
@@ -62,11 +67,26 @@ button:focus {
 .sortable-button {
   cursor: pointer;
 }
-a{
+
+a,
+a:hover {
   text-decoration: underline;
 }
 
-a:hover {
+a.button {
+  text-decoration: none;
+}
+
+a.button:hover {
+  text-decoration: none;
+}
+
+
+a.button span.label{
+  text-decoration: underline;
+}
+
+a.button span.label:hover {
   text-decoration: underline;
 }
 
@@ -491,8 +511,7 @@ div.toolbar-field > span.value {
 
 
 
-div.menu .button,
-div.menu .button:hover {
+div.menu .button {
   display: block;
   width: 100%;
 	border: none;
@@ -501,9 +520,17 @@ div.menu .button:hover {
   letter-spacing: 0;
   line-height: 16px;
   text-transform: capitalize;
-	text-decoration: underline;
+	text-decoration: none;
 	text-align: left;
 	margin: 16px 0px;
+}
+
+div.menu .button:hover {
+	text-decoration: none;
+}
+
+div.menu .button span.label {
+	text-decoration: underline;
 }
 
 div.toolbar .button {
@@ -530,6 +557,21 @@ div.menu div.section.tabs h5 {
 div.menu div.section.tabs h5.active {
   cursor: default;
   text-decoration: underline;
+}
+
+div.tool-custom {
+	padding-left: 15px;
+}
+
+
+div.tool-custom > h4.tool-title {
+  font-family: "Archivo Narrow";
+  font-size: 30px;
+  letter-spacing: 0;
+  line-height: 30px;
+  margin-top: 24px;
+  font-weight: 400;
+  border-bottom: 2px solid transparent;
 }
 
 /**
@@ -1037,12 +1079,14 @@ div.controls input[type="checkbox"] ~ label {
   line-height: 24px;
 }
 
-div.modal span.modal-control {
+span.modal-control {
   position: relative;
   display: block;
 }
 
-div.modal span.modal-control > img.caret {
+
+
+span.modal-control > img.caret {
   position: absolute;
   right: 18px;
   top: 19px;
@@ -1109,6 +1153,7 @@ textarea.template-editor {
  */
 
 div.app-footer {
+  margin-top: 100px;
   text-align: center;
 }
 
@@ -1141,4 +1186,23 @@ div.page_error {
 
 div.create .edit-toggled {
   display: none;
+}
+
+
+/*
+ * wizard
+ */
+
+
+div.wizard .wiz-step {
+  display: none;
+}
+
+div.wizard.wiz-step-6 .wiz-step.wiz-step-6,
+div.wizard.wiz-step-5 .wiz-step.wiz-step-5,
+div.wizard.wiz-step-4 .wiz-step.wiz-step-4,
+div.wizard.wiz-step-3 .wiz-step.wiz-step-3,
+div.wizard.wiz-step-2 .wiz-step.wiz-step-2,
+div.wizard.wiz-step-1 .wiz-step.wiz-step-1{
+  display: block;
 }

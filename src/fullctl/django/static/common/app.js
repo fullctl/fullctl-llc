@@ -39,6 +39,30 @@ fullctl.loading_animation = () => {
   return $('<div>').addClass("loading-anim").append(anim);
 }
 
+fullctl.widget.Wizard = $tc.define(
+  "Wizard",
+  {
+    Wizard : function(jq) {
+      this.element = jq;
+      this.step = 1;
+      this.element.addClass("wiz-step wiz-step-1");
+
+      var wizard = this;
+
+      this.element.find('button[data-wizard-step]').click(function() {
+        wizard.set_step($(this).data("wizard-step"));
+      });
+    },
+
+    set_step : function(n) {
+      this.element.removeClass("wiz-step-"+this.step);
+      this.element.addClass("wiz-step-"+n);
+      this.step = n;
+    }
+  }
+
+);
+
 fullctl.widget.StatusBadge = $tc.extend(
   "StatusBadge",
   {
@@ -220,7 +244,16 @@ fullctl.application.Tool = $tc.extend(
     initialize_sortable_headers: function() {
       //deprecated
       return;
+    },
+
+    custom_dialog : function(title) {
+      this.$e.body.empty();
+      var custom_dialog = $('<div>').addClass("tool-custom")
+      custom_dialog.append($('<h4>').addClass("tool-title").text(title));
+      this.$e.body.append(custom_dialog);
+      return custom_dialog;
     }
+
   },
   fullctl.application.Component
 );
@@ -392,6 +425,10 @@ fullctl.application.Application = $tc.define(
           this.$t[i].sync(app);
         }
       }
+    },
+
+    page : function(page) {
+      $('[data-component="pages"]').find('[aria-controls="'+page+'"]').tab('show');
     }
   }
 );

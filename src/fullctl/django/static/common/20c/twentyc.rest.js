@@ -742,6 +742,12 @@ twentyc.rest.Form = twentyc.cls.extend(
 
       var widget = this;
 
+
+      this.element.find('button').click(function(event) {
+        event.preventDefault();
+        return false;
+      });
+
       this.element.find('button.submit,button[data-element="submit"]').click(function(event) {
         event.preventDefault();
         widget.submit(

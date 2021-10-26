@@ -364,9 +364,6 @@ button.close:hover {
 div.controls button.generic,
 div.controls button.submit,
 div.modal button.submit {
-  background-color: #D1FF27;
-  border-color: #D1FF27;
-  color: #000;
 }
 
 div.modal .card {
@@ -375,6 +372,11 @@ div.modal .card {
 
 div.modal .list-group-item {
   background-color: #3C4650;
+}
+
+div.modal .list-group-item.highlight {
+	background-color: #535d68;
+	color: #fff;
 }
 
 div.controls button.generic:disabled {
@@ -398,8 +400,8 @@ div.controls textarea,
 div.controls input[type="text"],
 div.controls input[type="password"],
 div.controls select {
-  border: 1px solid rgba(188,190,192,0.5);
-  background-color: #191F26;
+  border: 1px solid #272e36;
+  background-color: #0f1317;
   color: #FFFFFF;
 }
 
@@ -408,9 +410,10 @@ div.controls textarea:disabled,
 div.controls input[type="text"]:disabled,
 div.controls input[type="password"]:disabled,
 div.controls select:disabled {
-  border-color: transparent;
-  background-color: #000;
+  border: 1px solid #272e36;
+  background-color: #0f1317;
   color: #FFFFFF;
+  opacity: 0.5;
 }
 
 
@@ -452,6 +455,10 @@ span.select2-dropdown {
 
 div.menu div.menu-deco-border {
   background-color: #3c4650;
+}
+
+div.tool-custom > h4.tool-title {
+	border-bottom: 2px solid #3c4650;
 }
 
 
@@ -547,6 +554,8 @@ a.nav-link.active {
 a.nav-link {
   color: #BCBEC0;
 }
+
+/* loading spinner */
 
 
 @keyframes ldio-a9ruqenne8l {
