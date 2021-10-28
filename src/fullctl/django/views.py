@@ -6,6 +6,7 @@ import sys
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
+from django.conf import settings
 
 from fullctl.django.decorators import require_auth
 
@@ -13,7 +14,6 @@ from fullctl.django.decorators import require_auth
 @require_auth()
 def org_redirect(request):
     return redirect(f"/{request.org.slug}/")
-
 
 def diag(request):
     if not request.user.is_superuser:
@@ -28,6 +28,17 @@ def diag(request):
         txt += f"{k}: {v}\n"
 
     return HttpResponse(mark_safe(f"<div><pre>Meta:\n{txt}</pre></div>"))
+
+
+@require_auth()
+def login(request):
+    return redirect("/")
+
+
+def logout(request):
+    response = redirect(f"{settings.AAACTL_HOST}/account/auth/logout/")
+    request.session.delete()
+    return response
 
 
 def handle_error(request, exception, status):

@@ -15,11 +15,10 @@ class require_auth:
         def wrapped(request, *args, **kwargs):
             if not request.user.is_authenticated:
 
-                # return redirect(
-                #     reverse("social:begin", args=("twentyc",))
-                #     + f"?next={request.get_full_path()}"
-                # )
-                return redirect(reverse("login") + f"?next={request.get_full_path()}")
+                return redirect(
+                     reverse("social:begin", args=("twentyc",))
+                     + f"?next={request.get_full_path()}"
+                )
 
             return fn(request, *args, **kwargs)
 

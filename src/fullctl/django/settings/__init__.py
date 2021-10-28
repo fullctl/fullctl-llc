@@ -338,6 +338,9 @@ class SettingsManager(confu.util.SettingsManager):
         # if false, billing checks on api end points will be disabled
         self.set_bool("BILLING_INTEGRATION", billing_integration)
 
+        # terminate session on browser close
+        self.set_option("SESSION_EXPIRE_AT_BROWSER_CLOSE", True)
+
     def set_languages_docs(self):
         self.set_option("ENABLE_ALL_LANGUAGES", False)
 
