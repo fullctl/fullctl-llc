@@ -15,6 +15,7 @@ from fullctl.django.decorators import require_auth
 def org_redirect(request):
     return redirect(f"/{request.org.slug}/")
 
+
 def diag(request):
     if not request.user.is_superuser:
         raise Http404()

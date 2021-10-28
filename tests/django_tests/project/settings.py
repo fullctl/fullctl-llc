@@ -174,3 +174,5 @@ LOGGING = {
 
 OAUTH_TWENTYC_HOST = "localhost"
 SERVICE_TAG = "fullctl"
+SERVICE_KEY = "s3cr3t"
+AAACTL_HOST = "test://aaactl"

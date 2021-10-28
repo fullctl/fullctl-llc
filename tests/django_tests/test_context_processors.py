@@ -18,6 +18,7 @@ def test_account_service(db, dj_account_objects, settings):
     }
 
     context = context_processors.account_service(request)
+
     assert context["account_service"] == expected
 
 

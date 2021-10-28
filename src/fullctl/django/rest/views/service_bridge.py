@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from fullctl.django.rest.core import BadRequest
 from fullctl.django.rest.decorators import grainy_endpoint
 
+
 class MethodFilter:
     def __init__(self, name):
         self.name = name
@@ -21,12 +22,14 @@ class SystemViewSet(viewsets.GenericViewSet):
     path_prefix = "/system"
     allowed_http_methods = ["GET"]
 
+
 class HeartbeatViewSet(SystemViewSet):
     ref_tag = "heartbeat"
 
     @grainy_endpoint("service_bridge.system")
     def list(self, request):
-        return Response({"status":"ok"})
+        return Response({"status": "ok"})
+
 
 class StatusViewSet(SystemViewSet):
     ref_tag = "status"
@@ -41,28 +44,35 @@ class StatusViewSet(SystemViewSet):
             fn = getattr(self, f"check_{check}")
             t_start = time.time()
             try:
-                results[check] = {"status": fn(request), "time": time.time()-t_start}
+                results[check] = {"status": fn(request), "time": time.time() - t_start}
             except Exception as e:
-                results[check] = {"status": "failure", "details": str(e), "time": time.time()-t_start}
+                results[check] = {
+                    "status": "failure",
+                    "details": str(e),
+                    "time": time.time() - t_start,
+                }
 
         return Response(results)
 
     def check_bridge_peerctl(self, request):
         import fullctl.service_bridge.peerctl as peerctl
+
         return peerctl.Peerctl(cache_duration=1).heartbeat()
 
     def check_bridge_aaactl(self, request):
         import fullctl.service_bridge.aaactl as aaactl
+
         return aaactl.Aaactl(cache_duration=1).heartbeat()
 
     def check_bridge_pdbctl(self, request):
         import fullctl.service_bridge.pdbctl as pdbctl
+
         return pdbctl.Pdbctl(cache_duration=1).heartbeat()
 
     def check_bridge_ixctl(self, request):
         import fullctl.service_bridge.ixctl as ixctl
-        return ixctl.Ixctl(cache_duration=1).heartbeat()
 
+        return ixctl.Ixctl(cache_duration=1).heartbeat()
 
 
 class DataViewSet(viewsets.ModelViewSet):

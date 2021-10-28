@@ -1,0 +1,7 @@
+{
+  "urls": {
+    "billing_setup": "localhost/billing/setup?org=test",
+    "create_org": "localhost/account/org/create/",
+    "manage_org": "localhost/account/?org=test"
+  }
+}

@@ -16,8 +16,8 @@ class require_auth:
             if not request.user.is_authenticated:
 
                 return redirect(
-                     reverse("social:begin", args=("twentyc",))
-                     + f"?next={request.get_full_path()}"
+                    reverse("social:begin", args=("twentyc",))
+                    + f"?next={request.get_full_path()}"
                 )
 
             return fn(request, *args, **kwargs)
