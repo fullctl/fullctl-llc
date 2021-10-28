@@ -83,6 +83,7 @@ class Command(CommandInterface):
 
     def _run(self, *args, **kwargs):
         self.sleep_interval = 0.5
+        self.all_workers_busy = False
         self.workers_num = int(kwargs.get("workers") or 1)
 
         self.workers = [Worker() for i in range(0, self.workers_num)]
@@ -111,8 +112,14 @@ class Command(CommandInterface):
             await asyncio.sleep(self.sleep_interval)
 
             if not self.worker_available:
-                self.log_info("All workers busy")
+                if not self.all_workers_busy:
+                    self.log_info("All workers busy")
+                    self.all_workers_busy = True
                 continue
+            else:
+                if self.all_workers_busy:
+                    self.log_info("Worker available")
+                self.all_workers_busy = False
 
             # django call needs to be wrapped in sync_to_async
 
