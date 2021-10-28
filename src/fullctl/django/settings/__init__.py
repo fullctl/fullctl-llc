@@ -328,6 +328,8 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_service_bridges()
         self.set_twentyc_oauth()
 
+        self.set_option("SUPPORT_EMAIL", self.get("SERVER_EMAIL"))
+
         # allow propagation of user field changes during oauth process
         # with exception of id fields
         if propagate_user_fields:

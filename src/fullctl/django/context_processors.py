@@ -8,6 +8,7 @@ def conf(request):
 
     return {
         "google_analytics_id": getattr(settings, "GOOGLE_ANALYTICS_ID", None),
+        "support_email": settings.SUPPORT_EMAIL,
     }
 
 

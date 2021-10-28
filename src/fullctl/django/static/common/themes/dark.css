@@ -91,6 +91,8 @@ div.validation-error.non-field-errors {
 
 a[data-action].ixctl,
 a[data-action].ixctl:hover,
+a,
+a:hover,
 a.ixctl,
 a.button:hover,
 .menu a.button:hover,
