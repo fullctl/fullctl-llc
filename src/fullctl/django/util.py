@@ -18,8 +18,9 @@ def host_url():
     """
 
     with current_request() as request:
+        print(request.META)
         if request:
-            return request.META["HTTP_HOST"]
+            return request.META["HTTP_ORIGIN"]
         return settings.HOST_URL
 
 
