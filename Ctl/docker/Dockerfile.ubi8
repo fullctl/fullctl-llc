@@ -1,0 +1,45 @@
+ARG poetry_version=1.1.11
+ARG uid=6300
+ARG user=fullctl
+
+ARG virtual_env=/venv
+ARG install_to=/srv/service
+ARG build_deps=" \
+    gcc \
+    git \
+    python39-devel \
+    bgpq4 \
+    "
+ARG run_deps=" \
+    libpq \
+    python39 \
+    "
+
+# build container
+FROM registry.access.redhat.com/ubi8/ubi:8.4 as builder
+
+# TODO pin bgpq4
+ARG build_deps
+ARG virtual_env
+ARG poetry_version
+
+ENV VIRTUAL_ENV=$virtual_env
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+WORKDIR /build
+
+RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
+    && dnf --disableplugin=subscription-manager install -by --nodocs $build_deps
+
+# Use Pip to install Poetry
+RUN pip3 install "poetry==$poetry_version"
+
+# Create a VENV
+RUN python3 -m venv "$VIRTUAL_ENV"
+# TODO should be able to replace these by adding to pyproject?
+RUN pip3 install --upgrade pip wheel
+
+# poetry install
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --no-root
+RUN poetry run pip install --upgrade pip wheel
