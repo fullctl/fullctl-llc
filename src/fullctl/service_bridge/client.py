@@ -159,6 +159,14 @@ class Bridge:
         for o in self.objects(**kwargs):
             return o
 
+    def heartbeat(self):
+        data = self.get("system/heartbeat")
+        return data[0].get("status")
+
+    def status(self):
+        data = self.get("system/status")
+        return data[0]
+
 
 class AaaCtl(Bridge):
 
