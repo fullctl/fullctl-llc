@@ -99,6 +99,7 @@ class CommandInterface(BaseCommand):
         )
         auditlog.set("info", f"{worker_id()}:{command_name}")
 
+        sid = None
         try:
             sid = transaction.savepoint()
             self._run(*args, **kwargs)

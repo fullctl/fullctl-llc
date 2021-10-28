@@ -47,7 +47,6 @@ services:
     build:
       context: ../../../ixctl
       dockerfile: Dockerfile
-#      dockerfile: Ctl/docker/Dockerfile.rsconfgen
     command: runserver 0.0.0.0:6001
     env_file:
       - .env
@@ -69,6 +68,28 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../ixctl/src:/srv/service/main
+
+  ixctl_worker:
+    build:
+      context: ../../../ixctl
+      dockerfile: Ctl/docker/Dockerfile.rsconfgen
+    # command: fullctl_poll_tasks
+    command: runserver
+    env_file:
+      - .env
+      - ../../../ixctl/Ctl/dev/.env
+    environment:
+      DATABASE_PASSWORD: devPASSWORD
+      DATABASE_HOST: postgres
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    user: 6300:6300
+    volumes:
+      - ../../src/fullctl:/srv/service/main/fullctl
+      - ../../../ixctl/src:/srv/service/main
+#      - ../../../ixctl/LOCAL/mnt/arouteserver:/arouteserver:Z
 
   peerctl_web:
     build:
