@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles import views as static_file_views
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView

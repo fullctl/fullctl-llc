@@ -68,4 +68,4 @@ class InternetExchangeMember(Ixctl):
 
     def set_as_macro(self, asn, as_macro, source):
         data = {"as_macro": as_macro, "asn": asn, "source": source}
-        self.put(f"data/member/sync/as-macro", data=data)
+        self.put("data/member/sync/as-macro", data=data)

@@ -2,11 +2,12 @@ import datetime
 import re
 import sys
 
+from django.conf import settings
+
 # from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
-from django.conf import settings
 
 from fullctl.django.decorators import require_auth
 

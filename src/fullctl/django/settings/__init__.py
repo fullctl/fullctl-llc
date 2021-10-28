@@ -166,7 +166,7 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_default("WSGI_APPLICATION", f"{service_tag}.wsgi.application")
 
         # eval from default.py file
-        filename = os.path.join(os.path.dirname(__file__), f"default.py")
+        filename = os.path.join(os.path.dirname(__file__), "default.py")
         self.try_include(filename)
 
     def set_default_append(self):
