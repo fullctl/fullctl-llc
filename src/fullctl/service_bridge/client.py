@@ -173,9 +173,7 @@ class AaaCtl(Bridge):
     """
     Service bridge to aaactl
 
-    TODO: this should probably live in the aaactl repo?
-          But, do we really want to install aaactl as a package
-          for each fullctl service?
+    TODO: move to service_bridge/aaactl.py
     """
 
     def requires_billing(self, product_name):
@@ -193,7 +191,7 @@ class AaaCtl(Bridge):
         return False
 
     def require_subscription(self, product_name):
-        data = self.get(f"billing/org/{self.org}/services/")
+        data = self.get(f"billing/org/{self.org}/services")
 
         for row in data:
             for item in row.get("items"):
@@ -202,7 +200,7 @@ class AaaCtl(Bridge):
 
         payload = {"product": product_name}
         try:
-            data = self.post(f"billing/org/{self.org}/subscribe/", data=payload)
+            data = self.post(f"billing/org/{self.org}/subscribe", data=payload)
         except ServiceBridgeError as exc:
             if exc.has_error("product", "unknown"):
                 return {}
