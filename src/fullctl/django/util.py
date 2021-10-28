@@ -19,7 +19,7 @@ def host_url():
 
     with current_request() as request:
         if request:
-            return request.META["HTTP_ORIGIN"]
+            return request.META.get("HTTP_ORIGIN", settings.HOST_URL)
         return settings.HOST_URL
 
 
