@@ -1,4 +1,4 @@
-name: build and publish container image
+name: build and publish alpine builder image
 
 on:
   push:
