@@ -1,6 +1,11 @@
 {% load i18n static %}
 <!-- snippets -->
 
+{% if cloudflare_analytics_id %}
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "{{ cloudflare_analytics_id }}"'></script>
+<!-- End Cloudflare Web Analytics -->
+{% endif %}
 
 {% if google_analytics_id %}
 <!-- Global site tag (gtag.js) - Google Analytics -->

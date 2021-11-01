@@ -168,6 +168,9 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_default("ROOT_URLCONF", f"{service_tag}.urls")
         self.set_default("WSGI_APPLICATION", f"{service_tag}.wsgi.application")
 
+        self.set_option("GOOGLE_ANALYTICS_ID","")
+        self.set_option("CLOUDFLARE_ANALYTICS_ID","")
+
         # eval from default.py file
         filename = os.path.join(os.path.dirname(__file__), "default.py")
         self.try_include(filename)
