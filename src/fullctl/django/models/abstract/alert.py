@@ -10,7 +10,7 @@ ALERT_RECIPIENT_TYPE = (("email", _("Email")),)
 # XXX this needs to be adapted to the new task system
 
 
-class AlertGroup:
+class AlertGroup(HandleRefModel):
 
     """
     Describes a group of recipients for alert notifications
