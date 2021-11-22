@@ -1305,7 +1305,7 @@ twentyc.rest.List = twentyc.cls.extend(
      */
 
     find_row : function(id) {
-      return this.list_body.find('.row-'+id.replace(':','\\:'));
+      return this.list_body.find('.row-'+(""+id).replace(':','\\:'));
     },
 
     action_failure : function(response) {
