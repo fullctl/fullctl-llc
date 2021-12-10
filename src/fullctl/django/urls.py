@@ -1,3 +1,5 @@
+import importlib
+
 from django.conf import settings
 from django.contrib.staticfiles import views as static_file_views
 from django.urls import include, path, re_path
@@ -34,6 +36,10 @@ if settings.DEBUG:
     urlpatterns += [
         re_path(r"^s/[^\/]+/(?P<path>.*)$", static_file_views.serve),
     ]
+
+
+for import_path, namespace in getattr(settings, "FULLCTL_ADDON_URLS", []):
+    urlpatterns += [path("", include((import_path, namespace), namespace=namespace))]
 
 urlpatterns += [
     path("_diag", fullctl.django.views.diag),
