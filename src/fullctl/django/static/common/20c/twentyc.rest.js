@@ -636,6 +636,23 @@ twentyc.rest.Widget = twentyc.cls.extend(
  * `submit` css class set it will be wired to submit the form
  * on click
  *
+ * Input type elements (`<input>`, `<textarea>`, etc.,) will be collected into
+ * the payload as long as they are nested inside a parent element that has
+ * the `data-api-submit="yes"` attribute set.
+ *
+ * # example
+ *
+ * ```html
+ * <form data-api-base="/api/add-object">
+ *   <div data-api-submit="yes">
+ *     <input type="text" name="name">
+ *   </div>
+ *   <div>
+ *     <button class="submit">Add object</button>
+ *   </div>
+ * </form>
+ * ```
+ *
  * @class Form
  * @extends twentyc.rest.Widget
  * @namespace twentyc.rest
@@ -774,6 +791,20 @@ twentyc.rest.Form = twentyc.cls.extend(
   twentyc.rest.Widget
 );
 
+/**
+ * Base input widget class
+ *
+ * # required
+ *
+ * - data-api-base: api root or full path to endpoint
+ *
+ * @class Button
+ * @extends twentyc.rest.Widget
+ * @namespace twentyc.rest
+ * @param {jQuery result} jq jquery result holding the target element
+ */
+
+
 
 twentyc.rest.Input = twentyc.cls.extend(
   "Input",
@@ -848,6 +879,23 @@ twentyc.rest.Input = twentyc.cls.extend(
   twentyc.rest.Widget
 );
 
+/**
+ * Button widget
+ *
+ * Wires a html element (typically `<a>` or `<button>` to the API
+ *
+ * The select element should have the following attributes set
+ *
+ * # required
+ *
+ * - data-api-base: api root or full path to endpoint
+ *
+ * @class Button
+ * @extends twentyc.rest.Input
+ * @namespace twentyc.rest
+ * @param {jQuery result} jq jquery result holding the button element
+ */
+
 
 twentyc.rest.Button = twentyc.cls.extend(
   "Button",
@@ -903,7 +951,7 @@ twentyc.rest.Button = twentyc.cls.extend(
  *   serializer field name, will default to "name" attribute if not specified.
  *
  * @class Select
- * @extends twentyc.rest.widget
+ * @extends twentyc.rest.Input
  * @namespace twentyc.rest
  * @param {jQuery result} jq jquery result holding the select element
  */
@@ -1170,6 +1218,22 @@ twentyc.rest.Select = twentyc.cls.extend(
  * var list = new twentyc.rest.List($('#my_list'))
  * list.load();
  * ```
+ *
+ * # Example: wiring a delete button
+ *
+ * One of the most common things to add to a list is a delete button
+ * for each row.
+ *
+ * ```html
+ * <td>
+ *   <button data-api-action="{id}" data-api-callback="remove" data-api-method="DELETE"></button>
+ * </td>
+ * ```
+ *
+ * `{id}` will be replaced by the value of `object.id` where `object` is the object
+ * represented by the row.
+ *
+ * the value of `data-api-action` on the row will be joined to the list's `data-api-base` value.
  *
  *
  * @class List
