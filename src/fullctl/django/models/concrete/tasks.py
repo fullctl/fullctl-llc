@@ -516,6 +516,8 @@ class TaskSchedule(HandleRefModel):
 
 class Monitor(HandleRefModel):
 
+    email = models.EmailField(null=True, blank=True, help_text=_("Primary alert notification email"))
+
 
     class Meta:
         abstract = True

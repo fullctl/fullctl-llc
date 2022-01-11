@@ -68,6 +68,10 @@ button:focus {
   cursor: pointer;
 }
 
+.small-info {
+  font-size: 12px;
+}
+
 a,
 a:hover {
   text-decoration: underline;
@@ -428,6 +432,15 @@ div.toolbar {
 input.slim {
 	width: 75px;
 }
+
+.list-body .secondary div.row:first-child {
+  margin-top: 0px;
+}
+
+.list-body .secondary div.row:not(:first-child) {
+  margin-top: 3px;
+}
+
 
 .list-body + .list-no-data {
   display: none;
