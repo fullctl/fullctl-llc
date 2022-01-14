@@ -25,22 +25,17 @@ def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None)
         op = task_config.get("op")
 
         model = TASK_MODELS.get(op)
-        param = task_config.get("param",{})
+        param = task_config.get("param", {})
         args = param.get("args", [])
         kwargs = param.get("kwargs", {})
         timeout = task_config.get("timeout", 0)
 
-
-        task = model.create_task(
-            timeout=timeout,
-            user=user,
-            org=org,
-            *args,
-            **kwargs
-        )
+        task = model.create_task(timeout=timeout, user=user, org=org, *args, **kwargs)
 
         tasks.append(task)
 
-        create_tasks_from_json(task_config, parent=task, user=user, org=org, tasks=tasks)
+        create_tasks_from_json(
+            task_config, parent=task, user=user, org=org, tasks=tasks
+        )
 
     return tasks

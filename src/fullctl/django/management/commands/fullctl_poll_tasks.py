@@ -5,7 +5,12 @@ import reversion
 from asgiref.sync import sync_to_async
 
 from fullctl.django.management.commands.base import CommandInterface
-from fullctl.django.tasks.orm import TaskClaimed, claim_task, fetch_task, progress_schedules
+from fullctl.django.tasks.orm import (
+    TaskClaimed,
+    claim_task,
+    fetch_task,
+    progress_schedules,
+)
 
 
 class Worker:
@@ -143,8 +148,6 @@ class Command(CommandInterface):
 
             await asyncio.sleep(self.sleep_interval)
             await sync_to_async(progress_schedules)()
-
-
 
     def claim_task(self, task):
         try:
