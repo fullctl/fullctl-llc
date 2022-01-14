@@ -186,10 +186,6 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../prefixctl/src:/srv/service/main:Z
-      - ../../../prefixctl-reputation/src/prefixctl_reputation_check:/srv/service/venv/lib/python3.9/site-packages/prefixctl_reputation_check:Z
-      - ../../../prefixctl-reputation/src/reputation_check:/srv/service/venv/lib/python3.9/site-packages/reputation_check:Z
-
-
 
 
 volumes:
