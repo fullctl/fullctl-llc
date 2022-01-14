@@ -39,11 +39,15 @@ def account_service(request):
         service_logo_light=f"{settings.SERVICE_TAG}/logo-lightbg.svg",
         service_tag=settings.SERVICE_TAG,
         service_name=settings.SERVICE_TAG.replace("ctl", ""),
-        service_applications=[
-            svcapp.for_org(org)
-            for svcapp in ServiceApplication().objects(group="fullctl")
-        ],
     )
+
+    if settings.OAUTH_TWENTYC_HOST:
+        context.update(
+            service_applications=[
+                svcapp.for_org(org)
+                for svcapp in ServiceApplication().objects(group="fullctl")
+            ],
+        )
 
     return context
 
