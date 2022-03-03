@@ -77,11 +77,11 @@ a:hover {
   text-decoration: underline;
 }
 
-a.button {
+a.a-button {
   text-decoration: none;
 }
 
-a.button:hover {
+a.a-button:hover {
   text-decoration: none;
 }
 
@@ -527,15 +527,15 @@ div.toolbar-field > span.value {
 div.menu .button {
   display: block;
   width: 100%;
-	border: none;
+  border: none;
   font-family: "Archivo Narrow";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 16px;
   text-transform: capitalize;
-	text-decoration: none;
-	text-align: left;
-	margin: 16px 0px;
+  text-decoration: none;
+  text-align: left;
+  margin: 4px 0px;
 }
 
 div.menu .button:hover {
@@ -729,7 +729,6 @@ a.nav-link.active {
  */
 
 div.menu {
-  margin-top: 54px;
   position: relative;
 }
 
@@ -759,6 +758,20 @@ div.menu .button {
 /**
  * content
  */
+
+.main[data-component="main"] {
+  margin-top: 54px;
+}
+
+div.list-th,
+table thead tr th {
+  opacity: 0.4;
+}
+
+div.list-th,
+.table.list-table  {
+  border-top: 2px solid #9da2a7;
+}
 
 div.list-th,
 .table th {
@@ -902,7 +915,7 @@ tbody.list-footer td {
   text-align: center;
 }
 
-tbody.list-footer button {
+tbody.list-footer button:not(.rounded-button)1 {
   text-decoration: underline;
 }
 
