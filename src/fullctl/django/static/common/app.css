@@ -636,6 +636,11 @@ span.icon-list {
   mask-image: url(icons/icon/list.svg);
 }
 
+span.icon-api {
+  -webkit-mask-image: url(icons/icon/api.svg);
+  mask-image: url(icons/icon/api.svg);
+}
+
 span.icon-download {
   -webkit-mask-image: url(icons/icon/logout.svg);
   mask-image: url(icons/icon/logout.svg);
