@@ -147,6 +147,7 @@ class Organization(HandleRefModel):
             if data["personal"] != org.personal:
                 org.personal = data["personal"]
                 changed = True
+
             if changed:
                 org.save()
         except cls.DoesNotExist:
@@ -158,8 +159,12 @@ class Organization(HandleRefModel):
                 personal=data["personal"],
             )
 
+        is_default = data.get("is_default", False)
+
         if not user.org_set.filter(org=org).exists():
-            OrganizationUser.objects.create(org=org, user=user)
+            OrganizationUser.objects.create(org=org, user=user, is_default=is_default)
+        else:
+            user.org_set.filter(org=org).update(is_default=is_default)
 
         return org
 
@@ -231,6 +236,8 @@ class OrganizationUser(HandleRefModel):
     user = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="org_set"
     )
+
+    is_default = models.BooleanField(default=False)
 
     class HandleRef:
         tag = "orguser"
