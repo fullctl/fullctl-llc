@@ -603,6 +603,7 @@ span.icon {
   vertical-align: bottom;
   margin-right: 3px;
   mask-position: center;
+  -webkit-mask-position: center;
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
 }
@@ -646,11 +647,6 @@ span.icon-api {
   mask-image: url(icons/icon/api.svg);
 }
 
-span.icon-down {
-  -webkit-mask-image: url(icons/icon/down.svg);
-  mask-image: url(icons/icon/down.svg);
-}
-
 span.icon-report {
   -webkit-mask-image: url(icons/icon/report.svg);
   mask-image: url(icons/icon/report.svg);
@@ -691,21 +687,10 @@ span.icon-caret-down {
   mask-image: url(icons/ui-caret-caret/down.svg);
 }
 
-.secondary span.icon-caret-down {
-	position: relative;
-	top: 5px;
-}
-
-
 span.icon-caret-left {
   -webkit-mask-image: url(icons/ui-caret-caret/down.svg);
   mask-image: url(icons/ui-caret-caret/down.svg);
   transform: rotate(-90deg);
-}
-
-.secondary span.icon-caret-left {
-	position: relative;
-	top: -5px;
 }
 
 
