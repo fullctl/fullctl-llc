@@ -49,9 +49,12 @@ span.icon.neutral {
 }
 
 span.icon.peerctl,
-span.icon.fullctl,
-span.icon.prefixctl {
+span.icon.fullctl {
   background-color: #D1FF27;
+}
+
+span.icon.prefixctl {
+  background-color: #BCBEC0;
 }
 
 span.inner-icon {
@@ -105,7 +108,7 @@ a[data-action].prefixctl,
 a[data-action].prefixctl:hover,
 a.prefixctl,
 .prefixctl {
-  color: #D1FF27;
+  color: #F1F2F2;
 }
 
 .prefixctl.app_bg {
@@ -117,7 +120,7 @@ a.prefixctl,
 
 
 div.header-outer {
-  background-color: #0F1317;
+  background-color: #000;
   border-color:#272e36;
 }
 
@@ -213,12 +216,18 @@ div.toolbar div.toolbar-control-group {
 
 div.menu .button,
 div.toolbar .button {
-  color: #D1FF27;
+  color: #F1F2F2;
+  width: initial;
 }
 
+.rounded-button {
+  border-radius: 50px;
+  background: #000;
+  padding: 12px 16px;
+}
 
 div.menu .button.prefixctl {
-  color: #D1FF27;
+  color: #F1F2F2;
 }
 
 div.toolbar-field {
@@ -240,16 +249,6 @@ div.menu div.section.tabs .active {
 }
 
 
-div.list-th,
-table thead tr th {
-  opacity: 0.4;
-}
-
-div.list-th,
-.table thead th {
-  border-bottom-color: #9da2a7;
-}
-
 .table .table {
   background-color: inherit;
 }
@@ -261,6 +260,14 @@ div.list-th,
 span.highlight,
 .table td.highlight {
   color: #fff;
+}
+
+.green-text {
+  color: #7ED321;
+}
+
+.table td.prefix-name {
+  font-size: 24px;
 }
 
 div.list-th.selected-order-header-asc,
@@ -278,7 +285,7 @@ table thead th.selected-order-header-desc,
 .list-body div.secondary,
 .table tr.secondary {
   background-color: #20262e;
-  border-bottom-color: #3c4650;
+  border-bottom-color: #191f26;
 }
 
 .list-body div.secondary {
@@ -304,10 +311,43 @@ table thead th.selected-order-header-desc,
   background-color: #191f26;
 }
 
+.with-border {
+  border-left: 4px #191f26 solid;
+}
 
-div.modal .controls,
-.inner-list {
+.with-border.orange-border {
+  border-color: #FD7E14;
+}
+
+.with-border.green-border {
+  border-color: #7ED321;
+}
+
+.rep-issues {
+  background: #FD7E14 !important;
+  border: none !important;
+  color: #000;
+}
+
+.rep-ok {
+  background: #7ED321 !important;
+  border: none !important;
+  color: #000;
+}
+
+.prefix-rep {
+  padding: 4px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+
+div.modal .controls {
   background-color: #000;
+}
+
+.inner-list {
+  background-color: #20262e;
 }
 
 .inner-list-2 {
@@ -525,15 +565,10 @@ div.header span.header-control .dropdown-item span.icon-solid {
   background-color: #3C4650;
 }
 
-tbody.list-footer {
-  border-top-color: #3C4650 !important;
-}
-
 tbody.list-footer td {
 }
 
 tbody.list-footer button {
-  background-color: transparent;
   border-color: transparent;
 }
 
