@@ -335,6 +335,13 @@ table thead th.selected-order-header-desc,
   color: #000;
 }
 
+.prefix-rep {
+  padding: 4px;
+  border-radius: 5px;
+  margin-left: 8px;
+  display: inline-block;
+}
+
 
 div.modal .controls,
 .inner-list {
