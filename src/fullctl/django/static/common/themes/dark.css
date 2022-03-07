@@ -120,7 +120,7 @@ a.prefixctl,
 
 
 div.header-outer {
-  background-color: #0F1317;
+  background-color: #000;
   border-color:#272e36;
 }
 
@@ -285,6 +285,7 @@ table thead th.selected-order-header-desc,
 .list-body div.secondary,
 .table tr.secondary {
   background-color: #20262e;
+  border-bottom-color: #191f26;
 }
 
 .list-body div.secondary {

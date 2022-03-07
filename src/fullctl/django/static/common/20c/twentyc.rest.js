@@ -46,7 +46,7 @@ twentyc.rest = {
 
     csrf : ""
   }
-}
+};
 
 /**
  * Wrapper for API responses
@@ -821,10 +821,13 @@ twentyc.rest.Widget = twentyc.cls.extend(
       var k, tag, val, formatter;
       for(k in data) {
         var formatter = this.formatters[k];
-        col_element = element.find('[data-field="'+k+'"]')
+        var col_element = element.find('[data-field="'+k+'"]');
+
         if(col_element.length)
           tag = col_element.get(0).tagName.toLowerCase();
-        toggle = col_element.data("toggle")
+
+        var toggle = col_element.data("toggle");
+
         if(toggle) {
           if(data[k]) {
             col_element.addClass(toggle);
@@ -1616,7 +1619,7 @@ twentyc.rest.List = twentyc.cls.extend(
      */
 
     insert : function(data) {
-      var toggle, k, row_element;
+      var row_element;
 
       row_element = this.template('row')
 
