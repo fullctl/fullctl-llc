@@ -1610,6 +1610,25 @@ twentyc.rest.List = twentyc.cls.extend(
     },
 
     /**
+     * Builds the html elements for a row in the list
+     *
+     * Note this does not fill in any data by itself and is called
+     * automatically by the `insert` method.
+     *
+     * Override this if you need to dynamically control how
+     * a the row elements are built, for example if you want to
+     * do different rows for different object types
+     *
+     * @method build_row
+     * @param {Object} data
+     * @returns {jQuery} row element
+     */
+
+    build_row : function(data) {
+      return this.template('row');
+    },
+
+    /**
      * insert a new row from object
      *
      * triggers insert:after event
@@ -1621,7 +1640,7 @@ twentyc.rest.List = twentyc.cls.extend(
     insert : function(data) {
       var row_element;
 
-      row_element = this.template('row')
+      row_element = this.build_row(data);
 
       this.apply_data(data, row_element);
 
