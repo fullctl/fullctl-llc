@@ -58,7 +58,15 @@ class RequestAugmentation:
                 request.org = Organization.objects.get(slug=kwargs["org_tag"])
 
             elif request.user.org_set.exists():
-                request.org = request.user.org_set.first().org
+
+                default_org = request.user.org_set.filter(is_default=True).first()
+
+                if default_org:
+                    request.org = default_org.org
+                else:
+                    request.org = (
+                        request.user.org_set.filter(user=request.user).first().org
+                    )
 
             if hasattr(request.user, "org_set"):
                 request.orgs = request.user.org_set.all()

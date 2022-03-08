@@ -5,6 +5,7 @@ from django_handleref.admin import VersionAdmin
 import fullctl.django.auditlog as auditlog
 from fullctl.django.models.concrete import (
     AuditLog,
+    Organization,
     OrganizationUser,
     Task,
     TaskSchedule,
@@ -35,10 +36,11 @@ class BaseTabularAdmin(admin.TabularInline):
 
 class OrganizationUserInline(admin.TabularInline):
     model = OrganizationUser
-    extra = 0
-    fields = ("status", "user")
+    extra = 1
+    fields = ("status", "user", "is_default")
 
 
+@admin.register(Organization)
 class OrganizationAdmin(BaseAdmin):
     list_display = ("id", "name", "slug")
     inlines = (OrganizationUserInline,)

@@ -1245,6 +1245,15 @@ span.status-badge div.spinner {
   text-transform: capitalize;
 }
 
+.prefix-rep,
+.rep-status {
+  text-transform: uppercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
 /*
  * oauth
  */
