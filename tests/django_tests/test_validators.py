@@ -48,6 +48,25 @@ def test_validate_masklength_range():
     assert "Needs to be [0-9]+..[0-9]+ or 'exact'" in str(execinfo.value)
 
 
+def test_validate_as_set():
+
+    validated_set = validators.validate_as_set("AS64496:AS-ALL")
+    assert validated_set == "AS64496:AS-ALL"
+
+
+def test_validate_as_set_multiple():
+    validated_set = validators.validate_as_set("AS64448:AS-SOME,AS64496:AS-ALL")
+    assert validated_set == "AS64448:AS-SOME, AS64496:AS-ALL"
+
+
+def test_validate_as_set_non_string():
+
+    with pytest.raises(ValueError) as execinfo:
+        validators.validate_as_set(123)
+
+    assert "IRR AS-SET value must be string type" in str(execinfo.value)
+
+
 @pytest.fixture
 def ipaddrs():
     Ipaddresses = namedtuple(
