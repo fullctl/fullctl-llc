@@ -27,7 +27,6 @@ def test_validate_ip6(ipaddrs):
 
 
 def test_validate_prefix(ipaddrs):
-
     validators.validate_prefix(ipaddrs.PREFIX)
     validators.validate_prefix(ipaddrs.NETMASK)
 
@@ -38,7 +37,6 @@ def test_validate_prefix(ipaddrs):
 
 
 def test_validate_masklength_range():
-
     validators.validate_masklength_range("32..128")
     validators.validate_masklength_range("exact")
 
@@ -49,7 +47,6 @@ def test_validate_masklength_range():
 
 
 def test_validate_as_set():
-
     validated_set = validators.validate_as_set("AS64496:AS-ALL")
     assert validated_set == "AS64496:AS-ALL"
 
@@ -60,7 +57,6 @@ def test_validate_as_set_multiple():
 
 
 def test_validate_as_set_non_string():
-
     with pytest.raises(ValueError) as execinfo:
         validators.validate_as_set(123)
 
