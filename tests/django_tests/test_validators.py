@@ -37,6 +37,17 @@ def test_validate_prefix(ipaddrs):
     assert "Invalid prefix" in str(execinfo.value)
 
 
+def test_validate_masklength_range(ipaddrs):
+
+    validators.validate_masklength_range("32..128")
+    validators.validate_masklength_range("exact")
+
+    with pytest.raises(ValidationError) as execinfo:
+        validators.validate_masklength_range("123")
+
+    assert "Needs to be [0-9]+..[0-9]+ or 'exact'" in str(execinfo.value)
+
+
 @pytest.fixture
 def ipaddrs():
     Ipaddresses = namedtuple(
