@@ -50,6 +50,20 @@ def test_validate_as_set():
     validated_set = validators.validate_as_set("AS64496:AS-ALL")
     assert validated_set == "AS64496:AS-ALL"
 
+    with pytest.raises(ValidationError) as execinfo:
+        validated_set = validators.validate_as_set(".,.,.,")
+
+    assert "Invalid formatting:" in str(
+        execinfo.value
+    ) and "- should be AS-SET, ASx, SOURCE::AS-SET" in str(execinfo.value)
+
+    with pytest.raises(ValidationError) as execinfo:
+        validated_set = validators.validate_as_set("AZ2134")
+
+    assert "Invalid formatting:" in str(
+        execinfo.value
+    ) and "- should be RS-SET, AS-SET or AS123" in str(execinfo.value)
+
 
 def test_validate_as_set_multiple():
     validated_set = validators.validate_as_set("AS64448:AS-SOME,AS64496:AS-ALL")
@@ -61,6 +75,13 @@ def test_validate_as_set_with_source():
     assert validated_set == "RIPE::AS64496:AS-ALL"
     validated_set = validators.validate_as_set("RIPE::AS64496:AS-ALL,AS13241:AS-SOME")
     assert validated_set == "RIPE::AS64496:AS-ALL, AS13241:AS-SOME"
+
+    with pytest.raises(ValidationError) as execinfo:
+        validated_set = validators.validate_as_set(
+            "INVALID::AS64496:AS-ALL,AS13241:AS-SOME"
+        )
+
+    assert "Unknown IRR source:" in str(execinfo.value)
 
 
 def test_validate_as_set_non_string():
