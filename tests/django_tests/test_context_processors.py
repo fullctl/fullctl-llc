@@ -69,6 +69,7 @@ def test_permissions_crud_no_org(db, dj_account_objects, settings):
 def test_permissions_crud_RemotePermissionsError():
     request = HttpRequest()
     request.error_response = RemotePermissionsError()
+
     context = context_processors.permissions(request)
     assert context["permissions"] == {}
 
@@ -88,3 +89,16 @@ def test_permissions_readonly(db, dj_account_objects, settings):
 
     context = context_processors.permissions(request)
     assert context["permissions"] == readonly_perms
+
+
+def test_conf(db, dj_account_objects, settings):
+    request = HttpRequest()
+
+    conf_support_email = {
+        "google_analytics_id": None,
+        "cloudflare_analytics_id": "asdf",
+        "support_email": "support@mail.com",
+    }
+
+    conf = context_processors.conf(request)
+    assert conf == conf_dict
