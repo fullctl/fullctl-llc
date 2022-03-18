@@ -80,3 +80,8 @@ def dj_account_objects():
 @pytest.fixture
 def dj_account_objects_b():
     return make_account_objects("test_b")
+
+
+@pytest.fixture
+def dj_account_objects_c():
+    return make_account_objects("test_c")
