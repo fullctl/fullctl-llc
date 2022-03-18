@@ -2,7 +2,7 @@ import pytest
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
-from fullctl.django.models.concrete.tasks import TaskLimitError
+from fullctl.django.models.concrete.tasks import TaskClaimed, TaskLimitError
 
 
 @pytest.mark.django_db
@@ -10,6 +10,18 @@ def test_fetch_tasks():
 
     task = models.TestTask.create_task(1, 2)
     assert task == orm.fetch_task()
+
+
+@pytest.mark.django_db
+def test_claim_task():
+
+    task = models.TestTask.create_task(1, 2)
+    orm.claim_task(task)
+
+    with pytest.raises(TaskClaimed) as execinfo:
+        orm.claim_task(task)
+
+    assert "Task already claimed by another worker:" in str(execinfo)
 
 
 @pytest.mark.django_db
