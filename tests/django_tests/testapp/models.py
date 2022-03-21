@@ -93,3 +93,18 @@ class LimitedTaskWithLimitId(LimitedTask):
     @property
     def generate_limit_id(self):
         return self.param["args"][0]
+
+
+@register
+class FailingTask(Task):
+    class Meta:
+        proxy = True
+
+    class HandleRef:
+        tag = "task_failing"
+
+    class TaskMeta:
+        result_type = int
+
+    def run(self, *args, **kwargs):
+        return int("string")

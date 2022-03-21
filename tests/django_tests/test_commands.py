@@ -33,3 +33,11 @@ def test_fullctl_work_task(db, dj_account_objects):
 
     assert task.status == "completed"
     assert int(task.output) == 3
+
+
+def test_fullctl_work_task_fail(db, dj_account_objects):
+    task = models.FailingTask.create_task()
+    management.call_command("fullctl_work_task", "1")
+    task = specify_task(Task.objects.get(id=1))
+
+    assert task.status == "failed"
