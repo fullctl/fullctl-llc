@@ -40,6 +40,15 @@ def test_SettingsManager_set():
 def test_SettingsManager_try_include():
     global settings_manager
     settings_manager = settings.SettingsManager(globals())
+    settings_manager.try_include("./tests/django_tests/testdevnonexistent.py")
+
     settings_manager.try_include("./tests/django_tests/testdev.py")
 
     assert TEST_EXTERNAL_SETTING == "a whole new world"
+
+
+def test_SettingsManager_try_include_env():
+    global settings_manager
+    settings_manager = settings.SettingsManager(globals())
+    setting = settings_manager.set_option("RELEASE_ENV", "testdev")
+    settings_manager.try_include_env() # TODO add assertion
