@@ -8,6 +8,7 @@ import sys
 from urllib.parse import urljoin
 
 import confu.util
+import django
 
 
 def print_debug(*args, **kwargs):
