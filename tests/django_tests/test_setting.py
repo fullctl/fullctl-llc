@@ -166,3 +166,43 @@ def test_SettingsManager_set_service_bridges():
     assert g["PDBCTL_HOST"] == ""
     assert g["PEERCTL_HOST"] == ""
     assert g["IXCTL_HOST"] == ""
+
+
+def test_SettingsManager_set_twentyc_oauth():
+    g = {}
+    settings_manager = settings.SettingsManager(g)
+    aaactlhost = "aaactlhost.com"
+    settings_manager.set_twentyc_oauth(aaactlhost)
+
+    assert g["OAUTH_TWENTYC_HOST"] == aaactlhost
+    assert g["OAUTH_TWENTYC_ACCESS_TOKEN_URL"] == "aaactlhost.com/account/auth/o/token/"
+    assert (
+        g["OAUTH_TWENTYC_AUTHORIZE_URL"] == "aaactlhost.com/account/auth/o/authorize/"
+    )
+    assert g["OAUTH_TWENTYC_PROFILE_URL"] == "aaactlhost.com/account/auth/o/profile/"
+    assert g["OAUTH_TWENTYC_KEY"] == ""
+    assert g["OAUTH_TWENTYC_SECRET"] == ""
+    assert g["SOCIAL_AUTH_REDIRECT_IS_HTTPS"] is True
+
+    authentication_backends = [
+        "fullctl.django.social.backends.twentyc.TwentycOAuth2",
+        "django.contrib.auth.backends.ModelBackend",
+    ]
+    assert g["AUTHENTICATION_BACKENDS"] == authentication_backends
+    assert g["GRAINY_REMOTE"] == {"url_load": "grainy/load/"}
+
+    social_auth_pipeline = (
+        "social_core.pipeline.social_auth.social_details",
+        "social_core.pipeline.social_auth.social_uid",
+        "social_core.pipeline.social_auth.social_user",
+        "social_core.pipeline.user.get_username",
+        "social_core.pipeline.user.create_user",
+        "social_core.pipeline.social_auth.associate_user",
+        "social_core.pipeline.social_auth.load_extra_data",
+        "fullctl.django.social.pipelines.sync_organizations",
+        "social_core.pipeline.user.user_details",
+    )
+    assert g["SOCIAL_AUTH_PIPELINE"] == social_auth_pipeline
+    assert g["LOGIN_REDIRECT_URL"] == "/"
+    assert g["LOGOUT_REDIRECT_URL"] == "/login"
+    assert g["LOGIN_URL"] == "/login"
