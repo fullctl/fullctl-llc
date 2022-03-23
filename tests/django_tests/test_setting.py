@@ -171,7 +171,7 @@ def test_SettingsManager_set_service_bridges():
 def test_SettingsManager_set_twentyc_oauth():
     g = {}
     settings_manager = settings.SettingsManager(g)
-    settings_manager.set_option("AAACTL_HOST", 'aaactlhost.com')
+    settings_manager.set_option("AAACTL_HOST", "aaactlhost.com")
     settings_manager.set_twentyc_oauth()
     aaactlhost = "aaactlhost.com"
     settings_manager.set_twentyc_oauth(aaactlhost)
