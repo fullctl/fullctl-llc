@@ -52,7 +52,7 @@ def test_SettingsManager_try_include():
 def test_SettingsManager_try_include_env():
     global settings_manager
     settings_manager = settings.SettingsManager(globals())
-    setting = settings_manager.set_option("RELEASE_ENV", "testdev")
+    settings_manager.set_option("RELEASE_ENV", "testdev")
     settings_manager.try_include_env()  # TODO add assertion
 
 
@@ -61,15 +61,15 @@ def test_SettingsManager_set_relase_env():
     settings_manager = settings.SettingsManager(g)
     settings_manager.set_release_env()
 
-    assert g["DEBUG"] == True
-    assert g["EXPOSE_ADMIN"] == True
+    assert g["DEBUG"] is True
+    assert g["EXPOSE_ADMIN"] is True
 
     g = {"RELEASE_ENV": "prod"}
     settings_manager = settings.SettingsManager(g)
     settings_manager.set_release_env()
 
-    assert g["DEBUG"] == False
-    assert g["EXPOSE_ADMIN"] == False
+    assert g["DEBUG"] is False
+    assert g["EXPOSE_ADMIN"] is False
 
 
 def test_SettingsManager_set_default_v1():
