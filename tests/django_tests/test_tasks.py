@@ -7,7 +7,7 @@ from fullctl.django.models.concrete.tasks import TaskClaimed, TaskLimitError
 
 @pytest.mark.django_db
 def test_fetch_tasks():
-    assert orm.fetch_task() == None
+    assert orm.fetch_task() is None
     assert orm.fetch_tasks() == []
 
     task = models.TestTask.create_task(1, 2)
