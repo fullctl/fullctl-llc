@@ -13,6 +13,21 @@ __all__ = [
 ]
 
 
+class Data(HandleRefModel):
+
+    """
+    Normalized object meta data
+    """
+
+    meta = models.JSONField()
+
+    class Meta:
+        abstract = True
+
+    class HandleRef:
+        tag = "meta_data"
+
+
 class Request(HandleRefModel):
 
     """
@@ -45,7 +60,7 @@ class Request(HandleRefModel):
         will make sure targets are always converted
         into a list object
 
-        override this method for more elaborate preparating
+        override this method for more complex preparation
         of request targets
 
         Arguments:
@@ -174,13 +189,14 @@ class Request(HandleRefModel):
             if req.response_id:
                 req.response.data = data
                 req.response.save()
-                resp = req.response
             else:
-                resp = response_cls.objects.create(
+                response_cls.objects.create(
                     source=source,
                     data=data,
                     request=req,
                 )
+
+            req.response.write_meta_data()
 
             return req
 
@@ -226,23 +242,31 @@ class Response(HandleRefModel):
     source = models.CharField(max_length=255)
     data = models.JSONField(null=True)
 
+    class Config:
+        meta_data_cls = None
+
     class Meta:
         abstract = True
 
     class HandleRef:
         tag = "meta_response"
 
+    @classmethod
+    def config(cls, config_name, default=None):
 
-class Data(HandleRefModel):
+        value = getattr(cls.Config, config_name, default)
 
-    """
-    Normalized object meta data
-    """
+        if value is None:
+            raise ValueError(f"`{cls}.Config.{config_name}` property not specified")
 
-    meta = models.JSONField()
+        return value
 
-    class Meta:
-        abstract = True
+    def prepare_meta_data(self):
+        raise NotImplementedError("override in extended class")
 
-    class HandleRef:
-        tag = "meta_data"
+    def write_meta_data(self):
+
+        meta_data_cls = self.config("meta_data_cls")
+        meta_data, _ = meta_data_cls.objects.get_or_create(pk=self.pk)
+        meta_data.data.update(self.prepare_meta_data() or {})
+        meta_data.save()
