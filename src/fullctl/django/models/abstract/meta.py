@@ -2,10 +2,13 @@
 Abstract classes to facilitate the fetching, caching and retrieving of meta data
 sourced from third party sources.
 """
+import json
 from datetime import timedelta
+
 import requests
-from django.utils import timezone
 from django.db import models
+from django.utils import timezone
+
 from fullctl.django.models.abstract import HandleRefModel
 
 __all__ = [

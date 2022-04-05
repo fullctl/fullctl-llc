@@ -104,6 +104,6 @@ def progress_schedules(**filters):
         return
 
     try:
-        task = schedule.spawn_tasks()
+        schedule.spawn_tasks()
     except TaskAlreadyStarted:
         schedule.reschedule()

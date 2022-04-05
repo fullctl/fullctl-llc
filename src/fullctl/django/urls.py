@@ -1,4 +1,4 @@
-import importlib
+import importlib  # noqa
 
 from django.conf import settings
 from django.contrib.staticfiles import views as static_file_views
