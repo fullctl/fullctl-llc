@@ -475,6 +475,12 @@ input.slim {
   padding: 8px;
 }
 
+tbody.list-body:empty + tbody.list-no-data {
+  display: table-row-group;
+  text-align: center;
+}
+
+
 .list-body div.secondary input[type="text"],
 div.toolbar-field input[type="text"] {
   border: 1px solid;
@@ -650,6 +656,10 @@ span.icon-edit {
 span.icon-logout {
   -webkit-mask-image: url(icons/icon/logout.svg);
   mask-image: url(icons/icon/logout.svg);
+}
+span.icon-location {
+  -webkit-mask-image: url(icons/icon/location.svg);
+  mask-image: url(icons/icon/location.svg);
 }
 span.icon-settings {
   -webkit-mask-image: url(icons/icon/settings.svg);
@@ -1234,6 +1244,7 @@ span.status-badge div.spinner {
   text-transform: uppercase;
 }
 
+.inline-addon-control,
 .prefix-rep {
   padding: 4px;
   border-radius: 5px;
