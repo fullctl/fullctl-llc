@@ -210,6 +210,43 @@ class Task(HandleRefModel):
         task.save()
         return task
 
+    @classmethod
+    def last_run(cls, limit_id, age=0):
+
+        """
+        Returns the last time this task was run with the specified limit id
+
+        Arguments:
+
+        - limit_id (`mixed`)
+
+        Keyword arguments:
+
+        - age (`int`): max age in seconds
+
+        Returns:
+
+        - last run time (`datetime`) or `None` if it has not been run
+        """
+
+        qset = cls.objects.filter(op=cls.HandleRef.tag, limit_id=limit_id).exclude(
+            status="failed"
+        )
+
+        if age != 0:
+            qset = qset.filter(
+                updated__gte=timezone.now() - datetime.timedelta(seconds=age)
+            )
+
+        qset = qset.order_by("-updated")
+
+        task = qset.first()
+
+        if task:
+            return task.updated
+
+        return None
+
     @property
     def generate_limit_id(self):
         return ""
