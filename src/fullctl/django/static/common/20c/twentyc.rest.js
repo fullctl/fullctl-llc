@@ -1592,6 +1592,24 @@ twentyc.rest.List = twentyc.cls.extend(
     },
 
     /**
+     * calls load() until the list is no longer empty
+     * will pause for the specified delay after a load attempt
+     *
+     * @method load
+     * @param {Number} delay pause (ms)
+     */
+
+    load_until_data : function(delay) {
+      this.load().then(() => {
+        if(this.element.find('.list-body').is(':empty')) {
+          setTimeout(() => {
+            this.load_until_data(delay);
+          }, delay);
+        }
+      });
+    },
+
+    /**
      * reload single row
      *
      * @method reload_row
