@@ -1597,13 +1597,20 @@ twentyc.rest.List = twentyc.cls.extend(
      *
      * @method load
      * @param {Number} delay pause (ms)
+     * @param {Function} condition - if specified will be called to
+     *   determine if another aload attempt should be made. The function
+     *   should return true for yes, and false for no
      */
 
-    load_until_data : function(delay) {
+    load_until_data : function(delay, condition) {
       this.load().then(() => {
         if(this.element.find('.list-body').is(':empty')) {
+
+          if(condition && !condition())
+            return
+
           setTimeout(() => {
-            this.load_until_data(delay);
+            this.load_until_data(delay, condition);
           }, delay);
         }
       });
