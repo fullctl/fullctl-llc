@@ -1011,19 +1011,15 @@ div.inner-list > div {
   position: relative;
 }
 
-.prefix-container a {
+.prefix-container a[data-api-action="delete_prefix"] {
   position: absolute;
-  right: 1;
-  padding: 0 8px;
+  right: 0;
+  padding-right: 8px;
 }
 
 .prefix-container a,
 .prefix-container span {
   display: inline-block;
-}
-
-.prefix-container a {
-  margin-left: 36px;
 }
 
 .prefix {
