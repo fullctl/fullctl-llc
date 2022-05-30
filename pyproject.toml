@@ -71,7 +71,6 @@ peeringdb = "^1"
 
 
 [tool.poetry.dev-dependencies]
-docker-compose = "^1.29.1"
 # tests
 codecov = ">=2"
 coverage = ">=5"
