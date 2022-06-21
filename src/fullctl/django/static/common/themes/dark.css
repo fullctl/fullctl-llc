@@ -80,6 +80,14 @@ div.validation-error.non-field-errors {
   background-color: rgba(0,0,0,0.5);
 }
 
+span.icon.fullctl {
+  background-color: #D1FF27;
+}
+.fullctl {
+  color: #D1FF27;
+}
+
+
 .ixctl {
   color: #D1FF27;
 }
