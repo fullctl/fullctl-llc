@@ -60,6 +60,7 @@ class Bridge:
         self.url = f"{host}/api"
         self.org = org_slug
         self.key = key
+        self.host = host
         self.cache = kwargs.get("cache", None)
         self.cache_duration = kwargs.get("cache_duration", 5)
 
