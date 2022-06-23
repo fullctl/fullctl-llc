@@ -464,6 +464,11 @@ input.slim {
   margin-top: 3px;
 }
 
+.list-body label {
+  font-size: 11px;
+  margin:0px;
+}
+
 
 .list-body + .list-no-data {
   display: none;

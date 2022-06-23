@@ -195,6 +195,10 @@ div.list-body .secondary .property [data-field] {
   color: #fff;
 }
 
+.list-body label {
+  color: #D1FF27;
+}
+
 .list-body div.secondary input[type="text"],
 div.toolbar-field input[type="text"] {
   background-color: #191F26;

@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from fullctl.django.auth import Permissions, RemotePermissions
 from fullctl.django.models import Instance, Organization
 from fullctl.django.rest.core import HANDLEREF_FIELDS
+from fullctl.django.rest.authentication import APIKey
 from fullctl.service_bridge.client import AaaCtl
 
 
@@ -112,6 +113,7 @@ class grainy_endpoint(base):
         else:
             permissions_cls = RemotePermissions
 
+
         @grainy_endpoint_response(
             namespace=decorator.namespace,
             namespace_instance=decorator.namespace,
@@ -121,7 +123,14 @@ class grainy_endpoint(base):
             enable_apply_perms=decorator.enable_apply_perms,
             **decorator.kwargs,
         )
-        def wrapped(self, request, *args, **kwargs):
+        def inner(self, request, *args, **kwargs):
+
+            """
+            inner wrapper, called after grainy permissioning logic ran
+
+            handles auth requirement, loading of organization instance
+            and opening of reversion context
+            """
 
             if decorator.require_auth and not request.user.is_authenticated:
                 return Response(status=401)
@@ -137,9 +146,28 @@ class grainy_endpoint(base):
 
                 return fn(self, request, *args, **kwargs)
 
-        wrapped.__name__ = fn.__name__
+        inner.__name__ = fn.__name__
 
-        return wrapped
+        def outer(self, request, *args, **kwargs):
+
+            """
+            outer wrapper, called before grainy permissioning logic runs
+
+            handles superuser imitation for sufficiently provisioned api keys
+            """
+
+            as_user = request.headers.get("X-User")
+            if as_user and hasattr(request, "api_key"):
+                if permissions_cls(APIKey(request.api_key)).check(f"superuser.{as_user}", "c"):
+                    request.user = get_user_model().objects.get(social_auth__uid=as_user)
+                    print("Initimating user", request.user)
+
+
+            return inner(self, request, *args, **kwargs)
+
+        outer.__name__ = fn.__name__
+
+        return outer
 
 
 class _aaactl:
