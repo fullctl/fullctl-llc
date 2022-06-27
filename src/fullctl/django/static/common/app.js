@@ -13,6 +13,7 @@ fullctl.template = function(name) {
 fullctl.application = {}
 fullctl.widget = {}
 fullctl.formatters = {}
+fullctl.modals = {}
 
 fullctl.formatters.pretty_speed = (value) => {
   if(value >= 1000000)
@@ -509,6 +510,59 @@ fullctl.application.Orgctl.PermissionsModal = $tc.extend(
     }
   },
   fullctl.application.Modal
+);
+
+fullctl.TemplateSelect = $tc.extend(
+  "TemplateSelect",
+  {
+    load_params : function() {
+      //to override
+    }
+  },
+  twentyc.rest.Select
+)
+
+fullctl.TemplatePreview = $tc.extend(
+  "TemplatePreview",
+  {
+    TemplatePreview: function(jq, select_widget, type) {
+      this.Form(jq);
+      this.select = new select_widget(this.element.find('select'));
+      this.editor = this.element.find('textarea');
+      this.type = type;
+
+      if(type) {
+        this.select.filter = (tmpl) => {
+          return tmpl.type == type;
+        };
+      }
+
+      $(this.select).on("load:after", ()=>{ this.preview();});
+      $(this.select.element).on("change", ()=>{ this.preview();});
+
+      this.select.load();
+    },
+
+    payload : function() {
+      return { type: this.type }
+    },
+
+    preview : function() {
+      var tmpl_id = parseInt(this.select.element.val())
+      if(tmpl_id)
+        var url = this.editor.data("api-preview").replace("tmpl_id", tmpl_id);
+      else
+        var url = this.editor.data("api-preview-default");
+      var client = new twentyc.rest.Client(url);
+
+      client.post(null, this.payload()).then(
+        (response)=>{
+          this.editor.val(response.first().body);
+        }
+      );
+    }
+  },
+  twentyc.rest.Form
 );
 
 $.fn.grainy_toggle = function(namespace, level) {
