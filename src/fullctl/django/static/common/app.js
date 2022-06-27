@@ -552,7 +552,7 @@ fullctl.TemplatePreview = $tc.extend(
       if(tmpl_id)
         var url = this.editor.data("api-preview").replace("tmpl_id", tmpl_id);
       else
-        var url = this.editor.data("api-preview-default");
+        var url = this.editor.data("api-preview-default").replace("type", this.type);
       var client = new twentyc.rest.Client(url);
 
       client.post(null, this.payload()).then(
