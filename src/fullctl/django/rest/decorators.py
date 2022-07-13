@@ -232,7 +232,9 @@ def serializer_registry():
         if not hasattr(cls, "ref_tag"):
             cls.ref_tag = cls.Meta.model.HandleRef.tag
             cls.Meta.fields += ["grainy"] + HANDLEREF_FIELDS
-        setattr(Serializers, cls.ref_tag, cls)
+
+        ref_tag = cls.ref_tag.replace(".", "__")
+        setattr(Serializers, ref_tag, cls)
         return cls
 
     return (Serializers, register)
