@@ -43,9 +43,9 @@ class ServiceApplicationObject(AaactlEntity):
 
     def for_org(self, org):
         if org:
-            self.org_redirect = self.invite_redirect.format(org=org)
+            self.org_redirect = self.service_url.format(org=org)
         else:
-            self.org_redirect = self.api_host
+            self.org_redirect = self.api_url
         return self
 
 
