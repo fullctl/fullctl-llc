@@ -1,5 +1,5 @@
 from importlib import import_module
-from django.db.models import PositiveIntegerField
+from django.db.models import CharField, PositiveIntegerField
 from django.conf import settings
 
 BRIDGE_MAP = {}
@@ -55,12 +55,14 @@ class ReferencedObject:
         return bridge.first(**kwargs)
 
 
-class ReferencedObjectField(PositiveIntegerField):
+class ReferencedObjectFieldMixin:
 
     """
     References an object on another fullctl service via the
     service bridge
     """
+
+    base_type = int
 
     def __init__(self, bridge=None, remote_lookup="id", bridge_type=None, *args, **kwargs):
 
@@ -114,6 +116,25 @@ class ReferencedObjectField(PositiveIntegerField):
     def get_prep_value(self, value):
         if value is None:
             return None
-        if isinstance(value, int):
+        if isinstance(value, self.base_type):
             return value
         return value.id
+
+
+class ReferencedObjectField(ReferencedObjectFieldMixin, PositiveIntegerField):
+    """
+    References an object on another fullctl service via the
+    service bridge using a positive integer
+    """
+    pass
+
+
+class ReferencedObjectCharField(ReferencedObjectFieldMixin, CharField):
+
+    """
+    References an object on another fullctl service via the
+    service bridge using a char field
+    """
+
+    base_type = str
+
