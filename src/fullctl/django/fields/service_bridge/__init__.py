@@ -1,6 +1,7 @@
 from importlib import import_module
-from django.db.models import CharField, PositiveIntegerField
+
 from django.conf import settings
+from django.db.models import CharField, PositiveIntegerField
 
 BRIDGE_MAP = {}
 
@@ -64,7 +65,9 @@ class ReferencedObjectFieldMixin:
 
     base_type = int
 
-    def __init__(self, bridge=None, remote_lookup="id", bridge_type=None, *args, **kwargs):
+    def __init__(
+        self, bridge=None, remote_lookup="id", bridge_type=None, *args, **kwargs
+    ):
 
         if bridge and bridge_type:
             raise AttributeError("Cannot specify both bridge and bridge_type")
@@ -73,8 +76,9 @@ class ReferencedObjectFieldMixin:
             try:
                 bridge = BRIDGE_MAP[bridge_type]
             except KeyError:
-                raise KeyError(f"settings.SERVICE_BRIDGE_REF_{bridge_type.upper} not set")
-
+                raise KeyError(
+                    f"settings.SERVICE_BRIDGE_REF_{bridge_type.upper} not set"
+                )
 
         self.bridge_type = bridge_type
         self.bridge = bridge
@@ -126,6 +130,7 @@ class ReferencedObjectField(ReferencedObjectFieldMixin, PositiveIntegerField):
     References an object on another fullctl service via the
     service bridge using a positive integer
     """
+
     pass
 
 
@@ -137,4 +142,3 @@ class ReferencedObjectCharField(ReferencedObjectFieldMixin, CharField):
     """
 
     base_type = str
-

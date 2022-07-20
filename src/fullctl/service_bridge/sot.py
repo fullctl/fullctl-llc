@@ -121,7 +121,6 @@ class SourceOfTruth:
             if not client.host:
                 continue
 
-
             kwargs.update(params)
             kwargs["raise_on_notfound"] = False
             try:

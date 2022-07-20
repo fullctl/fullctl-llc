@@ -9,6 +9,7 @@ from fullctl.service_bridge.client import Bridge, DataObject
 
 CACHE = {}
 
+
 class NautobotObject(DataObject):
     source = "nautobot"
     description = "Nautobot Object"
@@ -41,7 +42,6 @@ class Nautobot(Bridge):
     @property
     def auth_headers(self):
         return {"Authorization": f"Token {self.key}"}
-
 
 
 class DeviceObject(NautobotObject):
