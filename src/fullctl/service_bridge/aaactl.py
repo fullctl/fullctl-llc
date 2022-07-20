@@ -34,7 +34,7 @@ class Aaactl(Bridge):
         kwargs.setdefault("cache_duration", 10)
         kwargs.setdefault("cache", CACHE)
 
-        super().__init__(settings.AAACTL_HOST, key, org, **kwargs)
+        super().__init__(settings.AAACTL_URL, key, org, **kwargs)
         self.url = f"{self.url}/service-bridge"
 
 
@@ -43,13 +43,13 @@ class ServiceApplicationObject(AaactlEntity):
 
     def for_org(self, org):
         if org:
-            self.org_redirect = self.invite_redirect.format(org=org)
+            self.org_redirect = self.service_url.format(org=org)
         else:
-            self.org_redirect = self.api_host
+            self.org_redirect = self.api_url
         return self
 
 
 class ServiceApplication(Aaactl):
     class Meta(Aaactl.Meta):
-        ref_tag = "svcapp"
+        ref_tag = "service_application"
         data_object_cls = ServiceApplicationObject

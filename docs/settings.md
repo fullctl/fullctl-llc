@@ -2,19 +2,19 @@
 
 ### OAuth
 
-- `OAUTH_TWENTYC_HOST` - "https://account.20c.com"
+- `OAUTH_TWENTYC_URL` - "https://account.20c.com"
 - `OAUTH_TWENTYC_KEY` - oauth application client id
 - `OAUTH_TWENTYC_SECRET` - oauth application secret
 
 ### Service Bridge
 
 - `SERVICE_KEY` - api key to use for fullctl service bridge communications
-- `AAACTL_HOST` - host url for aaactl service (e.g., "https://account.fullctl.com"). This will automatically be defaulted to `OAUTH_TWENTYC_HOST`
-- `PDBCTL_HOST` - host url for pdbctl service (e.g., "https://pdb.fullctl.com")
-- `IXCTL_HOST` - host url for ixctl service (e.g., "https://ix.fullctl.com")
-- `PEERCTL_HOST` - host url for peerctl service (e.g., "https://peer.fullctl.com")
-- `PREFIXCTL_HOST` - host url for prefixctl service (e.g., "https://prefix.fullctl.com")
-- `DEVICECTL_HOST` - host url for devicectl service (e.g., "https://device.fullctl.com")
+- `AAACTL_URL` - host url for aaactl service (e.g., "https://account.fullctl.com"). This will automatically be defaulted to `OAUTH_TWENTYC_URL`
+- `PDBCTL_URL` - host url for pdbctl service (e.g., "https://pdb.fullctl.com")
+- `IXCTL_URL` - host url for ixctl service (e.g., "https://ix.fullctl.com")
+- `PEERCTL_URL` - host url for peerctl service (e.g., "https://peer.fullctl.com")
+- `PREFIXCTL_URL` - host url for prefixctl service (e.g., "https://prefix.fullctl.com")
+- `DEVICECTL_URL` - host url for devicectl service (e.g., "https://device.fullctl.com")
 
 ### Operational
 

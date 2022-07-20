@@ -240,7 +240,7 @@ class OrganizationUser(HandleRefModel):
     is_default = models.BooleanField(default=False)
 
     class HandleRef:
-        tag = "orguser"
+        tag = "org_user"
 
     class Meta:
         db_table = "fullctl_org_user"

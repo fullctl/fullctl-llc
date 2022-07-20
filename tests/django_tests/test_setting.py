@@ -162,21 +162,21 @@ def test_SettingsManager_set_service_bridges():
     settings_manager = settings.SettingsManager(g)
     settings_manager.set_service_bridges()
 
-    assert g["AAACTL_HOST"] == ""
-    assert g["PDBCTL_HOST"] == ""
-    assert g["PEERCTL_HOST"] == ""
-    assert g["IXCTL_HOST"] == ""
+    assert g["AAACTL_URL"] == ""
+    assert g["PDBCTL_URL"] == ""
+    assert g["PEERCTL_URL"] == ""
+    assert g["IXCTL_URL"] == ""
 
 
 def test_SettingsManager_set_twentyc_oauth():
     g = {}
     settings_manager = settings.SettingsManager(g)
-    settings_manager.set_option("AAACTL_HOST", "aaactlhost.com")
+    settings_manager.set_option("AAACTL_URL", "aaactlhost.com")
     settings_manager.set_twentyc_oauth()
     aaactlhost = "aaactlhost.com"
     settings_manager.set_twentyc_oauth(aaactlhost)
 
-    assert g["OAUTH_TWENTYC_HOST"] == aaactlhost
+    assert g["OAUTH_TWENTYC_URL"] == aaactlhost
     assert g["OAUTH_TWENTYC_ACCESS_TOKEN_URL"] == "aaactlhost.com/account/auth/o/token/"
     assert (
         g["OAUTH_TWENTYC_AUTHORIZE_URL"] == "aaactlhost.com/account/auth/o/authorize/"

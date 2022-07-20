@@ -174,10 +174,10 @@ class grainy_endpoint(base):
 class _aaactl:
     @property
     def connected(self):
-        return getattr(settings, "AAACTL_HOST", None) is not None
+        return getattr(settings, "AAACTL_URL", None) is not None
 
     def bridge(self, org_slug):
-        return AaaCtl(settings.AAACTL_HOST, settings.SERVICE_KEY, org_slug)
+        return AaaCtl(settings.AAACTL_URL, settings.SERVICE_KEY, org_slug)
 
 
 class billable(_aaactl):
@@ -185,7 +185,7 @@ class billable(_aaactl):
     """
     Will use the aaactl service bridge to determine
     if the specified product/service has accumulated
-    costs during the current subscription cycle and
+    costs during the current subscription subscription_cycle and
     return an error response if the there are costs
     but the organization has not yet set up billing
     """
@@ -214,7 +214,7 @@ class billable(_aaactl):
                 return Response(
                     {
                         "non_field_errors": [
-                            f"Billing setup required to continue using {product}. Please set up billing for your organization at {settings.AAACTL_HOST}/billing/setup?org={request.org.slug}"
+                            f"Billing setup required to continue using {product}. Please set up billing for your organization at {settings.AAACTL_URL}/billing/setup?org={request.org.slug}"
                         ]
                     },
                     status=403,
@@ -232,7 +232,9 @@ def serializer_registry():
         if not hasattr(cls, "ref_tag"):
             cls.ref_tag = cls.Meta.model.HandleRef.tag
             cls.Meta.fields += ["grainy"] + HANDLEREF_FIELDS
-        setattr(Serializers, cls.ref_tag, cls)
+
+        ref_tag = cls.ref_tag.replace(".", "__")
+        setattr(Serializers, ref_tag, cls)
         return cls
 
     return (Serializers, register)

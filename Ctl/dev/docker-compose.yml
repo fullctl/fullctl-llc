@@ -18,6 +18,7 @@ services:
 
 
   aaactl_web:
+    user: "0:0"
     build:
       context: ../../../aaactl
       dockerfile: Dockerfile
@@ -115,27 +116,27 @@ services:
       - ../../../peerctl/src:/srv/service/main
 
 
-#  devicectl_web:
-#    build:
-#      context: ../../../devicectl
-#      dockerfile: Dockerfile
-#    command: runserver 0.0.0.0:6001
-#    env_file:
-#      - .env
-#      - ../../../devicectl/Ctl/dev/.env
-#    environment:
-#      DATABASE_PASSWORD: devPASSWORD
-#      DATABASE_HOST: postgres
-#    logging:
-#      options:
-#        max-size: 100m
-#        max-file: "3"
-#    ports:
-#      # this needs to be set in the shell, compose env vars aren't read yet
-#      - "${DEVICECTL_PORT:-6001}:6001"
-#    volumes:
-#      - ../../src/fullctl:/srv/service/main/fullctl
-#      - ../../../devicectl/src:/srv/service/main
+  devicectl_web:
+    build:
+      context: ../../../devicectl
+      dockerfile: Dockerfile
+    command: runserver 0.0.0.0:6001
+    env_file:
+      - .env
+      - ../../../devicectl/Ctl/dev/.env
+    environment:
+      DATABASE_PASSWORD: devPASSWORD
+      DATABASE_HOST: postgres
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    ports:
+      # this needs to be set in the shell, compose env vars aren't read yet
+      - "${DEVICECTL_PORT:-6001}:6001"
+    volumes:
+      - ../../src/fullctl:/srv/service/main/fullctl
+      - ../../../devicectl/src:/srv/service/main
 
 
   pdbctl_web:
@@ -190,6 +191,32 @@ services:
       - ../../../prefixctl-reputation/src/reputation_check:/srv/service/venv/lib/python3.9/site-packages/reputation_check:Z
       - ../../../prefixctl-meta/src/prefix_meta:/srv/service/venv/lib/python3.9/site-packages/prefix_meta:Z
 
+  aclctl_web:
+    user: "0:0"
+    build:
+      context: ../../../aclctl
+      dockerfile: Dockerfile
+    command: runserver 0.0.0.0:6001
+    env_file:
+      - .env
+      - ../../../aclctl/Ctl/dev/.env
+    environment:
+      DATABASE_PASSWORD: devPASSWORD
+      DATABASE_HOST: postgres
+      # defaults
+      # DATABASE_USER: account_service
+      # DATABASE_NAME: account_service
+      # DATABASE_PORT: 5432
+    logging:
+      options:
+        max-size: 100m
+        max-file: "3"
+    ports:
+      # this needs to be set in the shell, compose env vars aren't read yet
+      - "${ACLCTL_PORT:-6001}:6001"
+    volumes:
+      - ../../src/fullctl:/srv/service/main/fullctl
+      - ../../../aclctl/src:/srv/service/main:Z
 
 volumes:
   postgres_data:

@@ -155,7 +155,7 @@ Follow [instructions](https://github.com/fullctl/ixctl/blob/prep-release/docs/qu
 **required setup**
 
 - Authentication and accounts
-- add `PDBCTL_HOST` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7002)
+- add `PDBCTL_URL` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7002)
 
 ### run ixctl
 
@@ -173,8 +173,8 @@ Follow [instructions](https://github.com/fullctl/peerctl/blob/prep-release/docs/
 **required setup**
 
 - Authentication and accounts
-- add `PDBCTL_HOST` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7002)
-- add `IXCTL_HOST` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7003)
+- add `PDBCTL_URL` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7002)
+- add `IXCTL_URL` to pdbctl/Ctl/dev/.env - pointing at your pdbctl instance (e.g., https://localhost:7003)
 
 ### run peerctl
 

@@ -35,7 +35,7 @@ class Organization(ModelSerializer):
 @register
 class OrganizationUser(serializers.Serializer):
 
-    ref_tag = "orguser"
+    ref_tag = "org_user"
     user = serializers.IntegerField()
     default_org = serializers.IntegerField()
     orgs = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
@@ -57,9 +57,9 @@ class OrganizationUser(serializers.Serializer):
             if not user.org_set.filter(org=org).exists():
                 models.OrganizationUser.objects.create(org=org, user=user)
 
-        for orguser in user.org_set.all():
-            if orguser.org.remote_id not in self.validated_data["orgs"]:
-                orguser.delete()
+        for org_user in user.org_set.all():
+            if org_user.org.remote_id not in self.validated_data["orgs"]:
+                org_user.delete()
 
         user.org_set.all().update(is_default=False)
         user.org_set.filter(org__remote_id=default_org).update(is_default=True)

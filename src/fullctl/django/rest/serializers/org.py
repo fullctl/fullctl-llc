@@ -9,7 +9,7 @@ Serializers, register = serializer_registry()
 
 @register
 class OrganizationUser(ModelSerializer):
-    ref_tag = "orguser"
+    ref_tag = "org_user"
 
     name = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()

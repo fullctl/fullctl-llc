@@ -581,6 +581,14 @@ div.menu .button span.label {
   text-decoration: underline;
 }
 
+.shift-down .menu-deco-border {
+  margin-top: 55px;
+}
+
+.shift-down .menu .section {
+  padding-top: 55px;
+}
+
 div.toolbar .button {
   border: none;
   border-radius: 25px;
@@ -867,6 +875,11 @@ div.list-th,
   --margin-top: -12px;
   --margin-bottom: -12px;
 }
+
+.marg-top-xl {
+  margin-top: 55px;
+}
+
 td.property {
   padding: 0px 15px;
 }

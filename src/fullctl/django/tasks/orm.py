@@ -39,7 +39,7 @@ def fetch_tasks(limit=1, **filters):
     if filters:
         qset = qset.filter(**filters)
 
-    # order by date of creation
+    # order_history by date of creation
     qset = qset.order_by("created")
 
     # no pending tasks for this task model

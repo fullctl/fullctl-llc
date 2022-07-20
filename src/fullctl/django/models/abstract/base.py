@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_countries.fields import CountryField
 from django_handleref.models import HandleRefModel as SoftDeleteHandleRefModel
 
 __all__ = [
+    "GeoMixin",
     "HandleRefModel",
     "PdbRefModel",
 ]
@@ -31,6 +33,30 @@ class HandleRefModel(SoftDeleteHandleRefModel):
 
     def delete(self):
         return super().delete(hard=True)
+
+
+class GeoMixin:
+
+    """
+    Mixin class to use on models that need to store a geo location
+    """
+
+    address1 = models.CharField(_("Address 1"), max_length=255, blank=True)
+    address2 = models.CharField(_("Address 2"), max_length=255, blank=True)
+    city = models.CharField(_("City"), max_length=255, blank=True)
+    state = models.CharField(_("State"), max_length=255, blank=True)
+    zipcode = models.CharField(_("Zip-Code"), max_length=48, blank=True)
+    country = CountryField(_("Country"), blank=True)
+
+    suite = models.CharField(_("Suite"), max_length=255, blank=True)
+    floor = models.CharField(_("Floor"), max_length=255, blank=True)
+
+    latitude = models.DecimalField(
+        _("Latitude"), max_digits=9, decimal_places=6, blank=True, null=True
+    )
+    longitude = models.DecimalField(
+        _("Longitude"), max_digits=9, decimal_places=6, blank=True, null=True
+    )
 
 
 class PdbRefModel(HandleRefModel):

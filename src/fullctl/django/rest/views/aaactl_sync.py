@@ -91,7 +91,7 @@ class OrganizationUser(CachedObjectMixin, viewsets.GenericViewSet):
     """
 
     path_prefix = "/aaactl-sync"
-    serializer_class = Serializers.orguser
+    serializer_class = Serializers.org_user
     queryset = get_user_model().objects.all()
 
     # this approach assumes that aaactl is the only authentication
@@ -99,7 +99,7 @@ class OrganizationUser(CachedObjectMixin, viewsets.GenericViewSet):
     lookup_field = "social_auth__uid"
     lookup_url_kwarg = "remote_id"
 
-    @grainy_endpoint("aaactl_sync.orguser")
+    @grainy_endpoint("aaactl_sync.org_user")
     def update(self, request, remote_id, *args, **kwargs):
         self.get_object()
         serializer = self.serializer_class(data=request.data)

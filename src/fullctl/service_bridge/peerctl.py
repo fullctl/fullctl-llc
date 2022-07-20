@@ -34,7 +34,7 @@ class Peerctl(Bridge):
         kwargs.setdefault("cache_duration", 10)
         kwargs.setdefault("cache", CACHE)
 
-        super().__init__(settings.PEERCTL_HOST, key, org, **kwargs)
+        super().__init__(settings.PEERCTL_URL, key, org, **kwargs)
         self.url = f"{self.url}/service-bridge"
 
 

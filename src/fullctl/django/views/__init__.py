@@ -38,7 +38,7 @@ def login(request):
 
 
 def logout(request):
-    response = redirect(f"{settings.AAACTL_HOST}/account/auth/logout/")
+    response = redirect(f"{settings.AAACTL_URL}/account/auth/logout/")
     request.session.delete()
     return response
 

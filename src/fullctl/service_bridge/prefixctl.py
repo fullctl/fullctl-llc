@@ -44,5 +44,5 @@ class PrefixSetObject(PrefixctlEntity):
 
 class PrefixSet(Prefixctl):
     class Meta(Prefixctl.Meta):
-        ref_tag = "pfxset"
+        ref_tag = "prefix_set"
         data_object_cls = PrefixSetObject

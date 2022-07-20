@@ -28,9 +28,9 @@ def account_service(request):
     context.update(
         account_service={
             "urls": {
-                "billing_setup": f"{settings.OAUTH_TWENTYC_HOST}/billing/setup?org={org_slug}",
-                "create_org": f"{settings.OAUTH_TWENTYC_HOST}/account/org/create/",
-                "manage_org": f"{settings.OAUTH_TWENTYC_HOST}/account/?org={org_slug}",
+                "billing_setup": f"{settings.OAUTH_TWENTYC_URL}/billing/setup?org={org_slug}",
+                "create_org": f"{settings.OAUTH_TWENTYC_URL}/account/org/create/",
+                "manage_org": f"{settings.OAUTH_TWENTYC_URL}/account/?org={org_slug}",
             },
         },
         # TODO: deprecated
@@ -41,11 +41,11 @@ def account_service(request):
         service_name=settings.SERVICE_TAG.replace("ctl", ""),
     )
 
-    if settings.OAUTH_TWENTYC_HOST:
+    if settings.OAUTH_TWENTYC_URL:
         context.update(
             service_applications=[
-                svcapp.for_org(org)
-                for svcapp in ServiceApplication().objects(group="fullctl")
+                service_application.for_org(org)
+                for service_application in ServiceApplication().objects(group="fullctl")
             ],
         )
 

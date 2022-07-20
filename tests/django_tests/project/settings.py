@@ -172,8 +172,8 @@ LOGGING = {
     },
 }
 
-OAUTH_TWENTYC_HOST = "localhost"
+OAUTH_TWENTYC_URL = "localhost"
 SERVICE_TAG = "fullctl"
 SERVICE_KEY = "s3cr3t"
-AAACTL_HOST = "test://aaactl"
+AAACTL_URL = "test://aaactl"
 SUPPORT_EMAIL = "support@localhost"

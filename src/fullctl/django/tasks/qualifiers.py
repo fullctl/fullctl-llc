@@ -20,7 +20,7 @@ class Base:
 class Setting(Base):
     """
     Requires there to be specific settings value set
-    in order for the task to qualify for processing
+    in order_history for the task to qualify for processing
     on this instance
     """
 

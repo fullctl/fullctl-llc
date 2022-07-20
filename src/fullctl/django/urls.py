@@ -9,7 +9,7 @@ import fullctl.django.views
 
 urlpatterns = []
 
-if getattr(settings, "PDBCTL_HOST", None):
+if getattr(settings, "PDBCTL_URL", None):
 
     import fullctl.django.autocomplete.pdb
 

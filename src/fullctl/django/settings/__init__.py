@@ -272,24 +272,24 @@ class SettingsManager(confu.util.SettingsManager):
 
     def set_service_bridges(self):
         # no default so we error sooner
-        self.set_option("AAACTL_HOST", "")
-        self.set_option("PDBCTL_HOST", "")
-        self.set_option("PEERCTL_HOST", "")
-        self.set_option("IXCTL_HOST", "")
+        self.set_option("AAACTL_URL", "")
+        self.set_option("PDBCTL_URL", "")
+        self.set_option("PEERCTL_URL", "")
+        self.set_option("IXCTL_URL", "")
 
-    def set_twentyc_oauth(self, AAACTL_HOST=None):
-        if not AAACTL_HOST:
-            AAACTL_HOST = self.get("AAACTL_HOST")
+    def set_twentyc_oauth(self, AAACTL_URL=None):
+        if not AAACTL_URL:
+            AAACTL_URL = self.get("AAACTL_URL")
 
-        self.set_option("OAUTH_TWENTYC_HOST", AAACTL_HOST)
+        self.set_option("OAUTH_TWENTYC_URL", AAACTL_URL)
         self.set_option(
-            "OAUTH_TWENTYC_ACCESS_TOKEN_URL", f"{AAACTL_HOST}/account/auth/o/token/"
+            "OAUTH_TWENTYC_ACCESS_TOKEN_URL", f"{AAACTL_URL}/account/auth/o/token/"
         )
         self.set_option(
-            "OAUTH_TWENTYC_AUTHORIZE_URL", f"{AAACTL_HOST}/account/auth/o/authorize/"
+            "OAUTH_TWENTYC_AUTHORIZE_URL", f"{AAACTL_URL}/account/auth/o/authorize/"
         )
         self.set_option(
-            "OAUTH_TWENTYC_PROFILE_URL", f"{AAACTL_HOST}/account/auth/o/profile/"
+            "OAUTH_TWENTYC_PROFILE_URL", f"{AAACTL_URL}/account/auth/o/profile/"
         )
 
         self.set_option("OAUTH_TWENTYC_KEY", "")
@@ -307,8 +307,8 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_option("AUTHENTICATION_BACKENDS", AUTHENTICATION_BACKENDS)
 
         GRAINY_REMOTE = {
-            "url_load": urljoin(AAACTL_HOST, "grainy/load/"),
-            # "url_get": f"{OAUTH_TWENTYC_HOST}/grainy/get/" + "{}/",
+            "url_load": urljoin(AAACTL_URL, "grainy/load/"),
+            # "url_get": f"{OAUTH_TWENTYC_URL}/grainy/get/" + "{}/",
         }
         self.set_option("GRAINY_REMOTE", GRAINY_REMOTE)
 
