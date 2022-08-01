@@ -61,10 +61,16 @@ fullctl.permissions = {{ permissions|safe }}
           <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ service_tag }}">
         <span class="icon {{ request.app_id }} icon-caret-down"></span>
         <div class="others" style="display:none">
-          {% for svcapp in service_applications %}
-          {%   if svcapp.slug != service_tag %}
-          {%     with "common/logos/"|add:svcapp.slug|add:"-dark.svg" as other_app_logo %}
-          <a data-grainy-remove="{{ svcapp.grainy }}.{{ request.org.remote_id}}" href="{{ svcapp.org_redirect }}"><img class="app-logo" src="{% static other_app_logo %}" alt="{{ svcapp.slug }}"></a>
+          {% for service_app in service_applications %}
+          {%   if service_app.slug != service_tag %}
+          {%     with "common/logos/"|add:service_app.slug|add:"-dark.svg" as other_app_logo %}
+            <a data-grainy-remove="{{ service_app.grainy }}.{{ request.org.remote_id}}" href="{{ service_app.org_redirect }}">
+              {% if not service_app.logo %}
+                <img class="app-logo" src="{% static other_app_logo %}" alt="{{ service_app.slug }}">
+              {% else %}
+                <img class="app-logo" src="{{ service_app.logo }}" alt="{{ service_app.slug }}">
+              {% endif %}
+            </a>
           {%     endwith %}
           {%   endif %}
           {% endfor %}

@@ -1732,6 +1732,7 @@ twentyc.rest.List = twentyc.cls.extend(
         var method = ($(this).data("api-method") || "POST").toLowerCase();
         var action = $(this).data("api-action").toLowerCase();
         var callback = $(this).data("api-callback");
+        var callback_name = $(this).data("api-callback");
         var confirm_set = $(this).data("confirm")
 
         if(callback)
@@ -1749,6 +1750,8 @@ twentyc.rest.List = twentyc.cls.extend(
           )
           widget[method](_action, row.data("apiobject")).then(
             callback, widget.action_failure.bind(widget)
+          ).then(
+            $(widget).trigger("api_callback_"+callback_name+":after")
           );
         });
       });
