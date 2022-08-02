@@ -799,7 +799,7 @@ div.menu div.menu-deco-border {
   position: absolute;
   height: 2px;
   left: 15px;
-  right: -15px;
+  right: -12px;
   z-index: 10;
   top: 0px;
 }
@@ -837,6 +837,12 @@ div.list-th,
 .table td,
 .table th {
   border-top: none;
+  padding: 12px;
+}
+
+.table th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
 }
 
 .tool {

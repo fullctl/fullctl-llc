@@ -1,6 +1,11 @@
+:root {
+  --bs-body-color: #b8bbbc;
+  --bs-body-bg: #191f26;
+}
+
 body {
-  background-color: #191f26;
-  color: #b8bbbc;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
 .inactive {
@@ -262,6 +267,10 @@ div.menu div.section.tabs .active {
 
 .table .table {
   background-color: inherit;
+}
+
+.table th {
+  border-color: #dee2e6;
 }
 
 .modal-body .table tr.sub-row {
@@ -723,7 +732,7 @@ a.nav-link {
 
 span.tag {
   background-color: #29323b;
-  color: #b8bbbc;
+  color: var(--bs-body-color);
 }
 
 span.tag-name {
