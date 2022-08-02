@@ -44,6 +44,15 @@ class Nautobot(Bridge):
         return {"Authorization": f"Token {self.key}"}
 
 
+class DeviceTypeObject(NautobotObject):
+    description = "Nautobot Device Type"
+
+
+class DeviceType(Nautobot):
+    class Meta(Nautobot.Meta):
+        ref_tag = "dcim/device-types"
+        data_object_cls = DeviceTypeObject
+
 class DeviceObject(NautobotObject):
     description = "Nautobot Device"
 

@@ -4,7 +4,7 @@ from django_countries.fields import CountryField
 from django_handleref.models import HandleRefModel as SoftDeleteHandleRefModel
 
 __all__ = [
-    "GeoMixin",
+    "GeoModel",
     "HandleRefModel",
     "PdbRefModel",
 ]
@@ -35,7 +35,7 @@ class HandleRefModel(SoftDeleteHandleRefModel):
         return super().delete(hard=True)
 
 
-class GeoMixin:
+class GeoModel(models.Model):
 
     """
     Mixin class to use on models that need to store a geo location
@@ -57,6 +57,9 @@ class GeoMixin:
     longitude = models.DecimalField(
         _("Longitude"), max_digits=9, decimal_places=6, blank=True, null=True
     )
+
+    class Meta:
+        abstract = True
 
 
 class PdbRefModel(HandleRefModel):
