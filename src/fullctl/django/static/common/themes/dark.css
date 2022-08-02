@@ -3,6 +3,10 @@
   --bs-body-bg: #191f26;
 }
 
+.nav {
+  --bs-nav-link-hover-color: unset;
+}
+
 body {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
