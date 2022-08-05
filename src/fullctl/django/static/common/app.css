@@ -1108,7 +1108,7 @@ h5.modal-title {
   line-height: 26px;
 }
 
-button.close {
+button.btn-close {
   text-shadow: none;
   position: relative;
   top: -40px;

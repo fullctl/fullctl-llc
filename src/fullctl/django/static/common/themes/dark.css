@@ -451,11 +451,11 @@ h5.modal-title {
   color: #fff;
 }
 
-button.close {
+button.btn-close {
   color: #fff !important;
 }
 
-button.close:hover {
+button.btn-close:hover {
   color: #fff !important;
 }
 
