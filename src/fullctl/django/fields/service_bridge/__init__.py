@@ -1,7 +1,12 @@
 from importlib import import_module
+from logging import getLogger
 
 from django.conf import settings
 from django.db.models import CharField, PositiveIntegerField
+
+from fullctl.django.fields import CastOnAssignDescriptor
+
+log = getLogger("django")
 
 BRIDGE_MAP = {}
 
@@ -24,6 +29,14 @@ class ReferencedObject:
         if not hasattr(self, "_object"):
             self._object = self.load()
         return self._object
+
+    @property
+    def ux_url(self):
+        return self.bridge().ux_url(self.id)
+
+    @property
+    def api_url(self):
+        return self.bridge().api_url(self.id)
 
     def __init__(self, bridge, id, remote_lookup="id"):
         self.bridge = bridge
@@ -118,11 +131,16 @@ class ReferencedObjectFieldMixin:
         return ReferencedObject(self.bridge, value, self.remote_lookup)
 
     def get_prep_value(self, value):
+
         if value is None:
             return None
         if isinstance(value, self.base_type):
             return value
         return value.id
+
+    def contribute_to_class(self, cls, name):
+        super().contribute_to_class(cls, name)
+        setattr(cls, name, CastOnAssignDescriptor(self))
 
 
 class ReferencedObjectField(ReferencedObjectFieldMixin, PositiveIntegerField):

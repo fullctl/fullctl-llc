@@ -69,13 +69,15 @@ class Bridge:
 
     def _data(self, response):
         status = response.status_code
-        if status == 200:
+        if status in [200, 201, 202, 203, 204, 205]:
             return response.json().get(self.results_key)
         elif status in [401, 403]:
             raise AuthError(self, status)
         elif status in [400]:
+            print(response.json())
             raise ServiceBridgeError(self, 400, data=response.json())
         else:
+            print(response.content)
             raise ServiceBridgeError(self, status)
 
     def _requests_kwargs(self, **kwargs):
@@ -133,9 +135,19 @@ class Bridge:
         url = f"{self.url}/{endpoint}/"
         return self._data(requests.put(url, **self._requests_kwargs(**kwargs)))
 
+    def patch(self, endpoint, **kwargs):
+        url = f"{self.url}/{endpoint}/"
+        return self._data(requests.patch(url, **self._requests_kwargs(**kwargs)))
+
     def delete(self, endpoint, **kwargs):
         url = f"{self.url}/{endpoint}/"
-        return self._data(requests.delete(url, **self._requests_kwargs(**kwargs)))
+        try:
+            return self._data(requests.delete(url, **self._requests_kwargs(**kwargs)))
+        except ServiceBridgeError as exc:
+            if exc.status == 404:
+                pass
+            else:
+                raise
 
     def object(self, id, raise_on_notfound=True, join=None):
         url = f"{self.url_prefix}{self.ref_tag}/{id}"
@@ -160,6 +172,42 @@ class Bridge:
         for row in data:
             yield self.data_object_cls(ref_tag=self.ref_tag, **row)
 
+    def create(self, data):
+        url = f"{self.url_prefix}{self.ref_tag}"
+        data = self.post(url, data=data)
+        return data
+
+    def destroy(self, obj):
+        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        data = self.delete(url)
+        return data
+
+    def update(self, obj, data):
+        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        data = self.put(url, data=data)
+        return data
+
+    def partial_update(self, obj, data):
+        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        data = self.patch(url, data=data)
+        return data
+
+    def update_if_changed(self, obj, data):
+
+        diff = {}
+
+        for field, value in data.items():
+            if getattr(obj, field) != value:
+                diff[field] = value
+
+        if not diff:
+            return
+
+        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        data = self.patch(url, data=diff)
+
+        return data
+
     def first(self, **kwargs):
         for o in self.objects(**kwargs):
             return o
@@ -171,6 +219,12 @@ class Bridge:
     def status(self):
         data = self.get("system/status")
         return data[0]
+
+    def ux_url(self, id):
+        return None
+
+    def api_url(self, id):
+        return f"{self.url}/{self.url_prefix}{self.ref_tag}/{id}"
 
 
 class AaaCtl(Bridge):

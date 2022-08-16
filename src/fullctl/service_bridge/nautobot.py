@@ -18,14 +18,14 @@ class NautobotObject(DataObject):
 class Nautobot(Bridge):
 
     """
-    Service bridge for prefixctl data retrieval
+    Service bridge for nautobot data retrieval
     """
 
     url_prefix = ""
     results_key = "results"
 
     class Meta:
-        service = "prefixctl"
+        service = "nautobot"
         ref_tag = "base"
         data_object_cls = NautobotObject
 
@@ -53,6 +53,7 @@ class DeviceType(Nautobot):
         ref_tag = "dcim/device-types"
         data_object_cls = DeviceTypeObject
 
+
 class DeviceObject(NautobotObject):
     description = "Nautobot Device"
 
@@ -61,3 +62,39 @@ class Device(Nautobot):
     class Meta(Nautobot.Meta):
         ref_tag = "dcim/devices"
         data_object_cls = DeviceObject
+
+    def ux_url(self, id):
+        return f"{self.host}/{self.ref_tag}/{id}/?tab=main"
+
+
+class SiteObject(NautobotObject):
+    description = "Nautobot Site"
+
+
+class Site(Nautobot):
+    class Meta(Nautobot.Meta):
+        ref_tag = "dcim/sites"
+        data_object_cls = SiteObject
+
+
+class CustomFieldObject(NautobotObject):
+    description = "Nautobot CustomField"
+
+
+class CustomField(Nautobot):
+    class Meta(Nautobot.Meta):
+        ref_tag = "extras/custom-fields"
+        data_object_cls = CustomFieldObject
+
+    def sync(self, fields):
+
+        nautobot_fields = {nbf.name: nbf for nbf in self.objects()}
+
+        for field in fields:
+
+            nautobot_field = nautobot_fields.get(field["name"])
+
+            if not nautobot_field:
+                self.create(field)
+            else:
+                self.update(nautobot_field, field)

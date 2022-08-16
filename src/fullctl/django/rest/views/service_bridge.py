@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+from fullctl.django.models import Organization
 from fullctl.django.rest.core import BadRequest
 from fullctl.django.rest.decorators import grainy_endpoint
 
@@ -154,3 +155,40 @@ class DataViewSet(viewsets.ModelViewSet):
             qset = qset.select_related(*field)
 
         return qset, join
+
+    @grainy_endpoint("service_bridge")
+    def create(self, request, *args, **kwargs):
+
+        data = request.data.copy()
+        org_slug = data.get("org")
+        if org_slug:
+            data["instance"] = Organization.objects.get(slug=org_slug).instance.id
+
+        serializer = self.serializer_class(data=data)
+        if not serializer.is_valid():
+            return BadRequest(serializer.errors)
+
+        serializer.save()
+        return Response(serializer.data)
+
+    @grainy_endpoint("service_bridge")
+    def partial_update(self, request, pk, *args, **kwargs):
+        instance = self.get_object()
+
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return BadRequest(serializer.errors)
+
+        serializer.save()
+        return Response(serializer.data)
+
+    @grainy_endpoint("service_bridge")
+    def destroy(self, request, pk, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance)
+        response = Response(serializer.data)
+
+        instance.delete()
+
+        return response
