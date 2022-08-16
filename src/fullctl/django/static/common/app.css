@@ -1036,12 +1036,6 @@ div.inner-list > div {
   position: relative;
 }
 
-.prefix-container a[data-api-action="delete_prefix"] {
-  position: absolute;
-  right: 0;
-  padding-right: 8px;
-}
-
 .prefix-container a,
 .prefix-container span {
   display: inline-block;
