@@ -26,5 +26,10 @@ class TemplateRenderView(CachedObjectMixin, OrgQuerysetMixin, viewsets.GenericVi
         else:
             tmpl = self.queryset.get(id=pk)
 
+        context = kwargs.get("context")
+        if context:
+            for k, v in context.items():
+                tmpl.context[k] = v
+
         serializer = self.serializer_class(instance=tmpl)
         return serializer

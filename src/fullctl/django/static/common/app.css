@@ -1168,7 +1168,9 @@ div.controls select:disabled {
 
 
 div.controls input[type="text"],
-div.controls input[type="password"] {
+div.controls input[type="text"]:disabled,
+div.controls input[type="password"],
+div.controls input[type="password"]:disabled {
   padding: 6px 8px;
   height: auto;
 }

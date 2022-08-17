@@ -92,6 +92,6 @@ class TemplateModel(HandleRefModel):
         env = self.get_env()
         template = env.get_template(self.template_path)
         try:
-            return strip_tags(template.render(**self.get_data()))
+            return strip_tags(template.render(context=self.context, **self.get_data()))
         except Exception as exc:
             raise TemplateRenderError(exc)

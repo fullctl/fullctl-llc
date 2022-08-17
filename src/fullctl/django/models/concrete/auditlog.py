@@ -23,7 +23,7 @@ class AuditLog(models.Model):
         get_user_model(), null=True, blank=True, on_delete=models.PROTECT
     )
     key = models.CharField(max_length=8, null=True, blank=True)
-    action = models.CharField(max_length=32)
+    action = models.CharField(max_length=128)
     info = models.CharField(
         max_length=255, help_text=_("Any extra information for the log entry")
     )
