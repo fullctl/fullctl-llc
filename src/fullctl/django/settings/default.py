@@ -88,4 +88,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+CSRF_FROM_SESSIONS = True
+
 FULLCTL_ADDON_URLS = []
