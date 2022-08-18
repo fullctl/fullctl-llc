@@ -12,7 +12,7 @@ def test_account_service(db, dj_account_objects, settings):
 
     expected = {
         "urls": {
-            "create_org": "localhost/account/org/create/",
+            "create_org": "localhost/account/",
             "manage_org": "localhost/account/?org=test",
             "billing_setup": "localhost/billing/setup?org=test",
         }
