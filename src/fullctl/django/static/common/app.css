@@ -1104,8 +1104,6 @@ h5.modal-title {
 
 button.btn-close {
   text-shadow: none;
-  position: relative;
-  top: -40px;
   opacity: 1;
 }
 
