@@ -436,8 +436,20 @@ fullctl.application.Application = $tc.define(
       }
     },
 
+    getPage : function(page) {
+      return $('[data-component="pages"]').find('[aria-controls="'+page+'"]');
+    },
+
     page : function(page) {
       $('[data-component="pages"]').find('[aria-controls="'+page+'"]').tab('show');
+    },
+
+    showPage : function(page) {
+      $('[data-component="pages"]').find('[aria-controls="'+page+'"]').show();
+    },
+
+    hidePage : function(page) {
+      $('[data-component="pages"]').find('[aria-controls="'+page+'"]').hide();
     }
   }
 );
