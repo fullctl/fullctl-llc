@@ -27,12 +27,27 @@ class ServiceBridgeReferenceModel(HandleRefModel):
     def reference_api_url(self):
         return self.reference.api_url
 
+    @property
+    def fullctl_id(self):
+        return self.id
+
+    @property
+    def sot(self):
+        if self.reference_is_sot:
+            return self.reference.object
+        return self
+
+
     def field_map(self, service_name=None):
         if not service_name:
             service_name = self.reference.bridge.Meta.service
         return getattr(self.ServiceBridge, f"map_{service_name}")
 
     def sync_from_reference(self, ref_obj=None):
+
+        if ref_obj == self:
+            return
+
         if self.reference and not ref_obj:
             ref_obj = self.reference.object
 
@@ -56,9 +71,15 @@ class ServiceBridgeReferenceModel(HandleRefModel):
 
     def service_bridge_data(self, service_name):
 
+
         field_map = self.field_map(service_name)
 
         data = {}
+
+        ref = self.sot
+
+        if self.sync_from_reference(ref):
+            self.save()
 
         for dest_field, src_field in field_map.items():
             if "." in dest_field:
@@ -67,8 +88,8 @@ class ServiceBridgeReferenceModel(HandleRefModel):
                 for nested in dest_field.split(".")[:-1]:
                     current[nested] = {}
                     current = current[nested]
-                current[field_name] = getattr(self, src_field)
+                current[field_name] = getattr(ref, src_field, getattr(self, src_field, None))
             else:
-                data[dest_field] = getattr(self, src_field)
+                data[dest_field] = getattr(ref, src_field, getattr(self, src_field, None))
 
         return data
