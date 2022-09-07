@@ -59,6 +59,9 @@ class ReferencedObject:
     def __gt__(self, b):
         return int(self) > int(b)
 
+    def __len__(self):
+        return len(str(self))
+
     def load(self):
         if not self.bridge:
             return None

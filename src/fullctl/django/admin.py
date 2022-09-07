@@ -12,7 +12,7 @@ from fullctl.django.models.concrete import (
 )
 
 from fullctl.django.models.concrete.service_bridge import (
-    ServiceBridgeReference,
+    ServiceBridgeAction,
 )
 
 
@@ -122,6 +122,6 @@ class AuditLogAdmin(admin.ModelAdmin):
         return ""
 
 
-@admin.register(ServiceBridgeReference)
-class ServiceBridgeReference(admin.ModelAdmin):
-    list_display = ("name", "reference", "target", "operation", "reference_url", "description", "org", "created", "updated")
+@admin.register(ServiceBridgeAction)
+class ServiceBridgeAction(admin.ModelAdmin):
+    list_display = ("name", "reference", "target", "action", "function", "description", "created", "updated")
