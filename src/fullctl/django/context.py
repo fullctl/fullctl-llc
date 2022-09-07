@@ -7,6 +7,7 @@ _current_request = contextvars.ContextVar("current_request")
 
 _service_bridge_sync = contextvars.ContextVar("service_bridge_sync")
 
+
 @contextmanager
 def current_request(request=None):
 
@@ -57,7 +58,7 @@ class ServiceBridgeSync:
         if self.enable_pull == "sot" and not obj.reference_is_sot:
             return
 
-        changed = obj.sync_from_reference(if_sot=(self.enable_pull=="sot"))
+        changed = obj.sync_from_reference(if_sot=(self.enable_pull == "sot"))
         obj.pull()
 
         if changed and self.save:

@@ -1,8 +1,8 @@
 from django.db import models
 
+from fullctl.django.context import service_bridge_sync
 from fullctl.django.models.abstract import HandleRefModel
 from fullctl.django.models.concrete.service_bridge import ServiceBridgeAction
-from fullctl.django.context import service_bridge_sync
 from fullctl.utils import rgetattr
 
 __all__ = [
@@ -70,7 +70,9 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         Returns a `list` of ServiceBridgeAction instances for this model
         """
         if not hasattr(self, "_service_bridge_actions"):
-            qset = ServiceBridgeAction.objects.filter(target__iexact=f"{self._meta.app_label}.{self._meta.model_name}")
+            qset = ServiceBridgeAction.objects.filter(
+                target__iexact=f"{self._meta.app_label}.{self._meta.model_name}"
+            )
             self._service_bridge_actions = list(qset)
         return self._service_bridge_actions
 
@@ -79,7 +81,7 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         # When the `service_bridge_sync` context is active for pulling data
         # we want to substitute any values read from the databse with the values
         # that exist on the source of truth.
-        instance = super(ServiceBridgeReferenceModel, cls).from_db(*args, **kwargs)
+        instance = super().from_db(*args, **kwargs)
         with service_bridge_sync() as sync:
             sync.pull(instance)
 
@@ -105,7 +107,7 @@ class ServiceBridgeReferenceModel(HandleRefModel):
 
         Fullctl field names will be keys, reference field names will be the values
         """
-        return {[(v,k) for k,v in self.field_map(service_name).items()]}
+        return {[(v, k) for k, v in self.field_map(service_name).items()]}
 
     def field_map(self, service_name=None):
 
@@ -154,10 +156,10 @@ class ServiceBridgeReferenceModel(HandleRefModel):
                     pass
 
                 changed = True
-                #print(f"{src_field} changed from {src_value} to {dest_value}")
+                # print(f"{src_field} changed from {src_value} to {dest_value}")
                 setattr(self, src_field, dest_value)
 
-        #print("sync from reference", self, changed)
+        # print("sync from reference", self, changed)
 
         if changed and save:
             self.save()
@@ -225,8 +227,12 @@ class ServiceBridgeReferenceModel(HandleRefModel):
                 for nested in dest_field.split(".")[:-1]:
                     current[nested] = {}
                     current = current[nested]
-                current[field_name] = getattr(ref, src_field, getattr(self, src_field, None))
+                current[field_name] = getattr(
+                    ref, src_field, getattr(self, src_field, None)
+                )
             else:
-                data[dest_field] = getattr(ref, src_field, getattr(self, src_field, None))
+                data[dest_field] = getattr(
+                    ref, src_field, getattr(self, src_field, None)
+                )
 
         return data

@@ -2,9 +2,8 @@ import django.http
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from fullctl.django.models import Instance, Organization
-
 import fullctl.django.context as context
+from fullctl.django.models import Instance, Organization
 
 
 class require_auth:
@@ -80,13 +79,12 @@ class load_instance:
 
 
 class service_bridge_sync:
-
     def __init__(self, **kwargs):
         self.ctx_args = kwargs
 
-
     def __call__(self, fn):
         ctx_args = self.ctx_args
+
         def wrapped(*args, **kwargs):
             with context.service_bridge_sync(**ctx_args):
                 return fn(*args, **kwargs)

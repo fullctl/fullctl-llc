@@ -10,10 +10,7 @@ from fullctl.django.models.concrete import (
     Task,
     TaskSchedule,
 )
-
-from fullctl.django.models.concrete.service_bridge import (
-    ServiceBridgeAction,
-)
+from fullctl.django.models.concrete.service_bridge import ServiceBridgeAction
 
 
 class BaseAdmin(VersionAdmin):
@@ -124,4 +121,13 @@ class AuditLogAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceBridgeAction)
 class ServiceBridgeAction(admin.ModelAdmin):
-    list_display = ("name", "reference", "target", "action", "function", "description", "created", "updated")
+    list_display = (
+        "name",
+        "reference",
+        "target",
+        "action",
+        "function",
+        "description",
+        "created",
+        "updated",
+    )

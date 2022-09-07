@@ -6,18 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_fullctl', '0021_servicebridgeaction'),
+        ("django_fullctl", "0021_servicebridgeaction"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='servicebridgeaction',
-            name='function',
-            field=models.CharField(blank=True, choices=[('nautbot_push_device_loc', 'Nautbot: update device location')], max_length=255, null=True),
+            model_name="servicebridgeaction",
+            name="function",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("nautbot_push_device_loc", "Nautbot: update device location")
+                ],
+                max_length=255,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='servicebridgeaction',
-            name='data_map',
-            field=models.JSONField(blank=True, default=dict, help_text='map reference fields to target fields - only fields specified here will be affected by this action. Leave empty to use the default definitions for the model, if they exist.', null=True),
+            model_name="servicebridgeaction",
+            name="data_map",
+            field=models.JSONField(
+                blank=True,
+                default=dict,
+                help_text="map reference fields to target fields - only fields specified here will be affected by this action. Leave empty to use the default definitions for the model, if they exist.",
+                null=True,
+            ),
         ),
     ]

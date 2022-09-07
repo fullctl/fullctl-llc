@@ -1,14 +1,14 @@
 import importlib
 import logging
 
-from django.db import models
 from django.apps import apps
-from django.utils.translation import gettext_lazy as _
+from django.db import models
 from django.utils.functional import lazy
+from django.utils.translation import gettext_lazy as _
 
 from fullctl.django.models.abstract import HandleRefModel
-from fullctl.django.tasks import register
 from fullctl.django.models.concrete.tasks import Task, TaskLimitError
+from fullctl.django.tasks import register
 
 __all__ = [
     "ServiceBridgeAction",
@@ -22,6 +22,7 @@ handlers = {}
 
 log = logging.getLogger(__name__)
 
+
 def handler_choices():
 
     r = []
@@ -31,6 +32,7 @@ def handler_choices():
         r.append((_id, label))
 
     return r
+
 
 class service_bridge_action:
 
@@ -80,6 +82,7 @@ class ServiceBridgeActionTask(Task):
         obj = action.target_model.objects.get(id=obj_id)
         action.run(obj)
 
+
 class ServiceBridgeAction(HandleRefModel):
 
     """
@@ -88,12 +91,29 @@ class ServiceBridgeAction(HandleRefModel):
     """
 
     name = models.CharField(max_length=255, unique=True)
-    reference = models.CharField(max_length=255, help_text=_("should be {module_path}.{class_name} of the service bridge class"))
-    target = models.CharField(max_length=255, help_text=_("should be {app_label}.{mode_name} of the target model"))
+    reference = models.CharField(
+        max_length=255,
+        help_text=_("should be {module_path}.{class_name} of the service bridge class"),
+    )
+    target = models.CharField(
+        max_length=255,
+        help_text=_("should be {app_label}.{mode_name} of the target model"),
+    )
     description = models.CharField(max_length=255, null=True, blank=True)
-    action = models.CharField(max_length=8, choices=(("pull", _("Pull")), ("push",_("Push"))), default="pull")
-    function = models.CharField(max_length=255, choices=lazy(handler_choices, list)(), null=True, blank=True)
-    data_map = models.JSONField(null=True, blank=True, help_text=_("map reference fields to target fields - only fields specified here will be affected by this action. Leave empty to use the default definitions for the model, if they exist."), default=dict)
+    action = models.CharField(
+        max_length=8, choices=(("pull", _("Pull")), ("push", _("Push"))), default="pull"
+    )
+    function = models.CharField(
+        max_length=255, choices=lazy(handler_choices, list)(), null=True, blank=True
+    )
+    data_map = models.JSONField(
+        null=True,
+        blank=True,
+        help_text=_(
+            "map reference fields to target fields - only fields specified here will be affected by this action. Leave empty to use the default definitions for the model, if they exist."
+        ),
+        default=dict,
+    )
 
     class HandelRef:
         tag = "service_bridge_action"
@@ -157,7 +177,7 @@ class ServiceBridgeAction(HandleRefModel):
             # TODO: should lookup field be a property of ServiceBridgeAction ?
 
             lookup_field = getattr(obj.ServiceBridge, f"lookup_{service_name}")
-            return client.first(**{lookup_field:obj.id})
+            return client.first(**{lookup_field: obj.id})
         except AttributeError:
             return obj.reference.object
 
@@ -172,9 +192,7 @@ class ServiceBridgeAction(HandleRefModel):
         """
 
         try:
-            ServiceBridgeActionTask.create_task(
-                self.id, obj.id
-            )
+            ServiceBridgeActionTask.create_task(self.id, obj.id)
         except TaskLimitError:
             pass
 
@@ -202,7 +220,7 @@ class ServiceBridgeAction(HandleRefModel):
         service_name = self.reference_service_name
         reference_object = self.reference_object(obj)
 
-        data = obj.service_bridge_data(service_name, self.data_map)
+        # data = obj.service_bridge_data(service_name, self.data_map)
 
         if not self.function:
 
@@ -231,7 +249,10 @@ class ServiceBridgeAction(HandleRefModel):
 
                 # TODO: specify method in schema?
 
-                client.partial_update(reference_object, obj.service_bridge_data(service_name, self.data_map))
+                client.partial_update(
+                    reference_object,
+                    obj.service_bridge_data(service_name, self.data_map),
+                )
         else:
 
             # Function handler specified, attempt to run it
@@ -239,10 +260,11 @@ class ServiceBridgeAction(HandleRefModel):
             try:
                 fn, _, _ = handlers[self.function]
             except KeyError:
-                log.error(f"Unknown service bridge action handler specified on {self}: {self.function}")
+                log.error(
+                    f"Unknown service bridge action handler specified on {self}: {self.function}"
+                )
                 return
             fn("push", obj)
-
 
     def pull(self, obj):
         """
