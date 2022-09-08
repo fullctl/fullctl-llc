@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_grainy.decorators import grainy_model
 
-from fullctl.django.auth import permissions
+import fullctl.django.auth as auth
 from fullctl.django.models.abstract import HandleRefModel
 
 __all__ = [
@@ -90,7 +90,7 @@ class Organization(HandleRefModel):
         - `list`
         """
 
-        perms = permissions(user)
+        perms = auth.permissions(user)
 
         # user is a member of these orgs
         if hasattr(user, "org_set"):

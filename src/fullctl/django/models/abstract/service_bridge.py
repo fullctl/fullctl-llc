@@ -37,7 +37,6 @@ class ServiceBridgeReferenceModel(HandleRefModel):
             return self.reference.object
         return self
 
-
     def field_map(self, service_name=None):
         if not service_name:
             service_name = self.reference.bridge.Meta.service
@@ -71,7 +70,6 @@ class ServiceBridgeReferenceModel(HandleRefModel):
 
     def service_bridge_data(self, service_name):
 
-
         field_map = self.field_map(service_name)
 
         data = {}
@@ -88,8 +86,12 @@ class ServiceBridgeReferenceModel(HandleRefModel):
                 for nested in dest_field.split(".")[:-1]:
                     current[nested] = {}
                     current = current[nested]
-                current[field_name] = getattr(ref, src_field, getattr(self, src_field, None))
+                current[field_name] = getattr(
+                    ref, src_field, getattr(self, src_field, None)
+                )
             else:
-                data[dest_field] = getattr(ref, src_field, getattr(self, src_field, None))
+                data[dest_field] = getattr(
+                    ref, src_field, getattr(self, src_field, None)
+                )
 
         return data
