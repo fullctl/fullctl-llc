@@ -192,7 +192,7 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         actions = self.service_bridge_actions
         for action in actions:
             if action.action == "pull":
-                action.run_as_task(self)
+                action.run(self)
 
     def service_bridge_data(self, service_name, field_map=None):
 

@@ -271,10 +271,21 @@ class ServiceBridgeAction(HandleRefModel):
         Pulls data for the specified ServiceBridgeModel instance from the reference using
         the service bridge
 
-        NOT implemented
-
         Arguments:
 
         - obj (`ServiceBridgeModel`)
         """
-        pass
+
+        if self.function:
+
+            try:
+                fn, _, _ = handlers[self.function]
+            except KeyError:
+                log.error(
+                    f"Unknown service bridge action handler specified on {self}: {self.function}"
+                )
+                return
+            fn("pull", obj)
+
+
+
