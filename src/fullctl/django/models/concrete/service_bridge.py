@@ -286,6 +286,3 @@ class ServiceBridgeAction(HandleRefModel):
                 )
                 return
             fn("pull", obj)
-
-
-
