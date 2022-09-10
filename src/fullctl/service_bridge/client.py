@@ -4,6 +4,7 @@ import time
 import urllib.parse
 
 import requests
+import requests.exceptions
 
 from fullctl.service_bridge.data import DataObject
 
@@ -179,8 +180,11 @@ class Bridge:
 
     def destroy(self, obj):
         url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
-        data = self.delete(url)
-        return data
+        try:
+            data = self.delete(url)
+            return data
+        except requests.exceptions.JSONDecodeError:
+            return {}
 
     def update(self, obj, data):
         url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"

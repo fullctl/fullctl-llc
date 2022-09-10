@@ -13,6 +13,7 @@ from fullctl.django.models.concrete import (
     Task,
     TaskSchedule,
 )
+from fullctl.django.models.concrete.service_bridge import ServiceBridgeAction
 
 
 class BaseAdmin(VersionAdmin):
@@ -160,3 +161,16 @@ class UrlActionMixin:
             ),
         ] + super().get_urls()
         return urls
+
+@admin.register(ServiceBridgeAction)
+class ServiceBridgeAction(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "reference",
+        "target",
+        "action",
+        "function",
+        "description",
+        "created",
+        "updated",
+    )
