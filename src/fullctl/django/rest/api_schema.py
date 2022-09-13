@@ -89,8 +89,16 @@ class BaseSchema(AutoSchema):
 
         serializer, model = self.get_classes(*args)
 
+        #if not model:
+        #    return op_dict
+
         # if we were able to get a model we want to include the markdown documentation
         # for the model type in the openapi description field (docs/api/obj_*.md)
+
+        if hasattr(model, "HandleRef"):
+            reftag = model.HandleRef.tag
+        else:
+            reftag = model.__name__.lower()
 
         if model:
             augment = getattr(self, f"augment_{op_type}_{model.HandleRef.tag}", None)
