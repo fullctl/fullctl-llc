@@ -57,6 +57,9 @@ class BaseSchema(AutoSchema):
 
         name = self.view.__class__.__name__
 
+        if "service-bridge" in path:
+            name = f"Service Bridge: {name}"
+
         return f"{name} {action}"
 
     def get_classes(self, *op_args):
