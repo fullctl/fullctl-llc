@@ -43,11 +43,11 @@ class BaseSchema(AutoSchema):
         """
 
         serializer, model = self.get_classes(path, method)
-        op_type = self.get_operation_type(path, method)
-        method_name = getattr(self.view, 'action', method.lower())
+        # op_type = self.get_operation_type(path, method)
+        method_name = getattr(self.view, "action", method.lower())
 
         if is_list_view(path, method, self.view):
-            action = 'list'
+            action = "list"
         elif method_name not in self.method_mapping:
             action = method_name
         else:

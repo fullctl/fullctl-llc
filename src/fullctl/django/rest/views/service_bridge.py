@@ -7,7 +7,10 @@ from rest_framework.response import Response
 from fullctl.django.models import Organization
 from fullctl.django.rest.core import BadRequest
 from fullctl.django.rest.decorators import grainy_endpoint
-from fullctl.django.rest.serializers.service_bridge import HeartbeatSerializer, StatusSerializer
+from fullctl.django.rest.serializers.service_bridge import (
+    HeartbeatSerializer,
+    StatusSerializer,
+)
 
 
 class MethodFilter:
