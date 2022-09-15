@@ -1,16 +1,18 @@
-from rest_framework.schemas.openapi import SchemaGenerator as BaseSchemaGenerator, AutoSchema, is_list_view
-from rest_framework import serializers
-
 from django.conf import settings
+from rest_framework import serializers
+from rest_framework.schemas.openapi import AutoSchema
+from rest_framework.schemas.openapi import SchemaGenerator as BaseSchemaGenerator
+from rest_framework.schemas.openapi import is_list_view
 
 from fullctl.django.rest.serializers import ModelSerializer
 
+
 class SchemaGenerator(BaseSchemaGenerator):
-
-
     def has_view_permissions(self, path, method, view):
 
-        generate_service_bridge = getattr(settings, "API_DOCS_GENERATE_SERVICE_BRIDGE", False)
+        generate_service_bridge = getattr(
+            settings, "API_DOCS_GENERATE_SERVICE_BRIDGE", False
+        )
 
         if "service-bridge" in path and not generate_service_bridge:
             return False
@@ -129,7 +131,6 @@ class BaseSchema(AutoSchema):
 
         return op_dict
 
-
     def get_components(self, path, method):
         """
         Return components with their properties from the serializer.
@@ -160,7 +161,6 @@ class BaseSchema(AutoSchema):
 
         return super().get_serializer(path, method)
 
-
     def get_response_serializer(self, path, method):
         return self.get_serializer(path, method, "response")
 
@@ -168,7 +168,7 @@ class BaseSchema(AutoSchema):
         return self.get_serializer(path, method, "request")
 
     def get_request_body(self, path, method):
-        if method not in ('PUT', 'PATCH', 'POST', 'DELETE'):
+        if method not in ("PUT", "PATCH", "POST", "DELETE"):
             return {}
 
         self.request_media_types = self.map_parsers(path, method)
@@ -181,10 +181,7 @@ class BaseSchema(AutoSchema):
             item_schema = self._get_reference(serializer)
 
         return {
-            'content': {
-                ct: {'schema': item_schema}
-                for ct in self.request_media_types
-            }
+            "content": {ct: {"schema": item_schema} for ct in self.request_media_types}
         }
 
     def request_body_schema(self, op_dict, content="application/json"):
@@ -200,9 +197,8 @@ class BaseSchema(AutoSchema):
             .get("schema", {})
         )
 
-
     def get_reference(self, serializer):
-        return {'$ref': '#/components/schemas/{}'.format(self.get_component_name(serializer))}
+        return {"$ref": f"#/components/schemas/{self.get_component_name(serializer)}"}
 
     def get_responses(self, path, method):
 
@@ -215,7 +211,6 @@ class BaseSchema(AutoSchema):
         else:
             item_schema = self.get_reference(serializer)
 
-
         response_schema = {
             "type": "object",
             "properties": {
@@ -223,20 +218,19 @@ class BaseSchema(AutoSchema):
                     "type": "array",
                     "items": item_schema,
                 }
-            }
+            },
         }
 
-        status_code = '201' if method == 'POST' else '200'
+        status_code = "201" if method == "POST" else "200"
         return {
             status_code: {
-                'content': {
-                    ct: {'schema': response_schema}
-                    for ct in self.response_media_types
+                "content": {
+                    ct: {"schema": response_schema} for ct in self.response_media_types
                 },
                 # description is a mandatory property,
                 # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#responseObject
                 # TODO: put something meaningful into it
-                'description': ""
+                "description": "",
             }
         }
 
