@@ -6,6 +6,7 @@ from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 import fullctl.django.views
+from fullctl.django.views.api_schema import api_schema
 
 urlpatterns = []
 
@@ -43,6 +44,7 @@ for import_path, namespace in getattr(settings, "FULLCTL_ADDON_URLS", []):
 
 urlpatterns += [
     path("_diag", fullctl.django.views.diag),
+    path("apidocs/schema.json", api_schema, name="api_schema"),
     path(
         "api/account/",
         include(

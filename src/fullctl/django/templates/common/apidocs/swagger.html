@@ -12,7 +12,7 @@
     <script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
     <script>
     const ui = SwaggerUIBundle({
-        url: "{% static "docs/openapi.yaml" %}",
+        url: "{% url "api_schema" %}",
         dom_id: '#swagger-ui',
         presets: [
           SwaggerUIBundle.presets.apis,
