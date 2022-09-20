@@ -277,6 +277,7 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_option("PEERCTL_URL", "")
         self.set_option("PREFIXCTL_URL", "")
         self.set_option("IXCTL_URL", "")
+        self.set_option("DEVICECTL_URL", "")
 
     def set_twentyc_social_oauth(self, AAACTL_URL=None):
         """

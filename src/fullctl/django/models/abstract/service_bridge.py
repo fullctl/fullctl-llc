@@ -34,6 +34,8 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         """
         Returns the service name for the reference
         """
+        if not self.reference:
+            return None
         return f"{self.reference.bridge.Meta.service}"
 
     @property
@@ -41,6 +43,8 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         """
         Returns the UX management url for the reference (if available)
         """
+        if not self.reference:
+            return None
         return self.reference.ux_url
 
     @property
@@ -48,6 +52,9 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         """
         Returns the API url for the reference
         """
+        if not self.reference:
+            return None
+
         return self.reference.api_url
 
     @property

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from fullctl.django.models import Organization
+from fullctl.django.models import Organization, Instance
 from fullctl.django.rest.core import BadRequest
 from fullctl.django.rest.decorators import grainy_endpoint
 
@@ -74,6 +74,12 @@ class StatusViewSet(SystemViewSet):
         import fullctl.service_bridge.ixctl as ixctl
 
         return ixctl.Ixctl(cache_duration=1).heartbeat()
+
+    def check_bridge_devicectl(self, request):
+        import fullctl.service_bridge.devicectl as devicectl
+
+        return devicectl.Ixctl(cache_duration=1).heartbeat()
+
 
 
 class DataViewSet(viewsets.ModelViewSet):
@@ -156,19 +162,34 @@ class DataViewSet(viewsets.ModelViewSet):
 
         return qset, join
 
+    def prepare_write_data(self, request):
+
+        data = request.data.copy()
+        org_slug = data.get("org")
+        if org_slug:
+            org = Organization.objects.get(slug=org_slug)
+            data["instance"] = Instance.get_or_create(org).id
+
+        return data
+
     @grainy_endpoint("service_bridge")
     def create(self, request, *args, **kwargs):
 
         data = request.data.copy()
         org_slug = data.get("org")
         if org_slug:
-            data["instance"] = Organization.objects.get(slug=org_slug).instance.id
+            org = Organization.objects.get(slug=org_slug)
+            data["instance"] = Instance.get_or_create(org).id
 
         serializer = self.serializer_class(data=data)
         if not serializer.is_valid():
             return BadRequest(serializer.errors)
 
-        serializer.save()
+        obj = serializer.save()
+
+        if hasattr(self, "after_create"):
+            self.after_create(obj, data)
+
         return Response(serializer.data)
 
     @grainy_endpoint("service_bridge")

@@ -78,7 +78,7 @@ class Bridge:
             print(response.json())
             raise ServiceBridgeError(self, 400, data=response.json())
         else:
-            print(response.content)
+            #print(response.content)
             raise ServiceBridgeError(self, status)
 
     def _requests_kwargs(self, **kwargs):
