@@ -18,6 +18,8 @@ SOURCE_MAP = {
     "as_set": {"pdbctl": pdbctl.Network, "peerctl": peerctl.Network},
 }
 
+class ReferenceNotSetError(ValueError):
+    pass
 
 class ReferenceNotFoundError(KeyError):
     pass
@@ -72,6 +74,8 @@ class ReferenceMixin:
     @property
     def ref_parts(self):
         """Return reference source name and id as a tuple"""
+        if not self.ref_id:
+            raise ReferenceNotSetError()
         src, _id = self.ref_id.split(":")
         return (src, int(_id))
 

@@ -1454,8 +1454,6 @@ twentyc.rest.Select = twentyc.cls.extend(
       this.element.on("change", function() {
         this.clear_errors();
 
-        console.log("SELECT", this.action)
-
         if(!this.action)
           return;
 
