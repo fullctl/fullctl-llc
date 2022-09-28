@@ -14,7 +14,7 @@ BRIDGE_MAP = {}
 for name in dir(settings):
     if name.startswith("SERVICE_BRIDGE_REF_"):
         path = getattr(settings, name).split(".")
-        name = name.split("_")[-1].lower()
+        name = name.split("SERVICE_BRIDGE_REF_")[1].lower()
         print("loading", path, "for", name)
         if not path or len(path) < 2:
             BRIDGE_MAP[name] = None

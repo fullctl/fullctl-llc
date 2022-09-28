@@ -43,6 +43,8 @@ class Nautobot(Bridge):
     def auth_headers(self):
         return {"Authorization": f"Token {self.key}"}
 
+    def ux_url(self, id):
+        return f"{self.host}/{self.ref_tag}/{id}/?tab=main"
 
 class DeviceTypeObject(NautobotObject):
     description = "Nautobot Device Type"
@@ -63,8 +65,22 @@ class Device(Nautobot):
         ref_tag = "dcim/devices"
         data_object_cls = DeviceObject
 
-    def ux_url(self, id):
-        return f"{self.host}/{self.ref_tag}/{id}/?tab=main"
+class InterfaceObject(NautobotObject):
+    description = "Nautobot Interface"
+
+class Interface(Nautobot):
+    class Meta(Nautobot.Meta):
+        ref_tag = "dcim/interfaces"
+        data_object_cls = InterfaceObject
+
+
+class IPAddressObject(NautobotObject):
+    description = "Nautobot IP-Address"
+
+class IPAddress(Nautobot):
+    class Meta(Nautobot.Meta):
+        ref_tag = "ipam/ip-addresses"
+        data_object_cls = IPAddressObject
 
 
 class SiteObject(NautobotObject):
