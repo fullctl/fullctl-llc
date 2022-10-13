@@ -1,0 +1,44 @@
+{% load i18n static %}
+<!-- snippets -->
+
+{% if cloudflare_analytics_id %}
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "{{ cloudflare_analytics_id }}"'></script>
+<!-- End Cloudflare Web Analytics -->
+{% endif %}
+
+{% if google_analytics_id %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ google_analytics_id }}');
+</script>
+<!-- /google-analytics -->
+{% endif %}
+
+
+<!-- cookie-consent -->
+
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#252e39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  }
+})});
+</script>
+
+<!-- /cookie-consent -->
+
+<!-- /snippets -->

@@ -1,0 +1,16 @@
+{% load i18n %}
+<div class="container" id="form-import-org">
+          <div class="row">
+            <div class="col-sm">
+              <p>{% trans "Will import all exchanges from a PeeringDB Organization" %}</p>
+              <form method="post">
+              <div class="form-group">
+                <label for="id_pdb_id">Organization:</label> <select name="pdb_id" data-autocomplete-light-language="en-US" data-autocomplete-light-function="select2" id="id_pdb_id" required data-autocomplete-light-url="/{{ org.tag }}/ix/autocomplete/pdb/org">
+                  <option value="" selected>---------</option>
+
+                  </select>
+              </div>
+              </form>
+            </div>
+          </div>
+</div>

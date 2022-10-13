@@ -1,0 +1,252 @@
+{% extends "common/v2/base.html" %}
+{% load static i18n %}
+{% block "title" %}fullctl / {{ service_name }}{% endblock %}
+
+{% block "js" %}
+{{ block.super }}
+<script src="{% static "autocomplete_light/jquery.init.js" %}" type="text/javascript"></script>
+<script src="{% static "admin/js/vendor/select2/select2.full.js" %}" type="text/javascript"></script>
+<script src="{% static "autocomplete_light/autocomplete.init.js" %}" type="text/javascript"></script>
+<script src="{% static "autocomplete_light/forward.js" %}" type="text/javascript"></script>
+<script src="{% static "autocomplete_light/select2.js" %}" type="text/javascript"></script>
+<script src="{% static "autocomplete_light/jquery.post-setup.js" %}" type="text/javascript"></script>
+<script src="{% static "common/app.js" %}" type="text/javascript"></script>
+<script src="{% static "common/service_bridge.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block "css" %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "common/v2/app.css" %}?v=041208" />
+<link rel="stylesheet" type="text/css" href="{% static "common/v2/themes/dark.css" %}?v=130801" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/vendor/select2/select2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/autocomplete.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "autocomplete_light/select2.css" %}" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+{% endblock %}
+
+{% block "content" %}
+
+<script>
+fullctl.user = {
+  id : {{ request.user.id }},
+  email : "{{ request.user.email }}",
+  username : "{{ request.user.username }}"
+}
+
+fullctl.org = {
+  id : {{ request.org.permission_id }},
+  slug : "{{ request.org.slug }}",
+  name : "{{ request.org.name }}"
+}
+
+fullctl.aaactl_urls = {{ account_service.urls|safe }}
+
+var True = true, False = false;
+
+fullctl.permissions = {{ permissions|safe }}
+</script>
+
+{% block "header" %}
+
+<div class="container-fluid header-outer">
+  <div class="top-border {{ request.app_id }} app_bg"></div>
+
+  {% if request.impersonating %}
+  <div class="row">
+    <div class="col-12 col-sm-2"></div>
+    <div class="col-12 col-sm-8">
+      <div class="alert alert-info center">
+      {% blocktrans with user=request.user logged_in_user=request.impersonating.superuser %}
+      You are currently impersonating <b>{{ user }}</b> - logged in as <b>{{ logged_in_user }}</b>
+      {% endblocktrans %}
+      </div>
+    </div>
+    <div class="col-12 col-sm-2"></div>
+  </div>
+  {% endif %}
+
+
+  <div class="row header" data-component="header">
+
+    <!-- logo and app switcher -->
+
+    <div class="col-12 col-sm-4 header-left">
+      {% block "header_left" %}
+      <div class="app-switcher" data-element="app_switcher">
+        <div class="selected {{ request.app_id }}">
+          <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ service_tag }}">
+        <span class="icon {{ request.app_id }} icon-caret-down"></span>
+        <div class="others" style="display:none">
+          {% for service_app in service_applications %}
+          {%   if service_app.slug != service_tag %}
+          {%     with "common/logos/"|add:service_app.slug|add:"-dark.svg" as other_app_logo %}
+            <a data-grainy-remove="{{ service_app.grainy }}.{{ request.org.remote_id}}" href="{{ service_app.org_redirect }}">
+              {% if not service_app.logo %}
+                <img class="app-logo" src="{% static other_app_logo %}" alt="{{ service_app.slug }}">
+              {% else %}
+                <img class="app-logo" src="{{ service_app.logo }}" alt="{{ service_app.slug }}">
+              {% endif %}
+            </a>
+          {%     endwith %}
+          {%   endif %}
+          {% endfor %}
+
+        </div>
+        </div>
+      </div>
+      {% endblock "header_left" %}
+    </div>
+
+    <!-- /logo and app switcher -->
+
+    <!-- pages -->
+
+    <div class="col-12 col-sm-4 header-middle">
+    {% block "header_middle" %}
+    {% endblock "header_middle" %}
+    </div>
+
+    <!-- /pages -->
+
+    <div class="col-12 col-sm-4 header-right">
+    {% block "header_right" %}
+      {% block "header_account_panel" %}
+
+      <!-- org switcher -->
+      <span class="header-control">
+        <span class="icon">
+          <img src="{% static "common/icons/icon/org.svg" %}">
+        </span>
+
+        <button data-element="button_select_org" class="button" type="button"  id="org-menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ request.org.display_name }}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="org-menu">
+
+          <!-- current org options / actions -->
+          <!-- switch org options -->
+          <div
+            data-api-base="{% url "fullctl_account_api:org-list" %}"
+            data-org="{{ request.org.slug }}"
+            data-element="select_org">
+            <div class="list-body"></div>
+            <div class="templates">
+              <a data-template="row" class="dropdown-item action">
+                <span class="icon icon-solid">
+                  <img src="{% static "common/icons/icon/org.svg" %}">
+                </span>
+                <span data-field="name"></span>
+                {% if permissions.update_instance and oauth_manages_org %}
+                <span class="action manage manage-org"><span class="icon icon-settings"></span></span>
+                {% endif %}
+              </a>
+            </div>
+          </div>
+          <div class="horizontal-line"></div>
+
+          <!-- other org related actions -->
+
+          {% if permissions.update_instance and oauth_manages_org %}
+          <a class="dropdown-item" href="{{ account_service.urls.manage_org }}">
+            <span class="icon icon-settings"></span>
+            {% trans "Manage Organization" %}
+          </a>
+          {% endif %}
+
+          {% if oauth_manages_org %}
+
+          <a class="dropdown-item" href="{{ account_service.urls.create_org }}">
+            <span class="icon icon-add"></span>{% trans "Create Organization" %}</a>
+          {% endif %}
+        </div>
+        <img class="caret" src="{% static "common/icons/ui-caret-caret/down.svg" %}">
+      </span>
+
+      <!-- user menu -->
+      <span class="header-control">
+        <span class="icon">
+          <img src="{% static "common/icons/icon/user.svg" %}">
+        </span>
+        <button data-element="button_account" class="button" type="button"  id="user-menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ request.user.username }}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
+          <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+          <span class="email">{{ request.user.email }}</span>
+          <div class="horizontal-line"></div>
+          <a class="dropdown-item" href="/logout/">
+            <span class="icon icon-logout"></span>{% trans "Logout" %}</a>
+        </div>
+        <img class="caret" src="{% static "common/icons/ui-caret-caret/down.svg" %}">
+      </span>
+      {% endblock %}
+    {% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block "error_content" %}{% endblock %}
+
+{% if not permissions.read_instance and request.org %}
+<div class="row">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <div class="alert alert-danger marg-top-lg">
+{% blocktrans trimmed with app_id=request.app_id org_name=request.org.name %}
+You do not have the permissions to view the {{ app_id }} workspace for the {{ org_name }} organization.
+{% endblocktrans %}
+    </div>
+  </div>
+  <div class="col-4"></div>
+</div>
+<div style="display:none">
+{% endif %}
+{% block "app_content" %}
+<div class="container-fluid toolbar-outer">
+  <div class="container">
+    <div class="row">
+      {% block "app_content_toolbar_outer" %}
+      <div class="col-12 toolbar" data-component="toolbar">
+        {% block "app_content_toolbar" %}{% endblock %}
+      </div>
+      {% endblock %}
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid content-outer">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 main" data-component="main">
+        {% block "app_content_main" %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<div id="templates">
+{% include "common/app/templates.html" %}
+{% block "templates" %}
+{% endblock %}
+</div>
+
+<div id="modals">
+{% include "common/app/modal.html" %}
+</div>
+{% if not permissions.read_instance %}</div>{% endif %}
+
+<div class="center app-footer">
+{% block "footer" %}
+version {{ version }}
+<p>
+<a class="button" href="mailto:{{ support_email }}">
+  <span class="icon icon-mail fullctl"></span>
+  <span class="label">Contact Support</span>
+</a>
+</p>
+{% endblock %}
+</div>
+{% endblock %}

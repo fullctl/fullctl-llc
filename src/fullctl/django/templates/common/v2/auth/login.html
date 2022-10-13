@@ -1,0 +1,86 @@
+{% extends "common/app/base.html" %}
+{% load static i18n %}
+
+{% block "content" %}
+
+    {% block "css" %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "{{ sertvice_tag }}/{{ sertvice_tag }}.css" %}" />
+    {% endblock %}
+
+    {% block "header_middle" %}
+    <div class="container-fluid header-outer">
+        <div class="top-border {{ sertvice_tag }} app_bg"></div>
+        <div class="row header">
+            <div class="col-12 col-sm-6 header-left mt-3 mb-2 ms-3 app-switcher">
+                <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ sertvice_tag }}">
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% if form.errors %}
+        {% blocktrans %}
+        <p>Your username and password didn't match. Please try again.</p>
+        {% endblocktrans %}
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>
+            {% blocktrans %}
+            Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.
+            {% endblocktrans %}
+        </p>
+        {% else %}
+        <p>{% trans "Please login to see this page." %}</p>
+        {% endif %}
+    {% endif %}
+    <div class="container-fluid toolbar-outer">
+        <div class="container">
+            <div class="row align-items-start pt-4 pb-2">
+                <div class="col-sm"></div>
+                {% if not oauth_manages_org %}
+                <div class="col mx-2 login">
+                    <!-- MANUAL LOGIN -->
+                    <h3> {% trans "Login" %} </h3>
+                    <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <table>
+                    <tr>
+                        <td>{{ form.username.label_tag }}</td>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label_tag }}</td>
+                        <td>{{ form.password }}</td>
+                    </tr>
+                    </table>
+                    <button class="btn" type="submit" value="login">{% trans "Login" %}</button>
+                    <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+                </div>
+                {% else %}
+                <div class="col mx-2">
+                {% blocktrans %}
+                The authentication service(s) to the right
+                are in control of the users and organizations for this
+                {{ sertvice_tag }} instance.
+                {% endblocktrans %}
+                </div>
+                {% endif %}
+                <div class="col" style="vertical-align:top">
+                    {% if backends.backends %}
+                    <h3>{% trans "Authenticate" %}</h3>
+                    <!-- OAUTH -->
+                    {% include "common/auth/oauth.html" %}
+                    {% endif %}
+                </div>
+
+                <div class="col-sm"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

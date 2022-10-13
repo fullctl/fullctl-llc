@@ -1,0 +1,64 @@
+{% load i18n %}
+<div
+  data-component="user_listing"
+  data-api-base="{% url "account_api:org-users" org_tag=request.org.slug %}">
+  <div class="templates">
+
+    <div
+      data-template="permissions"
+      data-api-base="{% url "account_api:org-set-permissions" org_tag=request.org.slug %}"
+      data-api-method="PUT">
+      <div class="row">
+        <div style="display:none" data-api-submit="yes">
+          <input type="text" name="id" type="hidden">
+          <input type="text" name="component" type="hidden">
+        </div>
+        <div class="col-3" data-field="component"></div>
+        <div class="col-9 flags">
+          <span><input data-permission-flag="c" type="checkbox"> create</span>
+          <span><input data-permission-flag="r" type="checkbox"> read</span>
+          <span><input data-permission-flag="u" type="checkbox"> update</span>
+          <span><input data-permission-flag="d" type="checkbox"> delete</span>
+        </div>
+      </div>
+    </div>
+
+    <table>
+    <tr data-template="row">
+      <td scope="col" class="highlight" data-field="name"></td>
+      <td scope="col" class="highlight" data-field="email"></td>
+      <td scope="col" class="right">
+        <button class="generic btn-permissions">{% trans "Permissions" %}</button>
+      </td>
+    </tr>
+    <tr data-template="row" class="manage inner-list inner-list-2">
+      <td colspan="3" scope="col">
+        <div class="row">
+          <div class="col-12">
+            <div data-field="permissions"></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    </table>
+  </div>
+
+  <table class="table table-sm">
+    <thead class="list-head">
+      <tr>
+        <th scope="col">{% trans "Name" %}</th>
+        <th scope="col">{% trans "Email" %}</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody class="list-body">
+    </tbody>
+  </table>
+</div>
+
+<!--
+<div class="alert alert-info">
+<a href="">{% trans "Invite users to your organization" %}</a>
+</div>
+-->

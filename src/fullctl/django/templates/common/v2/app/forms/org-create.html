@@ -1,0 +1,26 @@
+{% load i18n %}
+<div class="container" id="form-org-create">
+  <div class="row">
+    <div class="col">
+        <form method="post">
+          <div class="form-group">
+            <label for="name">{% trans "Name" %}:</label>
+            <input
+              class="form-control"
+              placeholder="{% trans "Organization name" %}"
+              id="name"
+              name="name">
+          </div>
+          <div class="form-group">
+            <label for="tag">{% trans "URL Tag" %}:</label>
+            <input
+              class="form-control"
+              id="tag"
+              name="tag">
+            <small class="form-text text-muted">https://fullctl.com/<span class="strong" id="tag-preview"></span>/ix/</small>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
