@@ -1,0 +1,15 @@
+{% extends "common/v2/base.html" %}
+{% block "app-content" %}
+<div class="app-content" id="app-content">
+
+</div>
+{% endblock %}
+{% block "js" %}
+{{ block.super }}
+<script language="javascript">
+window.ORG_ID = {{ org.id }};
+window.ORG_TAG= "{{ org.tag }}";
+window.ORG_NAME = "{{ org.name }}";
+window.INSTANCE_ID = {{ instance.id }};
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load i18n static %}
+{% if backend == "google-oauth2" %}
+    <img
+      alt="{% trans "login with google" %}"
+      title="{% trans "login with google" %}"
+      src="{% static "common/oauth/google.svg" %}"
+      class="img-fluid login-google"
+    >
+    {% if not associated %}
+    <span>{% trans "Sign in with Google" %}</span>
+    {% else %}
+    <span>Google</span>
+    {% endif %}
+{% elif backend == "peeringdb" %}
+    <img
+      alt="{% trans "login with peeringdb" %}"
+      title="{% trans "login with peeringdb" %}"
+      src="{% static "common/oauth/peeringdb.png" %}"
+      class="img-fluid login-peeringdb"
+    >
+{% elif backend == "twentyc" %}
+    <img
+      alt="{% trans "login with 20c" %}"
+      title="{% trans "login with 20c" %}"
+      src="{% static "common/oauth/20c.svg" %}"
+      class="img-fluid login-20c"
+    >
+
+{% else %}
+    {{ backend }}
+{% endif %}

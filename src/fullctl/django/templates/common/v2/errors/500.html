@@ -1,0 +1,11 @@
+{% extends "common/errors/base.html" %}
+{% load i18n %}
+{% block error_title %}{% trans "Internal Error" %}{% endblock %}
+{% block error_descr %}{% trans "Looks like something went wrong - we're looking into it and apologize for the inconvenience!" %}{% endblock %}
+{% block return_home_label %}{% trans "Return home" %}{% endblock %}
+{% block error_details %}
+<div>
+{{ error.description }}
+</div>
+{% include "common/errors/details.html" %}
+{% endblock %}

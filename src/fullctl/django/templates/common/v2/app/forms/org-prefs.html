@@ -1,0 +1,108 @@
+{% load i18n %}
+<div class="container" id="form-org-prefs">
+  <div class="row">
+    <div class="col-xs-12 col-md-3" id="org-list">
+      <nav class="nav flex-column">
+         <a class="nav-link active" data-nav-target="#org-details" href="#">{% trans "General" %}</a>
+         <a class="nav-link" data-nav-target="#org-invite-users" href="#">{% trans "Invite" %}</a>
+         <a class="nav-link" data-nav-target="#org-users" href="#">{% trans "Users" %}</a>
+         <a class="nav-link danger" data-nav-target="#org-leave" href="#">{% trans "Leave" %}</a>
+      </nav>
+    </div>
+
+    <div class="col-xs-12 col-md-9">
+      <!-- ORG DETAILS -->
+      <div id="org-details">
+        <form method="post" id="form-org-details">
+          <div class="form-group">
+            <label for="name">{% trans "Name" %}:</label>
+            <input
+              class="form-control"
+              value="{{ org.name }}"
+              id="name"
+              name="name">
+          </div>
+          <div class="form-group">
+            <label for="tag">{% trans "URL Tag" %}:</label>
+            <input
+              class="form-control"
+              value="{{ org.tag }}"
+              id="tag"
+              name="tag">
+            <small class="form-text text-muted">https://fullctl.com/<span class="strong" id="tag-preview">{{ org.tag }}</span>/{{ app_id }}/</small>
+          </div>
+          <div class="form-group right">
+            <button type="button" class="btn btn-primary btn-submit">{% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ORG USERS -->
+      <div id="org-invite-users" style="display:none;">
+        <form method="post" id="form-org-invite-users">
+          <div class="alert alert-danger">
+            {% blocktrans %}
+            Right now any person you invite to an organization <strong>gets full
+            permissions to edit</strong>. We will introduce more granular permissions
+            in the future, but for now, please keep this in mind.
+            {% endblocktrans %}
+          </div>
+          <div class="form-group">
+            <label for="invite-emails">Emails:</label>
+            <textarea class="form-control" placeholder="{% trans "Invite Users - one email address per line, 5 email addresses max."%}" name="emails" id="invite-emails"></textarea>
+          </div>
+          <div class="form-group right">
+            <button type="button" class="btn btn-primary btn-submit">
+            {% trans "Invite Users" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="org-users" style="display:none;">
+        <table
+          class="table"
+          data-sort-container="tbody"
+          data-sort-row=".listitem">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col" data-sort-target=".name">Name</th>
+            </tr>
+          </thead>
+          <tbody class="api-list-body">
+          </tbody>
+        </table>
+      </div>
+
+      <div id="org-leave" style="display:none;">
+        <form method="post" id="form-org-leave">
+          <div class="alert alert-danger">
+            {% blocktrans %}
+            You are about to leave the <strong>{{ org.name }}</strong>
+            organization - loosing access to their workspace.
+            {% endblocktrans %}
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-danger btn-submit">
+            {% trans "Leave Organization" %}</button>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<table>
+  <tr class="org-users listitem">
+    <td>
+      <button type="button" class="btn btn-danger btn-sm" data-action="delete_remote">
+        <span>Remove</span>
+      </button>
+    </td>
+    <td scope="col" class="name" name="name">Name</td>
+  </tr>
+</table>
+
+

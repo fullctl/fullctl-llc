@@ -1,0 +1,9 @@
+{% load i18n %}
+<div data-template="billing-setup" class="row marg-sm">
+  <div class="col-8">
+    <span>{% trans "Please set up billing for your organization" %}</span>
+  </div>
+  <div class="col-4 right">
+    <a href="{{ account_service.urls.billing_setup }}" target="_blank" class="btn btn-primary btn-xs">{% trans "Setup billing" %}</a>
+  </div>
+</div>

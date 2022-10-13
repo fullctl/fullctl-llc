@@ -1,0 +1,8 @@
+{% extends "common/errors/base.html" %}
+{% load i18n %}
+{% block error_title %}{% trans "Authentication required" %}{% endblock %}
+{% block error_descr %}{% trans "Please login to view this page." %}{% endblock %}
+{% block return_home_label %}{% trans "Return home" %}{% endblock %}
+{% block error_details %}
+{% include "common/errors/details.html" %}
+{% endblock %}
