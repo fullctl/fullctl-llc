@@ -15,26 +15,6 @@ a[data-action]:hover,
 .action:hover {
 }
 
-body {
-  overflow: scroll;
-}
-
-button {
-  border: none;
-  font-family: "Archivo Narrow";
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 16px;
-  text-transform: capitalize;
-  text-decoration: none;
-  text-align: left;
-}
-
-button span.label {
-  text-decoration: underline;
-}
-
-
 [data-api-submit] {
   position: relative;
 }
@@ -196,7 +176,7 @@ div.loading-anim {
  */
 
 body {
-  font-family: "Archivo Narrow";
+  font-family: 'Inter', sans-serif;
   letter-spacing: 0;
 }
 
@@ -205,42 +185,29 @@ body {
  */
 
 
-div.header {
-  min-height: 69px;
+div.header-outer {
+  border-bottom: solid 1px;
 }
 
-div.header-left {
+div.header {
+  min-height: 64px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
 }
 
 div.header-left a {
-  line-height: 24px;
-  font-size: 16px;
   text-decoration: underline;
 }
 
 div.header-middle {
   padding: 20px;
   text-align: center;
-}
-
-div.header-middle span.logo {
-  line-height: 30px;
-  font-size: 38px;
-}
-
-div.header-middle span.logo span.app-label {
-  font-size: 30px;
-}
-
-div.header-right {
-  padding: 16px 28px 12px 28px;
-  text-align: right;
+  border-left: solid 1px;
 }
 
 div.header select {
   border: none;
-  font-size: 16px;
-  line-height: 24px;
   border-radius: 15px;
   padding: 4px 28px 4px 38px;
   -webkit-appearance: none;
@@ -252,178 +219,13 @@ div.header .button {
   border: none;
   border-radius: 25px;
   padding: 4px 28px 4px 38px;
-  font-size: 16px;
-  line-height: 24px;
   outline: none;
-
-}
-
-div.header .button.icon-less {
-  padding: 4px 28px 4px 16px;
-  position: relative;
-  top: -2px;
-}
-
-div.header .button.icon-less img {
-  height: 14px;
-  margin: 5px;
-}
-
-div.header span.header-control {
-  position: relative;
-  display: inline-block;
-}
-
-div.header span.header-control > img.caret {
-  position: absolute;
-  right: 18px;
-  top: 14px;
-}
-
-div.header span.header-control > button + img.caret {
-  right: 12px;
-}
-
-div.header span.header-control span.icon {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  border-radius: 25px;
-  position: absolute;
-  left: 2px;
-  top: 2px;
-}
-
-div.header span.header-control span.icon > span.inner-icon {
-  top: 8px;
-  left: -2px;
-  position: relative;
-}
-
-div.header span.header-control span.icon > span.inner-icon,
-div.header span.header-control span.icon > img {
-  display: inline-block;
-  padding: 7px;
-}
-
-
-div.header span.header-control .dropdown-item {
-  font-family: "Archivo Narrow";
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 16px;
-  padding-left: 12px;
-  position: relative;
-}
-
-div.header span.header-control .dropdown-item > .action{
-  position: absolute;
-  right: 3px;
-  top: 10px;
-}
-
-div.header span.header-control .dropdown-menu > h3 {
-  font-family: "Archivo Narrow";
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 0;
-  line-height: 18px;
-  padding-left: 10px;
-}
-
-
-div.header span.header-control .dropdown-menu > h4 {
-  font-family: "Archivo Narrow";
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 0;
-  line-height: 24px;
-  padding-left: 10px;
-}
-
-
-
-div.header span.header-control .dropdown-menu > .horizontal-line {
-  height: 2px;
-  background-color: #3C4650;
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
-div.header span.header-control .dropdown-menu > span {
-  font-family: "Archivo Narrow";
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 24px;
-  padding-left: 10px;
-}
-
-div.dropdown-meny.show,
-span.header-control.show,
-span.dropdown.show {
-  display: inline-block !important;
-}
-
-div.header span.header-control .dropdown-item:hover {
-  text-decoration: underline;
-}
-
-div.header span.header-control .dropdown-item span.icon {
-  height: 16px;
-  width: 16px;
-  position: relative;
-  top: auto;
-  left: auto;
-  border-radius: 0;
-  vertical-align: middle;
-  margin-right: 4px;
-}
-
-div.header span.header-control .dropdown-item span.icon-solid {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  border-radius: 25px;
-}
-
-
-
-div.header span.header-control .fullctl-app .dropdown-item {
-  text-align: right;
-}
-
-div.header span.header-control .fullctl-app .dropdown-item img {
-  height: 16px;
-}
-
-div.header span.header-control .fullctl-app .dropdown-item.ixctl img {
-  height: 15px;
-}
-
-div.header-outer .top-border {
-  height: 4px;
-  margin-left: -15px;
-  margin-right: -30px;
-}
-
-div.header .app-switcher {
-  position: relative;
 }
 
 div.header .app-switcher .selected {
-  padding-top: 18px;
-  padding-bottom: 9px;
-  padding-left: 15px;
-  padding-right: 28px;
-  width: 220px;
   display: inline-block;
   cursor: pointer;
   position: relative;
-}
-
-div.header .app-switcher .selected .icon-caret-down {
-  display: inline-block;
-  margin-left: 10px;
 }
 
 div.header .app-switcher img.app-logo {
@@ -432,7 +234,6 @@ div.header .app-switcher img.app-logo {
 
 div.header .app-switcher .others {
   position: absolute;
-  background-color:#000;
   top: 60px;
   left: 0px;
   right: 0px;
@@ -442,6 +243,15 @@ div.header .app-switcher .others {
 div.header .app-switcher .others a {
   display: block;
   padding: 15px;
+}
+
+div.dropdown-meny.show,
+span.dropdown.show {
+  display: inline-block !important;
+}
+
+div.header-control {
+  border-left: solid 1px;
 }
 
 /**
@@ -494,7 +304,6 @@ tbody.list-body:empty + tbody.list-no-data {
 .list-body div.secondary input[type="text"],
 div.toolbar-field input[type="text"] {
   border: 1px solid;
-  font-family: "Archivo Narrow";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 20px;
@@ -536,7 +345,6 @@ div.toolbar span.toolbar-control > img.caret {
 
 div.toolbar-field {
   position: relative;
-  font-family: "Archivo Narrow";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 20px;
@@ -545,16 +353,8 @@ div.toolbar-field {
   padding: 8px;
 }
 
-div.toolbar-field > span.icon {
-  background-color: #fff;
-  position: absolute;
-  z-index: 1;
-  right: 14px;
-  top: 10px;
-}
 
 div.toolbar-field > span.value {
-  font-family: "Archivo Narrow";
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0;
@@ -567,7 +367,6 @@ div.menu .button {
   display: block;
   width: 100%;
   border: none;
-  font-family: "Archivo Narrow";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 16px;
@@ -625,7 +424,6 @@ div.tool-custom {
 
 
 div.tool-custom > h4.tool-title {
-  font-family: "Archivo Narrow";
   font-size: 30px;
   letter-spacing: 0;
   line-height: 30px;
@@ -651,103 +449,24 @@ span.icon {
   -webkit-mask-repeat: no-repeat;
 }
 
-span.icon-right {
-  margin-left: 3px;
-}
-
-.inner-list span.icon {
-}
-
-span.icon-add {
-  -webkit-mask-image: url(icons/icon/add.svg);
-  mask-image: url(icons/icon/add.svg);
-}
-span.icon-delete {
-  -webkit-mask-image: url(icons/icon/delete.svg);
-  mask-image: url(icons/icon/delete.svg);
-  width: 14px;
-}
-span.icon-edit {
-  -webkit-mask-image: url(icons/icon/edit.svg);
-  mask-image: url(icons/icon/edit.svg);
-}
-span.icon-logout {
-  -webkit-mask-image: url(icons/icon/logout.svg);
-  mask-image: url(icons/icon/logout.svg);
-}
-span.icon-location {
-  -webkit-mask-image: url(icons/icon/location.svg);
-  mask-image: url(icons/icon/location.svg);
-}
-span.icon-settings {
-  -webkit-mask-image: url(icons/icon/settings.svg);
-  mask-image: url(icons/icon/settings.svg);
-}
-
-span.icon-list {
-  -webkit-mask-image: url(icons/icon/list.svg);
-  mask-image: url(icons/icon/list.svg);
-}
-
-span.icon-api {
-  -webkit-mask-image: url(icons/icon/api.svg);
-  mask-image: url(icons/icon/api.svg);
-}
-
-span.icon-report {
-  -webkit-mask-image: url(icons/icon/report.svg);
-  mask-image: url(icons/icon/report.svg);
-}
-
-span.icon-refresh {
-  -webkit-mask-image: url(icons/icon/refresh.svg);
-  mask-image: url(icons/icon/refresh.svg);
-}
-
-span.icon-download {
-  -webkit-mask-image: url(icons/icon/logout.svg);
-  mask-image: url(icons/icon/logout.svg);
-  transform: rotate(-90deg);
-}
 span.icon-org {
-  -webkit-mask-image: url(icons/icon/org.svg);
-  mask-image: url(icons/icon/org.svg);
+  -webkit-mask-image: url(icons/org.svg);
+  mask-image: url(icons/org.svg);
 }
 
-span.icon-launch {
-  -webkit-mask-image: url(icons/icon/launch.svg);
-  mask-image: url(icons/icon/launch.svg);
-}
-span.icon-mail {
-  -webkit-mask-image: url(icons/icon/mail.svg);
-  mask-image: url(icons/icon/mail.svg);
-}
-span.icon-view {
-  -webkit-mask-image: url(icons/icon/view.svg);
-  mask-image: url(icons/icon/view.svg);
+span.icon-user {
+  -webkit-mask-image: url(icons/user.svg);
+  mask-image: url(icons/user.svg);
 }
 
-
+span.icon-caret-y {
+  -webkit-mask-image: url(icons/ui-caret/dbl-select.svg);
+  mask-image: url(icons/ui-caret/dbl-select.svg);
+}
 
 span.icon-caret-down {
-  -webkit-mask-image: url(icons/ui-caret-caret/down.svg);
-  mask-image: url(icons/ui-caret-caret/down.svg);
-}
-
-span.icon-caret-left {
-  -webkit-mask-image: url(icons/ui-caret-caret/down.svg);
-  mask-image: url(icons/ui-caret-caret/down.svg);
-  transform: rotate(-90deg);
-}
-
-
-img.icon.filled {
-  border-radius: 25px;
-  padding: 2px;
-}
-
-img.icon {
-  shape-rendering: cripsEdges;
+  -webkit-mask-image: url(icons/ui-caret/down.svg);
+  mask-image: url(icons/ui-caret/down.svg);
 }
 
 .checked [data-false] {
@@ -767,14 +486,12 @@ img.icon {
  */
 
 a.nav-link {
-  font-family: "Archivo Narrow";
-  font-size: 20px;
   font-weight: 500;
   letter-spacing: 0;
-  line-height: 24px;
   text-decoration: none;
-  padding: 12px 0px;
-  margin: 0px 12px -20px 12px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
 }
 
 a.nav-link.active {
@@ -791,7 +508,6 @@ div.menu {
 
 
 div.menu h4 {
-  font-family: "Archivo Narrow";
   font-size: 30px;
   letter-spacing: 0;
   line-height: 30px;
@@ -826,11 +542,6 @@ table thead tr th {
 }
 
 div.list-th,
-.table.list-table  {
-  border-top: 2px solid #9da2a7;
-}
-
-div.list-th,
 .table th {
   font-size: 15px;
   letter-spacing: 3px;
@@ -838,16 +549,6 @@ div.list-th,
   text-transform: uppercase;
 }
 
-.table td,
-.table th {
-  border-top: none;
-  padding: 12px;
-}
-
-.table th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #dee2e6;
-}
 
 .tool {
   position: relative;
@@ -875,9 +576,6 @@ div.list-th,
 .table td[data-field="controls"] a > span.label {
   display: none;
 }
-}
-
-.table div.property {
 }
 
 @media (min-width: 767.98px) {
@@ -914,15 +612,7 @@ div.list-body .secondary .property .field {
   display: inline-block;
 }
 
-div.list-body .secondary .property [data-field] {
-  margin-left: 4px;
-}
-
-div.list-body .secondary button {
-}
-
 .row-gap button {
-  font-family: "Archivo Narrow";
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0;
@@ -967,7 +657,6 @@ div.list-body div.secondary {
 }
 
 div.list-body .primary-row-name {
-  font-family: "Archivo Narrow";
   font-size: 20px;
   font-weight: bold;
   letter-spacing: 0;
@@ -981,10 +670,6 @@ tbody.list-footer {
 
 tbody.list-footer td {
   text-align: center;
-}
-
-tbody.list-footer button:not(.rounded-button)1 {
-  text-decoration: underline;
 }
 
 div.column-list-3 {
@@ -1035,11 +720,6 @@ div.inner-list > div {
   margin: 0 32px;
 }
 
-.prefix-container {
-  background: #0F1317;
-  position: relative;
-}
-
 .prefix-container a,
 .prefix-container span {
   display: inline-block;
@@ -1081,9 +761,6 @@ div.flags > span {
   content: " \2191";
 }
 
-.selected-order-header-desc {
-}
-
 .selected-order-header-desc::after {
   content: " \2193";
 }
@@ -1099,7 +776,6 @@ div.flags > span {
 }
 
 h5.modal-title {
-  font-family: "Archivo Narrow";
   font-size: 24px;
   font-weight: 500;
   letter-spacing: 0;
@@ -1115,18 +791,10 @@ div.controls button.generic,
 div.controls button.submit,
 div.modal button.submit {
   border-radius: 20px;
-  font-family: "Archivo Narrow";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 16px;
   text-align: center;
-}
-
-div.controls div.input-group-append button,
-div.modal div.input-group-append button {
-  border-bottom-left-radius: 0px;
-  border-top-left-radius: 0px;
-  border-color: transparent;
 }
 
 div.modal-footer {
@@ -1150,7 +818,6 @@ div.controls input[type="text"],
 div.controls input[type="password"],
 div.controls textarea,
 div.controls select {
-  font-family: "Archivo Narrow";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 20px;
@@ -1182,7 +849,6 @@ div.controls textarea {
 }
 
 div.controls label {
-  font-family: "Archivo Narrow";
   font-size: 12px;
   letter-spacing: 2.4px;
   line-height: 8px;
@@ -1211,7 +877,6 @@ div.controls .form-check {
 }
 
 div.controls input[type="checkbox"] ~ label {
-  font-family: "Archivo Narrow";
   font-size: 20px;
   letter-spacing: 0;
   line-height: 24px;
@@ -1317,46 +982,6 @@ div.page_error {
   margin: 50px;
 }
 
-
-
 div.create .edit-toggled {
   display: none;
-}
-
-
-/*
- * wizard
- */
-
-
-div.wizard .wiz-step {
-  display: none;
-}
-
-div.wizard.wiz-step-6 .wiz-step.wiz-step-6,
-div.wizard.wiz-step-5 .wiz-step.wiz-step-5,
-div.wizard.wiz-step-4 .wiz-step.wiz-step-4,
-div.wizard.wiz-step-3 .wiz-step.wiz-step-3,
-div.wizard.wiz-step-2 .wiz-step.wiz-step-2,
-div.wizard.wiz-step-1 .wiz-step.wiz-step-1{
-  display: block;
-}
-
-/*
- * tags
- */
-
-span.tag {
-  padding: 3px 5px;
-  margin-right: 10px;
-  border-radius: 5px;
-  font-size: 12px;
-}
-
-span.tag-name {
-  font-weight: 600;
-}
-
-span.tag-value {
-  margin-left: 10px;
 }

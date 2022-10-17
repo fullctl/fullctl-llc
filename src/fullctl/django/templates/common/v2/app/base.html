@@ -49,9 +49,7 @@ fullctl.permissions = {{ permissions|safe }}
 
 {% block "header" %}
 
-<div class="container-fluid header-outer">
-  <div class="top-border {{ request.app_id }} app_bg"></div>
-
+<div class="container-fluid header-outer px-4">
   {% if request.impersonating %}
   <div class="row">
     <div class="col-12 col-sm-2"></div>
@@ -67,16 +65,16 @@ fullctl.permissions = {{ permissions|safe }}
   {% endif %}
 
 
-  <div class="row header" data-component="header">
+  <div class="row header m-0" data-component="header">
 
     <!-- logo and app switcher -->
 
-    <div class="col-12 col-sm-4 header-left">
+    <div class="col-md-auto d-flex align-items-center header-left me-3 px-0">
       {% block "header_left" %}
       <div class="app-switcher" data-element="app_switcher">
-        <div class="selected {{ request.app_id }}">
+        <div class="selected {{ request.app_id }} d-flex align-items-center">
           <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ service_tag }}">
-        <span class="icon {{ request.app_id }} icon-caret-down"></span>
+        <span class="icon {{ request.app_id }} icon-caret-y ms-4"></span>
         <div class="others" style="display:none">
           {% for service_app in service_applications %}
           {%   if service_app.slug != service_tag %}
@@ -102,26 +100,36 @@ fullctl.permissions = {{ permissions|safe }}
 
     <!-- pages -->
 
-    <div class="col-12 col-sm-4 header-middle">
+    <div class="col header-middle p-0">
     {% block "header_middle" %}
     {% endblock "header_middle" %}
     </div>
 
     <!-- /pages -->
 
-    <div class="col-12 col-sm-4 header-right">
+    <div class="col-md-auto p-0 header-right d-flex align-items-center">
     {% block "header_right" %}
       {% block "header_account_panel" %}
 
       <!-- org switcher -->
-      <span class="header-control">
-        <span class="icon">
-          <img src="{% static "common/icons/icon/org.svg" %}">
-        </span>
+      <div class="header-control d-flex align-items-center h-100">
+        <div
+          class="d-flex align-items-center px-3 ms-2 h-100" 
+          data-element="button_select_org"
+          class="button"
+          type="button"
+          id="org-menu"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <span class="icon icon-org"></span>
 
-        <button data-element="button_select_org" class="button" type="button"  id="org-menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ request.org.display_name }}
-        </button>
+          <span class="ps-2 pe-4">{{ request.org.display_name }}</span>
+
+          <span class="icon icon-caret-down"></span>
+        </div>
+
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="org-menu">
 
           <!-- current org options / actions -->
@@ -160,26 +168,36 @@ fullctl.permissions = {{ permissions|safe }}
             <span class="icon icon-add"></span>{% trans "Create Organization" %}</a>
           {% endif %}
         </div>
-        <img class="caret" src="{% static "common/icons/ui-caret-caret/down.svg" %}">
-      </span>
+      </div>
 
       <!-- user menu -->
-      <span class="header-control">
-        <span class="icon">
-          <img src="{% static "common/icons/icon/user.svg" %}">
-        </span>
-        <button data-element="button_account" class="button" type="button"  id="user-menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ request.user.username }}
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu">
+      <div class="header-control d-flex align-items-center h-100 w-100">
+        <div
+          class="d-flex align-items-center px-3 ms-2 h-100" 
+          data-element="button_account" 
+          class="button" 
+          type="button" 
+          id="user-menu" 
+          data-bs-toggle="dropdown" 
+          aria-haspopup="true" 
+          aria-expanded="false"
+        >
+          <span class="icon icon-user"></span>
+
+          <span class="ps-2 pe-4">{{ request.user.username }}</span>
+
+          <span class="icon icon-caret-down"></span>
+        </div>
+
+        <div class="dropdown-menu dropdown-menu-right px-2" aria-labelledby="user-menu">
           <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
           <span class="email">{{ request.user.email }}</span>
           <div class="horizontal-line"></div>
           <a class="dropdown-item" href="/logout/">
-            <span class="icon icon-logout"></span>{% trans "Logout" %}</a>
+            <span class="icon icon-logout"></span>{% trans "Logout" %}
+          </a>
         </div>
-        <img class="caret" src="{% static "common/icons/ui-caret-caret/down.svg" %}">
-      </span>
+      </div>
       {% endblock %}
     {% endblock %}
     </div>

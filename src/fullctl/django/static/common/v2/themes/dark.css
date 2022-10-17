@@ -1,24 +1,23 @@
 :root {
-  --bs-body-color: #b8bbbc;
-  --bs-body-bg: #191f26;
-}
+  --theme-primary: #fff;
+  --theme-secondary: #D1FF27;
+  --theme-bg: #191B22;
+  --theme-border-color: rgba(255, 255, 255, 0.05);
 
-.nav {
-  --bs-nav-link-hover-color: unset;
+  --bs-body-bg: var(--theme-bg);
+  --bs-body-color: var(--theme-primary);
 }
 
 body {
   background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
+  color: var(--theme-primary);
 }
 
-.inactive {
-  color: #646a6f;
-}
-
-a.active,
-span.active {
-  color: #7dd120;
+/**
+ * icons
+ */
+.icon {
+  background-color: var(--theme-primary);
 }
 
 .alert-danger {
@@ -47,37 +46,10 @@ a[data-api-action] {
   cursor: pointer;
 }
 
-span.icon.ixctl {
-  background-color: #D1FF27;
-}
-
-
-span.icon.inactive,
-span.icon.neutral {
-	background-color: #fff;
-}
-
-span.icon.peerctl,
-span.icon.fullctl {
-  background-color: #D1FF27;
-}
-
-span.icon.prefixctl {
-  background-color: #BCBEC0;
-}
-
-span.inner-icon {
-	background-color: #ccc !important;
-}
-
-
 div.validation-error {
   color: #d2a5a5;
   background-color: #1d1b1b;
   border-color: #503838;
-}
-
-div.validation-error.non-field-errors {
 }
 
 .validation-error-indicator {
@@ -89,24 +61,8 @@ div.validation-error.non-field-errors {
   background-color: rgba(0,0,0,0.5);
 }
 
-span.icon.fullctl {
-  background-color: #D1FF27;
-}
 .fullctl {
   color: #D1FF27;
-}
-
-
-.ixctl {
-  color: #D1FF27;
-}
-
-.ixctl.app_bg {
-  background-color: #D1FF27;
-}
-
-.ixctl.app_bg.muted {
-  background-color: #3C4650;
 }
 
 a[data-action].ixctl,
@@ -128,41 +84,15 @@ a.prefixctl,
   color: #F1F2F2;
 }
 
-.prefixctl.app_bg {
-  background-color: #D1FF27;
-}
-.prefixctl.app_bg.muted {
-  background-color: #244145;
-}
+/**
+ * header
+ */
 
 
+div.header-middle,
+div.header-control,
 div.header-outer {
-  background-color: #000;
-  border-color:#272e36;
-}
-
-
-div.header-outer .top-border {
-  background-color: #272e36;
-}
-
-
-div.header-left a {
-  color: #D1FF27;
-}
-
-div.header-middle span.logo {
-  color: #BCBEC0;
-}
-
-div.header select {
-  background-color: #191F26;
-  color: #fff;
-}
-
-div.header .button {
-  background-color: #191F26;
-  color: #fff;
+  border-color: var(--theme-border-color);
 }
 
 div.header span.header-control span.icon-solid,
@@ -180,10 +110,6 @@ div.header .app-switcher {
 }
 
 
-div.header .app-switcher .selected .icon-caret-down {
-  background-color: #fff;
-}
-
 div.header .app-switcher .selected.prefixctl.expanded {
   background-color: #244145;
 }
@@ -200,20 +126,8 @@ div.toolbar {
   color: #BCBEC0;
 }
 
-div.list-body .secondary .property [data-field] {
-  color: #fff;
-}
-
 .list-body label {
   color: #D1FF27;
-}
-
-.list-body td input.slim,
-.list-body div.secondary input[type="text"],
-div.toolbar-field input[type="text"] {
-  background-color: #191F26;
-  border-color: #5a636c;
-  color: #fff;
 }
 
 .list-body div.secondary input[type="text"]:disabled,
@@ -221,53 +135,18 @@ div.toolbar-field input[type="text"]:disabled {
   opacity: 0.5;
 }
 
-.list-body .secondary select {
-  background-color: #29323b;
-  color: #fff;
-}
-div.toolbar-field select,
-div.toolbar select {
-  background-color: #3C4650;
-  color: #fff;
-}
-
 div.toolbar-field,
 div.toolbar div.toolbar-control-group {
   background-color: #3C4650;
-}
-
-div.menu .button,
-div.toolbar .button {
-  color: #F1F2F2;
-  width: initial;
 }
 
 .rounded-button {
   background: #000;
 }
 
-div.menu .button.prefixctl {
-  color: #F1F2F2;
-}
-
-div.toolbar-field {
-  color: #BCBEC0;
-}
-
-div.toolbar-field > span.value {
-  color: #F1F2F2;
-}
-
-
 div.menu div.section.tabs h5 {
   opacity: 0.5;
 }
-
-div.menu div.section.tabs .active {
-  color: #fff;
-  opacity: 1;
-}
-
 
 .table .table {
   background-color: inherit;
@@ -279,11 +158,6 @@ div.menu div.section.tabs .active {
 
 .modal-body .table tr.sub-row {
   background-color: #181818;
-}
-
-span.highlight,
-.table td.highlight {
-  color: #fff;
 }
 
 .green-text {
@@ -398,14 +272,6 @@ div.list-head,
   margin-left: -1.25rem;
 }
 
-.tool .list-body input[type="checkbox"]:checked:before {
-  content: '\2713';
-  position: relative;
-  top: -2px;
-  left: 2px;
-  color: #FFFFFF;
-}
-
 .keep-list-open {
   display: flex;
   align-content: center;
@@ -413,22 +279,6 @@ div.list-head,
 
 .main {
   background-color: #191f26;
-}
-
-button,
-.main a {
-  background-color: transparent;
-  color: #D1FF27;
-}
-
-button.solid-active {
-  background-color: #D1FF27;
-  color: #000;
-}
-
-button.solid-inactive {
-  background-color: #3C4650;
-  color: #fff;
 }
 
 .border-active {
@@ -447,35 +297,12 @@ div.modal-content {
   background-color: #000;
 }
 
-h5.modal-title {
-  color: #fff;
-}
-
-button.btn-close {
-  color: #fff !important;
-}
-
-button.btn-close:hover {
-  color: #fff !important;
-}
-
-
-div.controls button.generic,
-div.controls button.submit,
-div.modal button.submit {
-}
-
 div.modal .card {
   background-color: #191f26;
 }
 
 div.modal .list-group-item {
   background-color: #3C4650;
-}
-
-div.modal .list-group-item.highlight {
-  background-color: #535d68;
-  color: #fff;
 }
 
 div.controls button.generic:disabled {
@@ -494,29 +321,6 @@ span.select2-dropdown {
   border-color: rgba(188,190,192,0.5);
 }
 
-div.controls .select2-container--default .select2-selection--single,
-div.controls textarea,
-div.controls input[type="text"],
-div.controls input[type="password"],
-div.controls select {
-  border: 1px solid #272e36;
-  background-color: #0f1317;
-  color: #FFFFFF;
-}
-
-div.controls .select2-container--default .select2-selection--single:disabled,
-div.controls textarea:disabled,
-div.controls input[type="text"]:disabled,
-div.controls input[type="password"]:disabled,
-div.controls select:disabled {
-  border: 1px solid #272e36;
-  background-color: #0f1317;
-  color: #FFFFFF;
-  opacity: 0.5;
-}
-
-
-
 div.controls label {
   color: #BCBEC0;
 }
@@ -524,32 +328,6 @@ div.controls label {
 div.controls input[type="checkbox"] {
   background-color: #191F26;
   border: 1px solid #BCBEC0;
-}
-div.controls input[type="checkbox"]:checked:before {
-  color: #FFFFFF;
-}
-
-
-div.controls textarea:focus,
-div.controls select:focus {
-  background-color: #191F26;
-  color: #FFFFFF;
-}
-
-div.controls input[type="checkbox"] ~ label {
-  color: #FFFFFF;
-}
-
-.select2-search__field,
-span.select2-dropdown {
-  color: #FFFFFF;
-  background-color: #191F26;
-}
-
-
-
-.select2-selection__rendered {
-  color: #fff !important;
 }
 
 div.menu div.menu-deco-border {
@@ -587,10 +365,6 @@ div.tool-custom > h4.tool-title {
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
 }
 
-.dropdown-menu > h4 {
-  color: #fff;
-}
-
 .dropdown-item {
   color: #D1FF27;
 }
@@ -606,9 +380,6 @@ div.header span.header-control .dropdown-item span.icon {
 
 div.header span.header-control .dropdown-item span.icon-solid {
   background-color: #3C4650;
-}
-
-tbody.list-footer td {
 }
 
 tbody.list-footer button {
@@ -653,12 +424,6 @@ div.login button {
   background-color: #000;
 }
 
-div.login input {
-  background-color: #3C4650;
-  color: #fff;
-}
-
-
 /*
  * oauth
  */
@@ -673,14 +438,24 @@ div.oauth-backend.twentyc > a.btn {
  * nav
  */
 
-a.nav-link.active {
-  color: #F1F2F2;
-  border-color: #F1F2F2;
+.nav {
+  --bs-nav-link-hover-color: unset;
 }
 
-a.nav-link {
-  color: #BCBEC0;
+.nav a {
+  color: var(--theme-primary);
+  opacity: 50%;
 }
+
+.nav a:hover {
+  opacity: 1;
+}
+
+.nav a.nav-link.active {
+  border-color: var(--theme-secondary);
+  opacity: 1;
+}
+
 
 /* loading spinner */
 
@@ -736,9 +511,4 @@ a.nav-link {
 
 span.tag {
   background-color: #29323b;
-  color: var(--bs-body-color);
-}
-
-span.tag-name {
-  color: #fff;
 }
