@@ -2,10 +2,18 @@
   --theme-primary: #fff;
   --theme-secondary: #D1FF27;
   --theme-bg: #191B22;
+  --theme-bg-secondary: #191B22;
   --theme-border-color: rgba(255, 255, 255, 0.05);
+  --theme-toolbar-color: #fff;
 
   --bs-body-bg: var(--theme-bg);
   --bs-body-color: var(--theme-primary);
+}
+
+:root[data-theme="light"] {
+  --theme-primary: #191B22;
+  --theme-bg: #E5E5E5;
+  --theme-bg-secondary: #3E464F;
 }
 
 body {
@@ -93,22 +101,21 @@ div.header-middle,
 div.header-control,
 div.header-outer {
   border-color: var(--theme-border-color);
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-toolbar-color);
 }
 
-div.header span.header-control span.icon-solid,
-div.header span.header-control span.icon {
-  background-color: #3C4650;
+div.header-outer .nav a {
+  color: var(--theme-toolbar-color);
 }
 
-div.header span.header-control span.icon-solid > img,
-div.header span.header-control span.icon > img {
-  opacity: 0.66;
+div.header-outer .icon {
+  background-color: var(--theme-toolbar-color);
 }
 
 div.header .app-switcher {
   --background-color: black;
 }
-
 
 div.header .app-switcher .selected.prefixctl.expanded {
   background-color: #244145;
@@ -372,14 +379,6 @@ div.tool-custom > h4.tool-title {
 .dropdown-item:hover {
   color: #D1FF27;
   background-color: #0F1317;
-}
-
-div.header span.header-control .dropdown-item span.icon {
-  background-color: #D1FF27;
-}
-
-div.header span.header-control .dropdown-item span.icon-solid {
-  background-color: #3C4650;
 }
 
 tbody.list-footer button {

@@ -12,6 +12,7 @@
 <script src="{% static "autocomplete_light/jquery.post-setup.js" %}" type="text/javascript"></script>
 <script src="{% static "common/app.js" %}" type="text/javascript"></script>
 <script src="{% static "common/service_bridge.js" %}" type="text/javascript"></script>
+<script src="{% static "common/v2/theme_switching.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block "css" %}
@@ -266,5 +267,18 @@ version {{ version }}
 </a>
 </p>
 {% endblock %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-auto theme-switcher" type="button">
+      <span class="icon icon-lg icon-theme-switcher"></span>
+    </div>
+    <div class="col-auto">Contact Us | Make a Wish</div>
+    <div class="col">Copyright © 2014 - 2022 20C, LLC</div>
+    <div class="col-auto">{{ version }} | Private Cloud Stackscale</div>
+    <div class="col-sm-auto theme-switcher" type="button">
+      <span class="icon icon-lg icon-help"></span>
+    </div>
+  </div>
+</div>
 </div>
 {% endblock %}

@@ -449,6 +449,11 @@ span.icon {
   -webkit-mask-repeat: no-repeat;
 }
 
+span.icon-lg {
+  width: 32px;
+  height: 32px;
+}
+
 span.icon-org {
   -webkit-mask-image: url(icons/org.svg);
   mask-image: url(icons/org.svg);
@@ -457,6 +462,16 @@ span.icon-org {
 span.icon-user {
   -webkit-mask-image: url(icons/user.svg);
   mask-image: url(icons/user.svg);
+}
+
+span.icon-theme-switcher {
+  -webkit-mask-image: url(icons/theme-switcher.svg);
+  mask-image: url(icons/theme-switcher.svg);
+}
+
+span.icon-help {
+  -webkit-mask-image: url(icons/help.svg);
+  mask-image: url(icons/help.svg);
 }
 
 span.icon-caret-y {
