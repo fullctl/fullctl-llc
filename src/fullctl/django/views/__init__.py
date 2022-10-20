@@ -7,8 +7,8 @@ from django.conf import settings
 # from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
-from django.utils.safestring import mark_safe
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 from fullctl.django.decorators import require_auth
 
