@@ -10,8 +10,13 @@
   --theme-primary-btn-color: #2B5334;
   --theme-primary-btn-bg: #D1FF27;
 
+  --theme-alert-info-bg: #7747FF;
+  --theme-alert-info-color: rgba(255, 255, 255, 0.12);
+
   --theme-th-bg: rgba(255, 255, 255, 0.03);
   --theme-th-color: rgba(255, 255, 255, 0.5);
+
+  --theme-modal-color: #191B22;
 
   --bs-body-bg: var(--theme-bg);
   --bs-body-color: var(--theme-primary);
@@ -177,8 +182,19 @@ select.borderless {
   font-weight: 700;
 }
 
+.btn-close {
+  color: var(--theme-primary);
+}
+
 .list-body label {
   color: #D1FF27;
+}
+
+div.controls input[type="text"],
+div.controls select.form-control {
+  background: transparent;
+  color: var(--theme-primary);
+  border-color: var(--theme-secondary-border-color);
 }
 
 .list-body div.secondary input[type="text"]:disabled,
@@ -211,10 +227,6 @@ div.menu div.section.tabs h5 {
 
 .table .table {
   background-color: inherit;
-}
-
-.modal-body .table tr.sub-row {
-  background-color: #181818;
 }
 
 .green-text {
@@ -291,10 +303,6 @@ table thead th.selected-order-header-desc,
   color: #000;
 }
 
-div.modal .controls {
-  background-color: #000;
-}
-
 .inner-list {
   background-color: #20262e;
 }
@@ -347,7 +355,7 @@ img.icon.filled {
 }
 
 div.modal-content {
-  background-color: #000;
+  background-color: var(--theme-modal-color);
 }
 
 div.modal .card {
@@ -362,12 +370,12 @@ div.controls button.generic:disabled {
   opacity: 0.5;
 }
 
-div.modal-foote {
-  border-top-color: #3C4650;
-}
-
 div.modal-header {
   border-bottom-color: #BCBEC0;
+}
+
+div.modal-body div.border-top-seperator {
+  border-color: var(--theme-border-color);
 }
 
 span.select2-dropdown {
@@ -375,7 +383,7 @@ span.select2-dropdown {
 }
 
 div.controls label {
-  color: #BCBEC0;
+  color: var(--theme-th-color);
 }
 
 div.controls input[type="checkbox"] {
@@ -397,11 +405,13 @@ div.tool-custom>h4.tool-title {
  */
 
 .alert-info {
-  color: #b8bcbc;
-  background-color: #192027;
-  border-color: #656567;
+  font-family: 'Space Mono';
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--theme-primary);
+  background: var(--theme-alert-info-bg);
+  border-color: var(--theme-alert-info-color);
 }
-
 
 .dropdown-item,
 .dropdown-menu {

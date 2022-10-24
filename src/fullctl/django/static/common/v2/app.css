@@ -449,7 +449,7 @@ span.icon-api {
   mask-image: url(icons/api.svg);
 }
 
-span.icon-delete {
+s-modalpan.icon-delete {
   -webkit-mask-image: url(icons/delete.svg);
   mask-image: url(icons/delete.svg);
 }
@@ -801,7 +801,7 @@ div.flags > span {
 }
 
 /**
- * modal
+ * dmodal
  */
 
 @media (min-width: 1100px) {
@@ -822,44 +822,41 @@ button.btn-close {
   opacity: 1;
 }
 
-div.controls button.generic,
-div.controls button.submit,
-div.modal button.submit {
-  border-radius: 20px;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 16px;
-  text-align: center;
+div.modal-header {
+  border: none;
+  padding: 26px 32px 24px;
 }
 
 div.modal-footer {
-  margin-left: 16px;
-  margin-right: 16px;
+  margin: 0 32px;
   padding-right: 0px;
   padding-left: 0px;
+  border-top: none;
 }
 
-div.modal-header {
-  border-top-width: 2px;
-  margin-left: 16px;
-  margin-right: 16px;
-  padding-right: 0px;
-  padding-left: 0px;
+div.modal-body div.container-fluid {
+  padding-left: 32px;
+  padding-right: 32px;
 }
 
+div.modal-body div.border-top-seperator {
+  border-top: solid 1px;
+  padding-top: 18px;
+  margin-top: 20px;
+}
 
-div.controls .select2-container--default .select2-selection--single,
+div.controls select.form-control,
 div.controls input[type="text"],
 div.controls input[type="password"],
 div.controls textarea,
 div.controls select {
-  font-size: 16px;
+  font-size: 14px;
+  line-height: 16px;
   letter-spacing: 0;
-  line-height: 20px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
 div.controls .select2-container--default .select2-selection--single:disabled,
@@ -874,8 +871,9 @@ div.controls select:disabled {
 div.controls input[type="text"],
 div.controls input[type="text"]:disabled,
 div.controls input[type="password"],
-div.controls input[type="password"]:disabled {
-  padding: 6px 8px;
+div.controls input[type="password"]:disabled,
+div.controls select.form-control {
+  padding: 15px 16px;
   height: auto;
 }
 
@@ -884,9 +882,10 @@ div.controls textarea {
 }
 
 div.controls label {
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 16px;
   letter-spacing: 2.4px;
-  line-height: 8px;
+  margin-bottom: 12px;
 }
 
 div.controls input[type="checkbox"] {
@@ -904,7 +903,6 @@ div.controls input[type="checkbox"]:checked:before {
   position: relative;
   top: -5px;
   left: 2px;
-
 }
 
 div.controls .form-check {
@@ -926,6 +924,50 @@ span.modal-control > img.caret {
   position: absolute;
   right: 18px;
   top: 19px;
+}
+
+	.modal.modal-left .modal-dialog,
+	.modal.modal-right .modal-dialog {
+		position: fixed;
+		margin: auto;
+		width: 380px;
+		height: 100%;
+		-webkit-transform: translate3d(0%, 0, 0);
+		    -ms-transform: translate3d(0%, 0, 0);
+		     -o-transform: translate3d(0%, 0, 0);
+		        transform: translate3d(0%, 0, 0);
+	}
+
+	.modal.modal-left .modal-content,
+	.modal.modal-right .modal-content {
+		height: 100%;
+		overflow-y: auto;
+	}
+
+/*Left*/
+	.modal.modal-left.fade .modal-dialog{
+    left: -380px;
+    -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+    -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+    -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+    transition: opacity 0.3s linear, left 0.3s ease-out;
+	}
+	
+	.modal.modal-left.fade.in .modal-dialog{
+		left: 0;
+	}
+        
+/*Right*/
+.modal.modal-right.fade .modal-dialog {
+  right: -380px;
+  -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+  transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+	
+.modal.modal-right.fade.in .modal-dialog {
+  right: 0;
 }
 
 .select2-selection__rendered {
