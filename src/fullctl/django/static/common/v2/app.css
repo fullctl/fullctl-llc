@@ -91,7 +91,6 @@ a.button span.label:hover {
   text-decoration: underline;
 }
 
-
 button {
   cursor: pointer;
 }
@@ -275,7 +274,6 @@ input.slim {
   margin:0px;
 }
 
-
 .list-body + .list-no-data {
   display: none;
 }
@@ -290,7 +288,6 @@ tbody.list-body:empty + tbody.list-no-data {
   display: table-row-group;
   text-align: center;
 }
-
 
 .list-body td input.slim,
 .list-body div.secondary input[type="text"],
@@ -308,6 +305,7 @@ div.toolbar select {
   border: none;
   border-radius: 0px;
 }
+
 div.toolbar select {
   font-size: 20px;
   font-weight: bold;
@@ -565,6 +563,11 @@ div.menu .button {
   line-height: 20px;
   font-size: 14px;
   text-transform: uppercase;
+}
+
+div.toolbar-field select.secondary,
+select.secondary {
+  border: solid 1px;
 }
 
 div.list-th,

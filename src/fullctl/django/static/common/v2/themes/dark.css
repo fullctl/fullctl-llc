@@ -182,6 +182,13 @@ select.borderless {
   font-weight: 700;
 }
 
+div.toolbar-field select.secondary,
+select.secondary {
+  background: transparent;
+  color: var(--theme-primary);
+  border-color: var(--theme-secondary-border-color);
+}
+
 .btn-close {
   color: var(--theme-primary);
 }
@@ -200,11 +207,6 @@ div.controls select.form-control {
 .list-body div.secondary input[type="text"]:disabled,
 div.toolbar-field input[type="text"]:disabled {
   opacity: 0.5;
-}
-
-div.toolbar-field,
-div.toolbar div.toolbar-control-group {
-  background-color: #3C4650;
 }
 
 .rounded-button {
