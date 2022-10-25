@@ -22,12 +22,18 @@ def generate_secret():
     return token_urlsafe()
 
 
+COLOR_SCHEMES = (
+    ("dark", _("Dark")),
+    ("light", _("Light")),
+)
+
 @reversion.register()
 @grainy_model(namespace="user")
 class UserSettings(HandleRefModel):
 
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name="settings")
-    theme = models.CharField(max_length=255, null=True, blank=True)
+    theme = models.CharField(max_length=255, null=True, blank=True, help_text=_("override layout theme for this user"))
+    color_scheme = models.CharField(max_length=255, choices=COLOR_SCHEMES, default="dark", help_text=_("user's color scheme selection"))
 
     class HandleRef:
         tag = "user_settings"
