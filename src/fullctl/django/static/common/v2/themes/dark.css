@@ -17,6 +17,7 @@
 
   --clr-border-400: var(--clr-primary-800);
 
+
   --theme-secondary: #D1FF27;
   --theme-secondary-border-color: rgba(255, 255, 255, 0.15);
   --theme-toolbar-color: #fff;
@@ -33,6 +34,9 @@
 
   --foreground: var(--clr-primary-100);
   --background: var(--clr-bg-900);
+
+  /* need to manually find this */
+  --clr-filter-black-to-foreground: invert(100%) sepia(2%) saturate(8%) hue-rotate(335deg) brightness(101%) contrast(101%);
 
   --bs-body-bg: var(--background);
   --bs-body-color: var(--foreground);
@@ -56,6 +60,9 @@
   --foreground: var(--clr-primary-900);
   --background: var(--clr-bg-200);
 
+  /* need to manually find this */
+  --clr-filter-black-to-foreground: invert(7%) sepia(12%) saturate(1104%) hue-rotate(189deg) brightness(99%) contrast(93%);
+
   --footer-clr: var(--clr-primary-300);
   --th-clr: var(--clr-primary-500);
   --th-bg: var(--clr-bg-210);
@@ -75,6 +82,10 @@ body {
 
 .btn {
   --bs-btn-color: var(--foreground);
+}
+
+.btn-close {
+  filter: var(--clr-filter-black-to-foreground);
 }
 
 /**
@@ -236,6 +247,7 @@ div.controls input[type="text"],
 div.controls select.form-control {
   background: transparent;
   border-color: var(--theme-secondary-border-color);
+  color: inherit;
 }
 
 .list-body div.secondary input[type="text"]:disabled,
