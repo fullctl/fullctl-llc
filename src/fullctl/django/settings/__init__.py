@@ -112,6 +112,9 @@ class SettingsManager(confu.util.SettingsManager):
         # Contact email, from address, support email
         self.set_from_env("SERVER_EMAIL")
 
+        # No-reply email
+        self.set_from_env("NO_REPLY_EMAIL", self.scope["SERVER_EMAIL"])
+
         # django secret key
         self.set_from_env("SECRET_KEY")
 
