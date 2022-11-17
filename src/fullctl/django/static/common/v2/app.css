@@ -76,6 +76,12 @@ svg {
     scroll-behavior: auto !important;
   }
 }
+/**
+ * Utility classes
+ */
+.js-hide {
+  display: none;
+}
 
 /**
  * Basic styles
@@ -1155,8 +1161,11 @@ footer {
   text-align: center;
 }
 
+.footer-right {
+  position: relative;
+}
+
 .help-box {
-  display: block;
   text-align: left;
   position: absolute;
   z-index: 1;
@@ -1165,9 +1174,8 @@ footer {
   width: 260px;
   padding:0;
   margin: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 0.5rem;
   border-radius: .25rem;
-  background: rgba(44, 47, 58, 0.96);
 }
 
 .help-box div:not(.banner-img) {

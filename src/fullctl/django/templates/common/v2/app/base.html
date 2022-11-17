@@ -13,6 +13,7 @@
 <script src="{% static "common/v2/app.js" %}" type="text/javascript"></script>
 <script src="{% static "common/service_bridge.js" %}" type="text/javascript"></script>
 <script src="{% static "common/v2/theme_switching.js" %}" type="text/javascript"></script>
+<script src="{% static "common/v2/help_box.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block "css" %}
@@ -277,7 +278,7 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
     <div class="col footer-right">
       <div class="row align-items-center">
         <div class="ms-auto col-auto">{{ version }} | Private Cloud Stackscale</div>
-        <div class="help-box" style="display: none;">
+        <div class="help-box js-hide">
           <div class="banner-img">
             <img src="{% static "common/v2/imgs/help.png" %}" alt="">
           </div>
@@ -287,7 +288,7 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
           <div>Submit Feedback</div>
           <div>Legal Notes</div>
         </div>
-        <div class="col-sm-auto" type="button">
+        <div class="col-sm-auto help-btn" type="button">
           <span class="icon icon-lg icon-help"></span>
         </div>
       </div>
