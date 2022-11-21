@@ -6,6 +6,12 @@
   --fw-medium: 500;
   --fw-semi-bold: 600;
   --fw-bold: 800;
+
+  --size-300: .875rem;
+  --size-400: 1rem;
+  --size-425: 1.25rem;
+  --size-500: 2rem;
+  --size-550: 2.5rem;
 }
 
 /**
@@ -559,8 +565,8 @@ span.icon-api {
 }
 
 span.icon-delete {
-  -webkit-mask-image: url(icons/delete.svg);
-  mask-image: url(icons/delete.svg);
+  -webkit-mask-image: url(icons/list/delete.svg);
+  mask-image: url(icons/list/delete.svg);
 }
 
 span.icon-view-settings {
@@ -596,6 +602,16 @@ span.icon-caret-y {
 span.icon-caret-down {
   -webkit-mask-image: url(icons/ui-caret/down.svg);
   mask-image: url(icons/ui-caret/down.svg);
+}
+
+span.icon-options {
+  -webkit-mask-image: url(icons/list/options.svg);
+  mask-image: url(icons/list/options.svg);
+}
+
+span.icon-edit {
+  -webkit-mask-image: url(icons/list/edit.svg);
+  mask-image: url(icons/list/edit.svg);
 }
 
 .checked [data-false] {
@@ -658,8 +674,37 @@ div.menu .button {
 }
 
 /**
- * content
+ * main
  */
+
+ /**
+  * lists
+  */
+.list-table .btn{
+  border-radius: 100vmax;
+  display: inline-flex;
+  border: 1px solid;
+  padding: 4px;
+}
+
+.list-table .btn .icon{
+  margin: 0;
+}
+
+.list-table td,
+.list-table th {
+  padding: var(--size-400) var(--size-425);
+}
+
+.list-table tr [data-hover="show"] {
+  visibility: hidden;
+}
+
+.list-table tr:hover .options [data-hover="show"] {
+  visibility: visible;
+}
+
+
 
 .main[data-component="main"] {
   margin-top: 54px;
@@ -687,10 +732,7 @@ table.list-table {
 
 div.list-th,
 .table th {
-  font-size: var(--fs-300);
-  letter-spacing: 3px;
-  line-height: 30px;
-  text-transform: uppercase;
+  line-height: var(--size-500);
 }
 
 .tool {
