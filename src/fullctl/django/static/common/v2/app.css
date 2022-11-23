@@ -112,6 +112,15 @@ button.primary {
   font-weight: var(--fw-semi-bold);
 }
 
+.btn {
+  text-decoration: none;
+  --bs-btn-padding-x: var(--size-400);
+  --bs-btn-padding-y: var(--size-400);
+}
+
+.btn div {
+  display: inline-flex;
+}
 
 
 
@@ -211,10 +220,6 @@ a.button span.label:hover {
 
 button {
   cursor: pointer;
-}
-
-a.btn {
-  text-decoration: none;
 }
 
 @media (min-width: 1900px) {
