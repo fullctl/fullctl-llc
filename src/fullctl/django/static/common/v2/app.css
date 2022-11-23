@@ -118,6 +118,10 @@ button.primary {
   --bs-btn-padding-y: var(--size-400);
 }
 
+a.btn:hover {
+  text-decoration: none;
+}
+
 .btn div {
   display: inline-flex;
 }
@@ -287,6 +291,15 @@ div.loading-anim {
 
 .indent-on .indent-toggled {
   padding-left: 20px;
+}
+
+/**
+ * bootstrap overrides
+ */
+.form-select.secondary {
+  display: inline-block;
+  width: fit-content;
+  border-radius: var(--size-100);
 }
 
 /**
