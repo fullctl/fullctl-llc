@@ -317,6 +317,7 @@ body {
 
 header {
   border-bottom: 1px solid transparent;
+  position: relative;
 }
 
 div.header {
@@ -354,7 +355,6 @@ div.header .button {
 div.header .app-switcher .selected {
   display: inline-block;
   cursor: pointer;
-  position: relative;
 }
 
 div.header .app-switcher img.app-logo {
@@ -364,14 +364,32 @@ div.header .app-switcher img.app-logo {
 div.header .app-switcher .others {
   position: absolute;
   top: 60px;
-  left: 0px;
-  right: 0px;
+  left: 0;
   z-index: 11;
 }
 
 div.header .app-switcher .others a {
-  display: block;
-  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding: var(--size-400);
+  filter: grayscale(100%);
+}
+
+div.header .app-switcher .others a:hover {
+  filter: none;
+}
+
+div.header .app-switcher .others a img {
+  display: inline-block;
+  padding-right: var(--size-425);
+}
+
+div.header .app-switcher .others a .icon {
+  visibility: hidden;
+}
+
+div.header .app-switcher .others a:hover .icon {
+  visibility: visible;
 }
 
 div.dropdown-meny.show,
@@ -573,6 +591,11 @@ span.icon {
 span.icon-lg {
   width: 32px;
   height: 32px;
+}
+
+span.icon-arrow {
+  -webkit-mask-image: url(icons/arrow.svg);
+  mask-image: url(icons/arrow.svg);
 }
 
 span.icon-add {
