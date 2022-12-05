@@ -755,9 +755,12 @@ div.menu .button {
   margin: 0;
 }
 
-.list-table td,
-.list-table th {
+.list-table td {
   padding: var(--size-400) var(--size-425);
+}
+
+.list-table th {
+  padding: var(--size-300) var(--size-425);
 }
 
 .list-table tr [data-hover="show"] {
@@ -794,8 +797,7 @@ table.list-table {
   vertical-align: middle;
 }
 
-div.list-th,
-.table th {
+div.list-th {
   line-height: var(--size-500);
 }
 
