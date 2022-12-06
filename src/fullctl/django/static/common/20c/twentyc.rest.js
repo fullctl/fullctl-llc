@@ -1361,6 +1361,8 @@ twentyc.rest.Select = twentyc.cls.extend(
         var selected_field = this.selected_field
         var widget = this;
 
+        var old_val = select.val();
+
         select.empty();
 
         if(this.null_option) {
@@ -1379,8 +1381,11 @@ twentyc.rest.Select = twentyc.cls.extend(
           select.append(opt);
         });
 
-        if(select_this)
+        if(select_this) {
           select.val(select_this);
+          if(select_this != old_val)
+            select.trigger("change", []);
+        }
 
         $(this).trigger("load:after", [select, response.content.data, this]);
       }.bind(this));

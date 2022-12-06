@@ -446,6 +446,17 @@ fullctl.application.Application = $tc.define(
       }
     },
 
+    autoload_arg : function(idx) {
+      if(this.autoload_args) {
+        var value = this.autoload_args[idx];
+        if(value) {
+          this.autoload_args[idx] = null;
+        }
+        return value;
+      }
+      return null;
+    },
+
     tool : function(name, fn) {
       fn = fn.bind(this);
       var tool = this.$t[name] = fn()
