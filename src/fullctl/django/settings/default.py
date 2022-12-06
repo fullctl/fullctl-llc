@@ -38,6 +38,7 @@ if RELEASE_ENV == "dev":
 # settings_manager.set_from_env("SESSION_COOKIE_DOMAIN")
 
 settings_manager.set_option("DEFAULT_FROM_EMAIL", SERVER_EMAIL)
+settings_manager.set_option("NO_REPLY_EMAIL", SERVER_EMAIL)
 
 TEMPLATES = [
     {
