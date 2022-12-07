@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "fullctl"
 repository = "https://github.com/fullctl/fullctl"
-version = "1.0.0-rc12"
+version = "1.0.0-rc15"
 description = "Core classes and functions for service applications"
 authors = ["20C <code@20c.com>"]
 license = "Apache-2.0"
@@ -35,7 +35,9 @@ django-recaptcha = "^2"
 djangorestframework = "^3"
 django-reversion = "^5"
 django-structlog = "^2.1.3"
-social-auth-app-django = "^3"
+social-auth-app-django = { git = "https://github.com/python-social-auth/social-app-django.git", branch="master" }
+
+setuptools = "*"
 
 # only needed for ixctl now, compare vs django-inet?
 django-netfields = "<2"

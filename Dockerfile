@@ -37,10 +37,11 @@ FROM base as builder
 ARG build_deps
 ARG poetry_pin
 
-RUN apk upgrade --no-cache --available && apk --no-cache add $build_deps
+RUN apk upgrade --no-cache --available \
+    && apk --no-cache add $build_deps
 
 # Use Pip to install Poetry
-RUN python -m pip install --upgrade pip && pip install "poetry$poetry_pin"
+RUN python3 -m pip install --upgrade pip && pip install "poetry$poetry_pin"
 
 # Create a VENV
 RUN python3 -m venv "$VIRTUAL_ENV"
@@ -49,7 +50,7 @@ WORKDIR /build
 
 # individual files here instead of COPY . . for caching
 COPY pyproject.toml poetry.lock ./
-RUN poetry install --no-root
 
 # Need to upgrade pip and wheel within Poetry for all its installs
 RUN poetry run pip install --upgrade pip wheel
+RUN poetry install --no-root

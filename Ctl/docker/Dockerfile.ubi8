@@ -1,9 +1,10 @@
-ARG poetry_version=1.2.2
+ARG poetry_pin="==1.2.2"
 ARG uid=6300
 ARG user=fullctl
 
 ARG virtual_env=/venv
 ARG install_to=/srv/service
+
 ARG build_deps=" \
     gcc \
     git \
@@ -15,31 +16,41 @@ ARG run_deps=" \
     python39 \
     "
 
-# build container
-FROM registry.access.redhat.com/ubi8/ubi:8.4 as builder
 
-# TODO pin bgpq4
-ARG build_deps
+
+
+
+
+
+FROM almalinux/8-base as base
+
 ARG virtual_env
-ARG poetry_version
 
+# env to pass to sub images
+ENV PYTHONUNBUFFERED=1
 ENV VIRTUAL_ENV=$virtual_env
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-WORKDIR /build
+# build container
+FROM base as builder
+
+ARG build_deps
+ARG poetry_pin
 
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
     && dnf --disableplugin=subscription-manager install -by --nodocs $build_deps
 
 # Use Pip to install Poetry
-RUN pip3 install "poetry==$poetry_version"
+RUN python3 -m pip install --upgrade pip && pip install "poetry$poetry_pin"
 
 # Create a VENV
 RUN python3 -m venv "$VIRTUAL_ENV"
-# TODO should be able to replace these by adding to pyproject?
-RUN pip3 install --upgrade pip wheel
+
+WORKDIR /build
 
 # poetry install
 COPY pyproject.toml poetry.lock ./
-RUN poetry install --no-root
+
+# Need to upgrade pip and wheel within Poetry for all its installs
 RUN poetry run pip install --upgrade pip wheel
+RUN poetry install --no-root

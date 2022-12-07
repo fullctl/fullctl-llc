@@ -98,6 +98,7 @@ def test_conf(db, dj_account_objects, settings):
         "google_analytics_id": None,
         "cloudflare_analytics_id": "asdf",
         "support_email": "support@localhost",
+        "no_reply_email": "noreply@localhost",
     }
 
     conf = context_processors.conf(request)

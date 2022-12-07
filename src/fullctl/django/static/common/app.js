@@ -424,6 +424,8 @@ fullctl.application.Application = $tc.define(
         window.history.replaceState({}, document.title, $(this).attr("href"));
       });
 
+      fullctl[id] = this;
+
 
     },
 
@@ -431,10 +433,28 @@ fullctl.application.Application = $tc.define(
       var hash = window.location.hash;
       if(hash) {
         hash = hash.substr(1);
+
+        parts = hash.split(";");
+        hash = parts[0];
+
+        this.autoload_args = parts;
+
         if(this.get_page(hash)) {
           this.page(hash);
         }
+
       }
+    },
+
+    autoload_arg : function(idx) {
+      if(this.autoload_args) {
+        var value = this.autoload_args[idx];
+        if(value) {
+          this.autoload_args[idx] = null;
+        }
+        return value;
+      }
+      return null;
     },
 
     tool : function(name, fn) {
