@@ -215,8 +215,9 @@ fullctl.widget.SelectionList = $tc.extend(
       let list = this;
       selected_rows.each(function() {
         apiobj = $(this).data("apiobject");
-        list.delete(apiobj[endpoint], apiobj)
-        list.remove(apiobj)
+        list.delete(apiobj[endpoint], apiobj).then(() => {
+          list.remove(apiobj);
+        });
       });
     },
 
