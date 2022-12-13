@@ -4,7 +4,7 @@
   --clr-primary-300: hsl(214, 6%, 77%);
   --clr-primary-400: hsl(225, 2%, 57%);
   --clr-primary-500: hsl(223, 3%, 53%);
-  --clr-primary-700: hsl(230, 3%, 38%);
+  --clr-primary-700: hsl(233, 4%, 43%);
   --clr-primary-800: hsl(227, 9%, 19%);
   --clr-primary-900: #191B22;
 
@@ -269,7 +269,7 @@ a.prefixctl,
 
 
 .heading-preposition {
-  opacity: 0.2;
+  color: var(--clr-primary-700);
 }
 
 select.borderless {
