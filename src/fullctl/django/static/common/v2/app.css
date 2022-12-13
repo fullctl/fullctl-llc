@@ -788,6 +788,8 @@ div.menu .button {
   line-height: 20px;
   font-size: 14px;
   text-transform: uppercase;
+  margin-left: 1ch;
+  margin-right: 1ch;
 }
 
 div.toolbar-field select.secondary,
