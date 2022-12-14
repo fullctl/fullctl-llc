@@ -769,7 +769,7 @@ div.menu .button {
   visibility: hidden;
 }
 
-.list-table tr:hover .options [data-hover="show"] {
+.list-table tr:hover [data-hover="show"] {
   visibility: visible;
 }
 
