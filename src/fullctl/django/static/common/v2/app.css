@@ -8,6 +8,7 @@
   --fw-semi-bold: 600;
   --fw-bold: 800;
 
+  --size-50: .125rem;
   --size-100: .25rem;
   --size-200: .5rem;
   --size-300: .875rem;
@@ -734,6 +735,24 @@ div.menu .button {
 /**
  * main
  */
+
+  /**
+  * searchbar
+  */
+.input-group.searchbar input {
+  padding: var(--size-200);
+  border-top-left-radius: var(--size-200);
+  border-bottom-left-radius: var(--size-200);
+  flex: 1;
+  border: 1px solid;
+}
+
+.input-group.searchbar .btn {
+  border: 1px solid;
+  border-top-right-radius: var(--size-200);
+  border-bottom-right-radius: var(--size-200);
+  padding: var(--size-200);
+}
 
  /**
   * lists

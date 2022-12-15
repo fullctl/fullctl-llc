@@ -18,6 +18,7 @@
   --clr-bg-850: hsl(227, 12%, 14%);
   --clr-bg-900: #191B22;
 
+  --clr-border-200: var(--clr-primary-700);
   --clr-border-400: var(--clr-primary-800);
 
 
@@ -245,6 +246,19 @@ a.prefixctl,
  * main
  */
 
+  /**
+  * searchbar
+  */
+.input-group.searchbar input,
+.input-group.searchbar .btn {
+  border-color: var(--clr-border-200);
+  background-color: var(--background);
+}
+
+.input-group.searchbar input:focus {
+  outline: none;
+}
+
  /**
   * lists
   */
@@ -262,10 +276,9 @@ a.prefixctl,
   background-color: var(--list-table-hover);
 }
 
-.list-table tr:hover .options .btn {
+.list-table tr:hover .btn {
  border-color: var(--theme-secondary-border-color);
 }
-
 
 
 .heading-preposition {
