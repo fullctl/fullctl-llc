@@ -310,6 +310,13 @@ div.controls select.form-control {
   color: inherit;
 }
 
+div.controls textarea.form-control,
+div.controls textarea.form-control:is(:focus, :active){
+  color: var(--foreground);
+  background-color: var(--background);
+  border-color: var(--clr-border-400);
+}
+
 .list-body div.secondary input[type="text"]:disabled,
 div.toolbar-field input[type="text"]:disabled {
   opacity: 0.5;
