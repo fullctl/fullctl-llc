@@ -101,7 +101,7 @@ main {
   flex: 1;
 }
 
-button.primary,
+.btn.primary,
 .btn[data-btn-type="delete"] {
   text-transform: uppercase;
   font-size: var(--fs-300);
@@ -720,16 +720,22 @@ span.icon-launch {
   mask-image: url(icons/box-arrow-up-right.svg);
 }
 
-.checked [data-false] {
-  display: none;
+span.icon-download {
+  -webkit-mask-image: url(icons/download.svg);
+  mask-image: url(icons/download.svg);
 }
 
 [data-true] {
   display: none;
 }
 
-.checked [data-true] {
+.checked [data-true],
+[data-toggle="checked"] [data-false] {
   display: inline;
+}
+
+.checked [data-false] {
+  display: none;
 }
 
 /**
@@ -1408,4 +1414,22 @@ div.page_error {
 
 div.create .edit-toggled {
   display: none;
+}
+
+
+/*
+ * wizard
+ */
+
+div.wizard .wiz-step {
+  display: none;
+}
+
+div.wizard.wiz-step-6 .wiz-step.wiz-step-6,
+div.wizard.wiz-step-5 .wiz-step.wiz-step-5,
+div.wizard.wiz-step-4 .wiz-step.wiz-step-4,
+div.wizard.wiz-step-3 .wiz-step.wiz-step-3,
+div.wizard.wiz-step-2 .wiz-step.wiz-step-2,
+div.wizard.wiz-step-1 .wiz-step.wiz-step-1{
+  display: block;
 }

@@ -209,6 +209,10 @@ pre.codeblock code:nth-child(even) {
   background-color: var(--foreground);
 }
 
+.icon.filled {
+  background-color: transparent;
+}
+
 .icon-background {
   background-color: var(--clr-bg-900);
   border-radius: 200vw;
@@ -626,4 +630,12 @@ footer {
 footer .help-box {
   color: var(--clr-primary-100);
   background: var(--clr-bg-800);
+}
+
+/**
+ * sidebar
+ */
+.sidebar[data-element="menu"] .button {
+  color: var(--foreground);
+  background: transparent;
 }
