@@ -468,15 +468,19 @@ twentyc.rest.Client = twentyc.cls.define(
      */
 
     write : function(endpoint, data, method) {
+      return this.write_url(this.format_request_url(this.endpoint_url(endpoint), method), data, method)
+    },
+
+    write_url : function(url, data, method) {
       method = method.toLowerCase();
-      $(this).trigger("api-request:before", [endpoint,data,method])
-      $(this).trigger("api-write:before", [endpoint,data,method])
-      $(this).trigger("api-"+method+":before", [endpoint,data])
+      $(this).trigger("api-request:before", [url,data,method])
+      $(this).trigger("api-write:before", [url,data,method])
+      $(this).trigger("api-"+method+":before", [url,data])
       var request = new Promise(function(resolve, reject) {
         $.ajax({
           dataType : "json",
           method : method.toUpperCase(),
-          url : this.format_request_url(this.endpoint_url(endpoint), method),
+          url : url,
           data : this.encode(data),
           headers : {
             "Content-Type" : "application/json",
@@ -484,20 +488,20 @@ twentyc.rest.Client = twentyc.cls.define(
           },
         }).done(function(result) {
           var response = new twentyc.rest.Response(result);
-          $(this).trigger("api-request:success", [endpoint, data, response, method]);
-          $(this).trigger("api-write:success", [endpoint, data, response, method]);
-          $(this).trigger("api-"+method+":success", [endpoint, data, response]);
+          $(this).trigger("api-request:success", [url, data, response, method]);
+          $(this).trigger("api-write:success", [url, data, response, method]);
+          $(this).trigger("api-"+method+":success", [url, data, response]);
           resolve(response);
         }.bind(this)).fail(function(e) {
           var response = new twentyc.rest.Response(e.responseJSON, e.status);
-          $(this).trigger("api-request:error", [endpoint, data, response, method]);
-          $(this).trigger("api-write:error", [endpoint, data, response, method]);
-          $(this).trigger("api-"+method+":error", [endpoint, data, response]);
+          $(this).trigger("api-request:error", [url, data, response, method]);
+          $(this).trigger("api-write:error", [url, data, response, method]);
+          $(this).trigger("api-"+method+":error", [url, data, response]);
           reject(response);
         }.bind(this)).always(function(e) {
-          $(this).trigger("api-request:after", [endpoint, data, method]);
-          $(this).trigger("api-write:after", [endpoint, data, method]);
-          $(this).trigger("api-"+method+":after", [endpoint, data]);
+          $(this).trigger("api-request:after", [url, data, method]);
+          $(this).trigger("api-write:after", [url, data, method]);
+          $(this).trigger("api-"+method+":after", [url, data]);
         }.bind(this));
       }.bind(this));
 
