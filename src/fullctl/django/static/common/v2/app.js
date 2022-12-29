@@ -137,7 +137,7 @@ fullctl.widget.SelectionList = $tc.extend(
       this.List(jq);
       this.delete_selected_button = jq_delete_selected_button;
 
-      this.list_head.find('tr').first().prepend('<th><input type="checkbox" value="all"></th>');
+      this.list_head.find('tr').first().prepend('<th class="center"><input type="checkbox" value="all"></th>');
 
       $(this).on("load:after", () => {
         this.set_delete_selected_button();
@@ -156,7 +156,7 @@ fullctl.widget.SelectionList = $tc.extend(
     },
 
     build_row : function(data) {
-      return this.template('row').prepend('<td class="select-checkbox"><input type="checkbox" class="row-chbx" name="list-row"></td>');
+      return this.template('row').prepend('<td class="select-checkbox center"><input type="checkbox" class="row-chbx" name="list-row"></td>');
     },
 
     insert : function(data) {
@@ -217,15 +217,20 @@ fullctl.widget.SelectionList = $tc.extend(
       let selected_rows = this.get_selected_rows();
       let list = this;
       let promises = new Array();
+      let apiobj;
       selected_rows.each(function() {
         apiobj = $(this).data("apiobject");
         promises.push(
-          list.delete(apiobj[endpoint], apiobj).then((request) => {
+          list.delete_api_obj(apiobj, endpoint).then((request) => {
             list.remove(request.content.data[0]);
           })
         );
       });
       Promise.all(promises).then(() => {list.set_delete_selected_button()});
+    },
+
+    delete_api_obj : function(apiobj, endpoint) {
+      return this.delete(apiobj[endpoint], apiobj);
     },
 
     get_selected_rows : function() {
@@ -314,6 +319,9 @@ fullctl.application.Tool = $tc.extend(
       this.Component(name);
       this.init();
       this.menu();
+      if (this.$t["bottom-menu"]) {
+        this.bottom_menu();
+      };
       this.active = false;
     },
 
@@ -333,11 +341,15 @@ fullctl.application.Tool = $tc.extend(
     },
 
     menu : function() {
-      var menu = this.template("menu")
-      console.log(menu);
-      console.log(this);
+      let menu = this.template("menu")
       this.$e.menu.append(menu);
       return menu
+    },
+
+    bottom_menu : function() {
+      let bottom_menu = this.template("bottom-menu");
+      this.$e.bottom_menu.append(bottom_menu);
+      return bottom_menu
     },
 
     activate : function() {
