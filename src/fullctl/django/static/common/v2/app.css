@@ -1081,21 +1081,6 @@ div.inner-list > div {
 
 .prelist {
   border-bottom: none !important;
-  border-left: 16px solid;
-}
-
-.prelist div.prefix-container {
-  padding: 4px 8px;
-  margin: 0 32px;
-}
-
-.prefix-container a,
-.prefix-container span {
-  display: inline-block;
-}
-
-.prefix {
-  text-decoration: underline;
 }
 
 td div.controls div.alert {
