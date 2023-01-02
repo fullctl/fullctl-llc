@@ -298,7 +298,7 @@ a.prefixctl,
   color: var(--background);
 }
 
-.list-table tr:hover {
+.list-table:not(.no-hover) tr:hover {
   background-color: var(--list-table-hover);
 }
 
@@ -422,8 +422,18 @@ div.modal-body div.border-top-seperator {
   border-color: var(--clr-border-400);
 }
 
+.controls .select2-container--default .select2-selection--single {
+  background-color: var(--background);
+  border: 1px solid var(--clr-border-400);
+}
+
+.controls .select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: var(--foreground);
+}
+
 span.select2-dropdown {
-  border-color: rgba(188, 190, 192, 0.5);
+  border-color: var(--clr-border-400);
+  background-color: var(--background);
 }
 
 div.controls label {
