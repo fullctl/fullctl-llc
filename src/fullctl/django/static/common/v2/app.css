@@ -74,7 +74,7 @@ svg {
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
-   scroll-behavior: auto;
+    scroll-behavior: auto;
   }
 
   *,
@@ -218,11 +218,11 @@ a.a-button:hover {
 }
 
 
-a.button span.label{
+a.button span.label {
   text-decoration: underline;
 }
 
-a.button span.label.no-text-deco{
+a.button span.label.no-text-deco {
   text-decoration: none;
 }
 
@@ -236,7 +236,7 @@ button {
 
 @media (min-width: 1900px) {
   .container {
-      max-width: 1400px;
+    max-width: 1400px;
   }
 }
 
@@ -435,20 +435,20 @@ input.slim {
 
 .list-body label {
   font-size: 11px;
-  margin:0px;
+  margin: 0px;
 }
 
-.list-body + .list-no-data {
+.list-body+.list-no-data {
   display: none;
 }
 
-.list-body:empty + .list-no-data {
+.list-body:empty+.list-no-data {
   display: block;
   text-align: center;
   padding: 8px;
 }
 
-tbody.list-body:empty + tbody.list-no-data {
+tbody.list-body:empty+tbody.list-no-data {
   display: table-row-group;
   text-align: center;
 }
@@ -491,7 +491,7 @@ div.toolbar span.toolbar-control {
   display: inline-block;
 }
 
-div.toolbar span.toolbar-control > img.caret {
+div.toolbar span.toolbar-control>img.caret {
   position: absolute;
   right: 18px;
   top: 19px;
@@ -508,7 +508,7 @@ div.toolbar-field {
 }
 
 
-div.toolbar-field > span.value {
+div.toolbar-field>span.value {
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0;
@@ -570,7 +570,7 @@ div.tool-custom {
 }
 
 
-div.tool-custom > h4.tool-title {
+div.tool-custom>h4.tool-title {
   font-size: 30px;
   letter-spacing: 0;
   line-height: 30px;
@@ -583,7 +583,7 @@ div.tool-custom > h4.tool-title {
  * codeblock
  */
 
-pre.codeblock  {
+pre.codeblock {
   border: 1px solid;
 }
 
@@ -789,7 +789,7 @@ div.menu .button {
  * main
  */
 
-  /**
+/**
   * searchbar
   */
 .input-group.searchbar {
@@ -811,10 +811,10 @@ div.menu .button {
   padding: var(--size-200);
 }
 
- /**
+/**
   * lists
   */
-.list-table .btn{
+.list-table .btn {
   border-radius: 100vmax;
   display: inline-flex;
   border: 1px solid;
@@ -824,14 +824,14 @@ div.menu .button {
   margin-top: var(--size-50);
 }
 
-.list-table .btn[data-btn-type="secondary"]{
+.list-table .btn[data-btn-type="secondary"] {
   border: none;
   border-radius: var(--size-100);
-  padding:  var(--size-200) var(--size-400);
+  padding: var(--size-200) var(--size-400);
   font-size: var(--fs-200);
 }
 
-.list-table .btn .icon{
+.list-table .btn .icon {
   margin: 0;
 }
 
@@ -942,24 +942,24 @@ div.list-th {
 }
 
 @media (max-width: 1200px) {
-.table td[data-field="controls"] a > span.label {
-  display: none;
-}
+  .table td[data-field="controls"] a>span.label {
+    display: none;
+  }
 }
 
 @media (min-width: 767.98px) {
-.table tr.secondary td.property div.field {
-  --margin-top: -12px;
-  --margin-bottom: -12px;
-}
+  .table tr.secondary td.property div.field {
+    --margin-top: -12px;
+    --margin-bottom: -12px;
+  }
 
-.marg-top-xl {
-  margin-top: 55px;
-}
+  .marg-top-xl {
+    margin-top: 55px;
+  }
 
-td.property {
-  padding: 0px 15px;
-}
+  td.property {
+    padding: 0px 15px;
+  }
 }
 
 .secondary .property .field,
@@ -989,19 +989,19 @@ div.list-body .secondary .property .field {
   text-decoration: none;
 }
 
-tr.secondary > td {
+tr.secondary>td {
   padding: 0px calc(var(--bs-gutter-x) * .5);
 }
 
-.row.double-row > div.field > span {
+.row.double-row>div.field>span {
   display: block;
 }
 
-.row.double-row > div.field > span:nth-child(2) {
+.row.double-row>div.field>span:nth-child(2) {
   margin-top: 5px;
 }
 
-.row.double-row > div.field > span.inline {
+.row.double-row>div.field>span.inline {
   display: inline;
 }
 
@@ -1017,7 +1017,7 @@ div.list-head {
   padding-right: .75rem;
 }
 
-div.list-body > div.row {
+div.list-body>div.row {
   margin-top: 5px;
 }
 
@@ -1063,14 +1063,14 @@ div.inner-list-head {
   padding: 8px;
 }
 
-div.inner-list-head > div {
+div.inner-list-head>div {
   font-size: 15px;
   letter-spacing: 3px;
   line-height: 30px;
   text-transform: uppercase;
 }
 
-div.inner-list > div {
+div.inner-list>div {
   padding: 3px 0px;
 }
 
@@ -1087,7 +1087,7 @@ td div.controls div.alert {
   margin: 0px;
 }
 
-td div.controls  {
+td div.controls {
   padding: 5px;
 }
 
@@ -1099,7 +1099,7 @@ td div.controls .label {
   text-decoration: underline;
 }
 
-div.flags > span {
+div.flags>span {
   margin: 5px;
   display: inline-block;
 }
@@ -1230,7 +1230,7 @@ div.controls .form-check {
   margin-bottom: 15px;
 }
 
-div.controls input[type="checkbox"] ~ label {
+div.controls input[type="checkbox"]~label {
   font-size: 20px;
   letter-spacing: 0;
   line-height: 24px;
@@ -1241,7 +1241,7 @@ span.modal-control {
   display: block;
 }
 
-span.modal-control > img.caret {
+span.modal-control>img.caret {
   position: absolute;
   right: 18px;
   top: 19px;
@@ -1259,14 +1259,14 @@ span.modal-control > img.caret {
   transform: translate3d(0%, 0, 0);
 }
 
-	.modal.modal-left .modal-content,
-	.modal.modal-right .modal-content {
-		height: 100%;
-		overflow-y: auto;
-	}
+.modal.modal-left .modal-content,
+.modal.modal-right .modal-content {
+  height: 100%;
+  overflow-y: auto;
+}
 
 /*Left*/
-.modal.modal-left.fade .modal-dialog{
+.modal.modal-left.fade .modal-dialog {
   left: -380px;
   -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
   -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
@@ -1274,7 +1274,7 @@ span.modal-control > img.caret {
   transition: opacity 0.3s linear, left 0.3s ease-out;
 }
 
-.modal.modal-left.fade.in .modal-dialog{
+.modal.modal-left.fade.in .modal-dialog {
   left: 0;
 }
 
@@ -1375,6 +1375,15 @@ footer {
   position: relative;
 }
 
+footer a{
+  text-decoration: none;
+  color: currentColor;
+}
+
+footer a:is(:hover, :focus){
+  color: currentColor;
+}
+
 .help-box {
   text-align: left;
   position: absolute;
@@ -1382,14 +1391,17 @@ footer {
   right: 0;
   bottom: 0;
   width: 260px;
-  padding:0;
+  padding: 0;
   margin: 1rem;
   margin-bottom: 0.5rem;
   border-radius: .25rem;
 }
 
-.help-box div:not(.banner-img) {
+.help-box> :not(.banner-img) {
+  display: block;
   padding: 1rem;
+  text-decoration: none;
+  color: var(--foreground);
 }
 
 .help-box.js-hide {
@@ -1424,6 +1436,6 @@ div.wizard.wiz-step-5 .wiz-step.wiz-step-5,
 div.wizard.wiz-step-4 .wiz-step.wiz-step-4,
 div.wizard.wiz-step-3 .wiz-step.wiz-step-3,
 div.wizard.wiz-step-2 .wiz-step.wiz-step-2,
-div.wizard.wiz-step-1 .wiz-step.wiz-step-1{
+div.wizard.wiz-step-1 .wiz-step.wiz-step-1 {
   display: block;
 }
