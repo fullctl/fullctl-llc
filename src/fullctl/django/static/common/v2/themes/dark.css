@@ -40,6 +40,7 @@
   --clr-filter-black-to-foreground: invert(100%) sepia(2%) saturate(8%) hue-rotate(335deg) brightness(101%) contrast(101%);
 
   --bs-body-color: var(--foreground);
+  --bs-body-color-rgb: var(--foreground);
   --bs-body-bg: var(--background);
 
   --th-clr: var(--clr-primary-400);
