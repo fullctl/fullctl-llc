@@ -1,4 +1,4 @@
-FROM python:3.9-alpine as base
+FROM python:3.12.0a1-alpine as base
 
 ARG virtual_env=/venv
 ARG install_to=/srv/service
