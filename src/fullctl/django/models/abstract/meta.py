@@ -5,13 +5,11 @@ sourced from third party sources.
 import json
 from datetime import timedelta
 
-import requests
-
 import confu.schema
-
+import requests
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 
 from fullctl.django.models.abstract import HandleRefModel
 
@@ -39,7 +37,7 @@ class DataMixin:
                 continue
 
             data = getattr(self, name)
-            schema = getattr(self, DataSchema, name)
+            schema = getattr(self.DataSchema, name)
 
             try:
                 confu.schema.validate(schema(), data, raise_errors=True)
