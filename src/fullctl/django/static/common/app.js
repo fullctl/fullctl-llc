@@ -39,6 +39,17 @@ fullctl.formatters.monitor_status = (value) => {
   return value
 }
 
+fullctl.formatters.meta_data = (value) => {
+  if(!value)
+    return;
+
+  var k, node = $('<div>');
+  for(k in value) {
+    node.append($('<div>').addClass("badge").text(k+": "+value[k]));
+  }
+  return node;
+}
+
 
 fullctl.loading_animation = () => {
   var anim = $('<div class="spinner loadingio-spinner-bars-k879i8bcs9"><div class="ldio-a9ruqenne8l"><div></div><div></div><div></div><div></div></div></div>');
