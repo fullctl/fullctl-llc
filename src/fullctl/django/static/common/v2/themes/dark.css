@@ -13,13 +13,14 @@
 
   --clr-bg-200: rgba(246, 248, 250, 1);
   --clr-bg-210: hsl(210, 14%, 95%);
+  --clr-bg-300: #E5E5E5;
   --clr-bg-700: rgba(62, 70, 79, 1);
   --clr-bg-800: rgba(44, 47, 58, 0.96);
   --clr-bg-850: hsl(227, 12%, 14%);
   --clr-bg-900: #191B22;
 
-  --clr-border-200: var(--clr-primary-700);
-  --clr-border-400: var(--clr-primary-800);
+  --clr-border-200: var(--clr-primary-500);
+  --clr-border-400: var(--clr-primary-700);
 
 
   --theme-secondary-border-color: rgba(255, 255, 255, 0.15);
@@ -31,7 +32,6 @@
   --theme-alert-info-border: rgba(255, 255, 255, 0.12);
 
 
-  --theme-modal-color: #191B22;
 
   --foreground: var(--clr-primary-100);
   --background: var(--clr-bg-900);
@@ -44,40 +44,48 @@
   --bs-body-bg: var(--background);
 
   --th-clr: var(--clr-primary-400);
-  --th-bg: var(--clr-bg-850);
+  --th-bg: var(--clr-bg-800);
   --list-group-bg: var(--clr-bg-700);
   --list-table-hover: var(--clr-bg-850);
   --footer-clr: var(--clr-primary-700);
   --header-bg: var(--clr-bg-900);
   --primary-btn-clr: var(--clr-primary-800);
   --primary-btn-bg: var(--clr-accent-400);
+  --secondary-list-btn-bg: var(--clr-bg-800);
+  --box-bg: var(--clr-bg-800);
   --dropdown-svg-url: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgb(255, 255, 255)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   --codeblock-even-bg: var(--clr-bg-800);
+  --modal-clr: var(--clr-primary-200);
+  --modal-bg: var(--clr-bg-700);
 
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
   --theme-bg-secondary: #3E464F;
-  --clr-border-400: rgba(25, 27, 34, 0.05);
+  --clr-border-400: var(--clr-primary-500);
   --theme-secondary-border-color: rgba(25, 27, 34, 0.15);
 
 
-  --theme-modal-color: #fff;
 
   --foreground: var(--clr-primary-900);
-  --background: var(--clr-bg-200);
+  --background: var(--clr-bg-300);
 
   /* need to manually find this */
   --clr-filter-black-to-foreground: invert(7%) sepia(12%) saturate(1104%) hue-rotate(189deg) brightness(99%) contrast(93%);
 
   --footer-clr: var(--clr-primary-300);
   --th-clr: var(--clr-primary-500);
-  --th-bg: var(--clr-bg-210);
+  --th-bg: var(--clr-bg-200);
   --list-group-bg: var(--clr-bg-210);
   --list-table-hover: var(--clr-bg-210);
   --header-bg: var(--clr-bg-700);
+  --secondary-list-btn-bg: var(--modal-bg);
+  --box-bg: var(--clr-bg-200);
   --dropdown-svg-url: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgb(0, 0, 0)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  --codeblock-even-bg: var(--clr-bg-200);
+  --modal-bg: var(--clr-bg-200);
+  --modal-clr: var(--clr-primary-800);
 
   color-scheme: light;
 }
@@ -133,7 +141,12 @@ body {
 }
 
 .modal {
-  --bs-modal-bg: var(--background);
+  --bs-modal-bg: var(--modal-bg);
+}
+
+.modal .modal-content div.controls,
+.modal .modal-content div label {
+  color : var(--modal-clr);
 }
 
 .btn-close {
@@ -256,7 +269,7 @@ a[data-action].prefixctl,
 a[data-action].prefixctl:hover,
 a.prefixctl,
 .prefixctl {
-  color: #F1F2F2;
+  color: var(--foreground);
 }
 
 /**
@@ -285,8 +298,8 @@ a.prefixctl,
 }
 
 .list-table .btn[data-btn-type="secondary"]{
-  background: var(--clr-bg-800);
-  border-color: transparent;
+  background: var(--secondary-list-btn-bg);
+  border-color: var(--theme-secondary-border-color);
 }
 
 .list-table .dropdown button {
@@ -640,7 +653,7 @@ footer {
 
 footer .help-box {
   color: var(--clr-primary-100);
-  background: var(--clr-bg-800);
+  background: var(--box-bg);
 }
 
 /**

@@ -825,7 +825,7 @@ div.menu .button {
 }
 
 .list-table .btn[data-btn-type="secondary"] {
-  border: none;
+  border: 1px solid;
   border-radius: var(--size-100);
   padding: var(--size-200) var(--size-400);
   font-size: var(--fs-200);
