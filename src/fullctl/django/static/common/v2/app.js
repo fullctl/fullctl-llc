@@ -40,6 +40,17 @@ fullctl.formatters.monitor_status = (value) => {
   return value
 }
 
+fullctl.formatters.meta_data = (value) => {
+  if(!value)
+    return;
+
+  var k, node = $('<div>');
+  for(k in value) {
+    node.append($('<div>').addClass("badge").text(k+": "+value[k]));
+  }
+  return node;
+}
+
 
 fullctl.loading_animation = () => {
   var anim = $('<div class="spinner loadingio-spinner-bars-k879i8bcs9"><div class="ldio-a9ruqenne8l"><div></div><div></div><div></div><div></div></div></div>');
@@ -353,6 +364,7 @@ fullctl.application.Tool = $tc.extend(
       return menu
     },
 
+    // v2 - add bottom menu
     bottom_menu : function() {
       let bottom_menu = this.template("bottom-menu");
       this.$e.bottom_menu.append(bottom_menu);
@@ -558,6 +570,12 @@ fullctl.application.Application = $tc.define(
       var hash = window.location.hash;
       if(hash) {
         hash = hash.substr(1);
+
+        parts = hash.split(";");
+        hash = parts[0];
+
+        this.autoload_args = parts;
+
         if(this.get_page(hash)) {
           this.page(hash);
         }
@@ -640,7 +658,6 @@ fullctl.application.ContainerApplication = $tc.extend(
       this.title_base = window.document.title;
 
       this.$c.toolbar.widget(selector_name, ($e) => {
-        console.log($e);
         var e = $e[selector_name];
         var w = new twentyc.rest.Select(e);
         $(w).on("load:after", (event, element, data) => {
@@ -664,7 +681,7 @@ fullctl.application.ContainerApplication = $tc.extend(
 
       $(this.$c.toolbar.$w[selector_name]).one("load:after", () => {
 
-        if(this.preselect_container) {
+        if(this["preselect_"+ref_tag]) {
           this[selector_name](this["preselect_"+ref_tag])
         } else {
           this.sync();
