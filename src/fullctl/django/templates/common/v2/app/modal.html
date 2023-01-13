@@ -53,17 +53,42 @@
 </div>
 
 <div class="modal" role="dialog" data-component="modal_no_button_xl">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" data-element="title"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body controls" data-element="body">
       </div>
       <div class="modal-footer" data-element="footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" data-component="modal_no_button_fullscreen">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-element="title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body controls" data-element="body">
+      </div>
+      <div class="modal-footer" data-element="footer">
+        <button class="edit-toggled btn secondary" type="button" data-bs-dismiss="modal">
+          <div class="row align-items-center">
+            <div class="col label pe-0">Close</div>
+            <div class="col-auto">
+              <span class="icon icon-cancel"></span>
+            </div>
+          </div>
+        </button>
       </div>
     </div>
   </div>

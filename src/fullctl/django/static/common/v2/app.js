@@ -951,7 +951,36 @@ fullctl.help_box = document.addEventListener("DOMContentLoaded", () => {
       box.classList.add("js-hide");
     })
   })
+
+  $(box).find('[data-element="submit_feedback"]').click(() => {
+    new fullctl.ModalSubmitFeedback();
+  })
 });
+
+fullctl.ModalSubmitFeedback = $tc.extend(
+  "ModalSubmitFeedback",
+  {
+    ModalSubmitFeedback: function(acl_slug) {
+      let elem = document.createElement('template');
+      elem.innerHTML = `<iframe
+        class="clickup-embed clickup-dynamic-height"
+        src="https://forms.clickup.com/14289126/f/dm276-5327/E6NH3HHIK1GCM0S3B5"
+        onwheel=""
+        width="100%"
+        height="100%"
+        style="background:
+        transparent; border: 1px solid #ccc;"
+      >
+      </iframe>
+      <script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
+     `.trim();
+      elem = elem.content.firstChild;
+
+      this.Modal("no_button_fullscreen", "Filter Rule Config", $(elem));
+    }
+  },
+  fullctl.application.Modal
+);
 
 fullctl.theme_switching = document.addEventListener("DOMContentLoaded", () => {
   function get_system_theme() {
