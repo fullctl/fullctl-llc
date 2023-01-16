@@ -1380,8 +1380,14 @@ footer a{
   color: currentColor;
 }
 
-footer a:is(:hover, :focus){
+footer div{
+  display: inline-block;
+}
+
+footer a:is(:hover, :focus),
+footer div[type="button"]:is(:hover, :focus){
   color: currentColor;
+  text-decoration: underline;
 }
 
 .help-box {

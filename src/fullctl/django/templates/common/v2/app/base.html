@@ -262,7 +262,6 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
 
 <footer class="center app-footer">
 {% block "footer" %}
-<!--TODO: make links functional-->
 <div class="container-fluid">
   <div class="row align-items-center">
     <div class="col footer-left">
@@ -270,7 +269,12 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
         <div class="col-sm-auto theme-switcher" type="button">
           <span class="icon icon-lg icon-theme-switcher"></span>
         </div>
-        <div class="col-auto"><a href="mailto:hello@fullctl.com">Contact Us</a> | Feature Request</div>
+        <div class="col-auto">
+          <a href="mailto:hello@fullctl.com">Contact Us</a> |
+          <div type="button" data-bs-toggle="modal" data-bs-target="#featureRequestModal">
+            Feature Request
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-auto footer-center">Copyright © 2014 - 2022 20C, LLC</div>
@@ -282,9 +286,7 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
             <img src="{% static "common/v2/imgs/help.png" %}" alt="">
           </div>
           <a href="https://docs.fullctl.com" target="_blank">Help Center</a>
-          <div>Tutorials</div>
           <a href="mailto:support@fullct.com">Contact Support</a>
-          <div data-element="submit_feedback" type="button">Submit Feedback</div>
           <div>Legal Notes</div>
         </div>
         <div class="col-sm-auto help-btn" type="button">
@@ -295,6 +297,30 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
   </div>
 </div>
 {% endblock %}
+<!-- Modal -->
+<div class="modal fade" id="featureRequestModal" tabindex="-1" aria-labelledby="featureRequestModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" data-element="title">Feature Request</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <iframe
+          class="clickup-embed clickup-dynamic-height"
+          src="https://forms.clickup.com/14289126/f/dm276-5327/E6NH3HHIK1GCM0S3B5"
+          onwheel=""
+          width="100%"
+          height="100%"
+          style="background:
+          transparent; border: 1px solid #ccc;"
+        >
+        </iframe>
+        <script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
 </footer>
 {% endblock %}
 </div>
