@@ -227,9 +227,14 @@ div.toolbar-field input[type="text"]:disabled {
 }
 div.toolbar-field select,
 div.toolbar input[type=text],
+div.toolbar .select2-container--default .select2-selection--single,
 div.toolbar select {
   background-color: #3C4650;
   color: #fff;
+}
+
+div.toolbar .select2-container--default .select2-selection--single {
+  border-color: transparent;
 }
 
 div.toolbar-field,
