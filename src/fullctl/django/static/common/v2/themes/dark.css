@@ -290,6 +290,10 @@ a.prefixctl,
   outline: none;
 }
 
+.searchbar .select2-container--default .select2-selection--single {
+  background-color: transparent;
+}
+
  /**
   * lists
   */
