@@ -15,7 +15,9 @@ TEST_DATA_PATH = "."
 class ServiceBridgeError(IOError):
     def __init__(self, bridge, status, data=None):
         if data:
-            super().__init__(f"Service bridge error: {bridge} [{status}] - response data: {data}")
+            super().__init__(
+                f"Service bridge error: {bridge} [{status}] - response data: {data}"
+            )
         else:
             super().__init__(f"Service bridge error: {bridge} [{status}]")
         self.data = data
