@@ -1357,8 +1357,10 @@ span.status-badge div.spinner {
 span.tag {
   padding: var(--size-100);
   margin-right: var(--size-300);
+  margin-top: var(--size-100);
   border-radius: var(--size-100);
   font-size: var(--fs-400);
+  display: inline-block;
 }
 
 .capitalize {
