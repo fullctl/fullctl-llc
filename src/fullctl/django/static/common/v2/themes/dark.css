@@ -42,6 +42,7 @@
 
   --th-clr: var(--clr-primary-400);
   --th-bg: var(--clr-bg-800);
+  --card-header-bg: var(--clr-bg-850);
   --list-group-bg: var(--clr-bg-700);
   --list-table-hover: var(--clr-bg-850);
   --footer-clr: var(--clr-primary-700);
@@ -78,7 +79,8 @@
   --footer-clr: var(--clr-primary-300);
   --th-clr: var(--clr-primary-500);
   --th-bg: var(--clr-bg-200);
-  --list-group-bg: var(--clr-bg-210);
+  --card-header-bg: var(--clr-bg-300);
+  --list-group-bg: var(--clr-bg-300);
   --list-table-hover: var(--clr-bg-210);
   --header-bg: var(--clr-bg-700);
   --secondary-list-btn-bg: var(--modal-bg);
@@ -156,7 +158,16 @@ body {
 }
 
 .card {
-  background-color: var(--th-bg);
+  background-color: var(--list-group-bg);
+}
+
+.card .card-header {
+  font-weight: bold;
+  background-color: var(--card-header-bg);
+}
+
+.card li.highlight {
+  background-color: var(--th-bg) !important;
 }
 
 div.modal .list-group-item {
