@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "fullctl"
 repository = "https://github.com/fullctl/fullctl"
-version = "1.0.0-rc17"
+version = "1.0.0-rc19"
 description = "Core classes and functions for service applications"
 authors = ["20C <code@20c.com>"]
 license = "Apache-2.0"

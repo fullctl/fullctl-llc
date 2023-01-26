@@ -26,6 +26,12 @@ class peeringdb_asn(autocomplete.Select2QuerySetView):
         return item.asn
 
 
+class peeringdb_net(peeringdb_asn):
+    def get_queryset(self):
+        qs = list(pdbctl.Network().objects(q=self.q))
+        return qs
+
+
 class peeringdb_org(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = pdbctl.Organization().objects(q=self.q)

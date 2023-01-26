@@ -1594,7 +1594,7 @@ twentyc.rest.List = twentyc.cls.extend(
         response.rows(function(row, idx) {
           this.insert(row);
         }.bind(this));
-        $(this).trigger("load:after");
+        $(this).trigger("load:after", [response]);
         return
       }.bind(this));
     },

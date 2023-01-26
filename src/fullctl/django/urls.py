@@ -26,6 +26,11 @@ if getattr(settings, "PDBCTL_URL", None):
             name="pdb asn autocomplete",
         ),
         path(
+            "autocomplete/pdb/net",
+            fullctl.django.autocomplete.pdb.peeringdb_net.as_view(),
+            name="pdb asn autocomplete",
+        ),
+        path(
             "autocomplete/pdb/org",
             fullctl.django.autocomplete.pdb.peeringdb_org.as_view(),
             name="pdb org autocomplete",
