@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 
 from fullctl.django.context import current_request
 
@@ -43,6 +44,8 @@ def themed_path(path):
 
     with current_request() as request:
 
+        default_theme = getattr(settings, "DEFAULT_THEME", None)
+
         # no request in context, return path as is
         if not request:
             return path
@@ -54,7 +57,14 @@ def themed_path(path):
         except AttributeError:
             # request.user.settings is not specified, meaning
             # user currently has no settings, return path as is
-            return path
+            if not default_theme:
+                return path
+            else:
+                theme = default_theme
+
+        # v1 switches back to original theme
+        if theme == "v1":
+            theme = None
 
         if theme:
 
