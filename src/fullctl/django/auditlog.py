@@ -259,7 +259,7 @@ class auditlog:
                 if user and request and org:
                     break
 
-            if request and not user:
+            if request and not user and isinstance(request.user, User):
                 user = request.user
 
             if request and hasattr(request, "api_key"):

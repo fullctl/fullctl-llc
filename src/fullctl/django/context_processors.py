@@ -47,9 +47,16 @@ def account_service(request):
         context.update(
             service_applications=[
                 service_application.for_org(org)
-                for service_application in ServiceApplication().objects(group="fullctl")
+                for service_application in ServiceApplication().objects(group="fullctl", org=org.slug)
             ],
         )
+
+    for svc_app in context.get("service_applications", []):
+        if svc_app.slug != settings.SERVICE_TAG:
+            continue
+
+        context.update(service_info=svc_app)
+        break
 
     return context
 
@@ -81,5 +88,7 @@ def permissions(request):
             context[key] = is_accessible
         else:
             context[key] = request.perms.check(request.org, op)
+
+    context["billing"] = request.perms.check(f"billing.{request.org.permission_id}", "c")
 
     return {"permissions": context}

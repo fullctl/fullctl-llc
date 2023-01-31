@@ -113,13 +113,18 @@ class DataViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk):
         return self._retrieve(request, pk)
 
+    def serializer_context(self, request, context):
+        return context
+
     def _retrieve(self, request, pk):
         qset = self.get_queryset()
         qset, joins = self.join_relations(qset, request)
 
+        context = self.serializer_context(request, {"joins": joins})
+
         instance = qset.get(pk=pk)
         serializer = self.serializer_class(
-            instance, many=False, context={"joins": joins}
+            instance, many=False, context=context
         )
         return Response(serializer.data)
 
@@ -134,7 +139,10 @@ class DataViewSet(viewsets.ModelViewSet):
             return BadRequest(_("Unfiltered listing not allowed for this endpoint"))
 
         qset, joins = self.join_relations(qset, request)
-        serializer = self.serializer_class(qset, many=True, context={"joins": joins})
+
+        context = self.serializer_context(request, {"joins": joins})
+
+        serializer = self.serializer_class(qset, many=True, context=context)
         return Response(serializer.data)
 
     def filter(self, qset, request):

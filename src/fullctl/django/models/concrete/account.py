@@ -214,6 +214,13 @@ class Organization(HandleRefModel):
             return _("Personal")
         return self.name
 
+    @property
+    def display_name_verbose(self):
+        if self.personal:
+            return _("your personal organization")
+        return self.name
+
+
     def __str__(self):
         return f"{self.name} ({self.slug})"
 

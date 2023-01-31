@@ -116,7 +116,7 @@ class AuditLogAdmin(admin.ModelAdmin):
     list_filter = ("action", "object_type")
 
     def log_object(self, obj=None):
-        if obj and obj.log_object:
+        if obj and getattr(obj, "log_object", None):
             return f"{obj.log_object}"
         elif obj and obj.object_id:
             return "<deleted>"
