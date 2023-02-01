@@ -220,24 +220,24 @@ fullctl.permissions = {{ permissions|safe }}
     <div class="alert alert-info center">
       <p>
       {% blocktrans trimmed with app_id=request.app_id app_slug=service_info.slug app_name=service_info.name org_name=request.org.display_name_verbose %}
-      Start your <b>{{ app_name }}</b> trial for {{ org_name }} today!
+      Start your <b>{{ app_name }}</b> trial for {{ org_name }}
       {% endblocktrans %}
       </p>
       <div>
-        <a href="/" class="primary btn">
+        <button data-element="btn_start_trial" data-api-base="{% url "proxies-api-aaactl-start-trial" org_tag=request.org.slug %}" class="primary btn">
           <div class="row align-items-center">
             <div class="col label pe-0">{% trans "Start trial" %}</div>
             <div class="col-auto">
               <span class="icon icon-add"></span>
             </div>
           </div>
-        </a>
+        </button>
       </div>
     </div>
     {% else %}
     <div class="alert alert-danger marg-top-lg">
-{% blocktrans trimmed with app_id=request.app_id org_name=request.org.display_name_verbose %}
-You do not have access to peerCtl for {{ org_name }}.
+{% blocktrans trimmed with app_id=request.app_id app_slug=service_info.slug app_name=service_info.name org_name=request.org.display_name_verbose %}
+You do not have access to {{ app_name }} for {{ org_name }}.
 {% endblocktrans %}
     </div>
     {% endif %}
@@ -245,22 +245,6 @@ You do not have access to peerCtl for {{ org_name }}.
   <div class="col-4"></div>
 </div>
 <div style="display:none">
-
-{% elif not asns %}
-
-<div class="row">
-  <div class="col-4"></div>
-  <div class="col-4">
-    <div class="alert alert-danger marg-top-lg">
-{% blocktrans trimmed with app_id=request.app_id org_name=request.org.name %}
-Your organization does not have management permissions for any ASNs. Please reach out to fullctl support for assistance.
-{% endblocktrans %}
-    </div>
-  </div>
-  <div class="col-4"></div>
-</div>
-<div style="display:none">
-
 
 {% elif not permissions.read_instance and request.org %}
 <div class="row">

@@ -139,6 +139,12 @@ class grainy_endpoint(base):
             if decorator.instance_class:
                 decorator.load_org_instance(request, kwargs)
 
+            if hasattr(request, "api_key"):
+                request.perms = permissions_cls(APIKey(request.api_key))
+
+            if not request.perms.check(f"service.{settings.SERVICE_TAG}.{request.org.permission_id}", "r", ignore_grant_all=True):
+                return Response(status=403)
+
             with reversion.create_revision():
                 if isinstance(request.user, get_user_model()):
                     reversion.set_user(request.user)
