@@ -1,9 +1,8 @@
 import time
-from django.conf import settings
-from peeringdb import initialize_backend, resource
-from peeringdb.client import Client
 
-from peeringdb import _fetch
+from django.conf import settings
+from peeringdb import _fetch, initialize_backend, resource
+from peeringdb.client import Client
 
 from fullctl.django.management.commands.base import CommandInterface
 
@@ -16,11 +15,15 @@ PDB_API_URL = getattr(settings, "PDB_API_URL", "https://www.peeringdb.com/api")
 # Ideally this will be fixed in the peeringdb-py client (#76), but for now
 # this should do the trick.
 
+
 def fetch_deleted(self, R, pk, depth):
     def req():
         time.sleep(2)
         return self.all(R.tag, id=pk, since=1, depth=depth)
+
     return self._req(req)
+
+
 _fetch.Fetcher.fetch_deleted = fetch_deleted
 
 
