@@ -61,3 +61,23 @@ class User(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "user"
         data_object_cls = AaactlEntity
+
+
+class Product(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "product"
+
+class OrganizationProduct(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "org_product"
+
+    def get_product_property(self, component, org, property_name):
+
+        for org_product in self.objects(component=component, org=org):
+            if not org_product.product_data:
+                continue
+
+            if property_name in org_product.product_data.__dict__:
+                return org_product.product_data.__dict__[property_name]
+
+        return None
