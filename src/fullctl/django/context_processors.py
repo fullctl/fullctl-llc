@@ -46,7 +46,7 @@ def account_service(request):
             service_applications=[
                 service_application.for_org(org)
                 for service_application in ServiceApplication().objects(
-                    group="fullctl", org=org.slug
+                    group="fullctl", org=(org_slug or None)
                 )
             ],
         )
