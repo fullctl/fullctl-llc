@@ -52,3 +52,10 @@ class AuditLog(models.Model):
     )
     org_id = models.PositiveIntegerField(null=True, blank=True)
     org = GenericForeignKey("org_object_type", "org_id")
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["org_id", "action"]),
+            models.Index(fields=["user"]),
+            models.Index(fields=["object_type", "object_id"]),
+        ]

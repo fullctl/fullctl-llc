@@ -36,7 +36,6 @@ def read_file(name):
 
 # TODO : add dict access and logging
 class SettingsManager(confu.util.SettingsManager):
-
     # settings manager extensions
 
     def get(self, name):

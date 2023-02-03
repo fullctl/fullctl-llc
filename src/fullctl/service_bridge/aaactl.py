@@ -27,7 +27,6 @@ class Aaactl(Bridge):
         data_object_cls = AaactlEntity
 
     def __init__(self, key=None, org=None, **kwargs):
-
         if not key:
             key = DEFAULT_SERVICE_KEY
 
@@ -44,8 +43,10 @@ class ServiceApplicationObject(AaactlEntity):
     def for_org(self, org):
         if org:
             self.org_redirect = self.service_url.format(org=org)
+            self.org_namespace = f"{self.grainy}.{org.permission_id}"
         else:
             self.org_redirect = self.api_url
+            self.org_namespace = self.grainy
         return self
 
 
@@ -59,3 +60,23 @@ class User(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "user"
         data_object_cls = AaactlEntity
+
+
+class Product(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "product"
+
+
+class OrganizationProduct(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "org_product"
+
+    def get_product_property(self, component, org, property_name):
+        for org_product in self.objects(component=component, org=org):
+            if not org_product.product_data:
+                continue
+
+            if property_name in org_product.product_data.__dict__:
+                return org_product.product_data.__dict__[property_name]
+
+        return None

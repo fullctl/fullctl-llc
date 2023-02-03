@@ -5,7 +5,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("django_fullctl", "0012_auto_20210805_1153"),
     ]

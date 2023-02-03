@@ -28,7 +28,6 @@ class ReferenceNotFoundError(KeyError):
 
 
 def get_ref_definition(obj):
-
     """
     Will return the reference tag and id reference field name
     as a tuple.
@@ -119,7 +118,6 @@ class SourceOfTruth:
 
     def object(self, *args, **kwargs):
         for source, params in self.sources:
-
             client = source()
 
             # source host not specified, skip
@@ -139,11 +137,9 @@ class SourceOfTruth:
             raise KeyError("Object does not exist")
 
     def objects(self, **kwargs):
-
         _result = []
 
         for source, params in self.sources:
-
             client = source()
 
             # source host not specified, skip
@@ -175,7 +171,6 @@ class SourceOfTruth:
 
 
 class InternetExchangeMember(SourceOfTruth):
-
     sources = [
         (ixctl.InternetExchangeMember, {"sot": True}),
         (pdbctl.NetworkIXLan, {}),
@@ -198,11 +193,9 @@ class InternetExchangeMember(SourceOfTruth):
 
 
 class ASSet(SourceOfTruth):
-
     sources = [(peerctl.Network, {"has_as_set": 1}), (pdbctl.Network, {})]
 
     def filter_source_of_truth(self, networks):
-
         asn_map = {}
         filtered = []
 

@@ -11,7 +11,6 @@ from fullctl.django.views.api_schema import api_schema
 urlpatterns = []
 
 if getattr(settings, "PDBCTL_URL", None):
-
     import fullctl.django.autocomplete.pdb
 
     urlpatterns += [

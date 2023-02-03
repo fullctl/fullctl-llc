@@ -4,7 +4,6 @@ from fullctl.django.tasks.orm import specify_task, work_task
 
 
 class Command(CommandInterface):
-
     help = "Process the specified task"
 
     always_commit = True

@@ -32,7 +32,6 @@ class ReferencedObject:
 
     @property
     def ux_url(self):
-
         if not self.bridge:
             return None
 
@@ -40,7 +39,6 @@ class ReferencedObject:
 
     @property
     def api_url(self):
-
         if not self.bridge:
             return None
 
@@ -98,7 +96,6 @@ class ReferencedObjectFieldMixin:
     def __init__(
         self, bridge=None, remote_lookup="id", bridge_type=None, *args, **kwargs
     ):
-
         if bridge and bridge_type:
             raise AttributeError("Cannot specify both bridge and bridge_type")
 
@@ -117,7 +114,6 @@ class ReferencedObjectFieldMixin:
         super().__init__(*args, **kwargs)
 
     def deconstruct(self):
-
         name, path, args, kwargs = super().deconstruct()
 
         if self.bridge_type:
@@ -131,14 +127,12 @@ class ReferencedObjectFieldMixin:
         return (name, path, args, kwargs)
 
     def from_db_value(self, value, expression, connection):
-
         if value is None:
             return None
 
         return ReferencedObject(self.bridge, value, self.remote_lookup)
 
     def to_python(self, value):
-
         if value is None:
             return None
 
@@ -148,7 +142,6 @@ class ReferencedObjectFieldMixin:
         return ReferencedObject(self.bridge, value, self.remote_lookup)
 
     def get_prep_value(self, value):
-
         if value is None:
             return None
         if isinstance(value, self.base_type):

@@ -3,6 +3,8 @@ Classes and functions to handle service bridge data
 and relationship management
 """
 
+import json
+
 
 class DataObject:
 
@@ -31,6 +33,10 @@ class DataObject:
     @property
     def ref_id(self):
         return f"{self.source}:{self.id}"
+
+    @property
+    def json(self):
+        return json.dumps(self.__dict__)
 
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
@@ -93,7 +99,6 @@ class Relationships:
 
     @classmethod
     def preload(cls, name, objects):
-
         """
         Preload the specified relationship on a set of objects
 

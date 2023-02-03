@@ -4,7 +4,6 @@ from fullctl.django.management.commands.base import CommandInterface
 
 
 class Command(CommandInterface):
-
     help = "Promote a user to superuser"
 
     def add_arguments(self, parser):

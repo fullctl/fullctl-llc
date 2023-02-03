@@ -9,7 +9,6 @@ from fullctl.django.rest.serializers import ModelSerializer
 
 class SchemaGenerator(BaseSchemaGenerator):
     def has_view_permissions(self, path, method, view):
-
         generate_service_bridge = getattr(
             settings, "API_DOCS_GENERATE_SERVICE_BRIDGE", False
         )
@@ -96,7 +95,6 @@ class BaseSchema(AutoSchema):
         return (serializer, model)
 
     def get_operation(self, *args, **kwargs):
-
         """
         We override this so we can augment the operation dict
         for an openapi schema operation
@@ -201,7 +199,6 @@ class BaseSchema(AutoSchema):
         return {"$ref": f"#/components/schemas/{self.get_component_name(serializer)}"}
 
     def get_responses(self, path, method):
-
         self.response_media_types = self.map_renderers(path, method)
 
         serializer = self.get_response_serializer(path, method)

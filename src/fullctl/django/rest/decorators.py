@@ -49,7 +49,6 @@ class load_object(base):
         self.instance_class = instance_class
 
     def __call__(self, fn):
-
         decorator = self
 
         def wrapped(self, request, *args, **kwargs):
@@ -85,7 +84,6 @@ class grainy_endpoint_response(grainy_rest_viewset_response):
         self.enable_apply_perms = kwargs.pop("enable_apply_perms", True)
 
     def apply_perms(self, request, response, view_function, view):
-
         if self.enable_apply_perms:
             return super().apply_perms(request, response, view_function, view)
         return response
@@ -125,7 +123,6 @@ class grainy_endpoint(base):
             **decorator.kwargs,
         )
         def inner(self, request, *args, **kwargs):
-
             """
             inner wrapper, called after grainy permissioning logic ran
 
@@ -139,6 +136,22 @@ class grainy_endpoint(base):
             if decorator.instance_class:
                 decorator.load_org_instance(request, kwargs)
 
+            # if an api key is set, that should become the permission
+            # holder
+
+            if hasattr(request, "api_key"):
+                request.perms = permissions_cls(APIKey(request.api_key))
+
+            # check if the request is permissioned to access
+            # the fullctl service
+
+            if not request.perms.check(
+                f"service.{settings.SERVICE_TAG}.{request.org.permission_id}",
+                "r",
+                ignore_grant_all=True,
+            ):
+                return Response(status=403)
+
             with reversion.create_revision():
                 if isinstance(request.user, get_user_model()):
                     reversion.set_user(request.user)
@@ -151,7 +164,6 @@ class grainy_endpoint(base):
 
         @wraps(fn)
         def outer(self, request, *args, **kwargs):
-
             """
             outer wrapper, called before grainy permissioning logic runs
 
@@ -197,7 +209,6 @@ class billable(_aaactl):
         self.product = product
 
     def __call__(self, fn):
-
         product = self.product
 
         # if billing integration is disabled we just
@@ -207,7 +218,6 @@ class billable(_aaactl):
             return fn
 
         def wrapped(viewset, request, *args, **kwargs):
-
             if not self.connected:
                 return fn(viewset, request, *args, **kwargs)
 

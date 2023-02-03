@@ -540,6 +540,18 @@ fullctl.application.Toolbar = $tc.extend(
   fullctl.application.Component
 );
 
+fullctl.application.TrialButton = $tc.extend(
+  "TrialButton",
+  {
+    payload : function() {
+      return {
+        service_id : fullctl.service_info.id
+      }
+    }
+  },
+  twentyc.rest.Button
+);
+
 
 fullctl.application.Application = $tc.define(
   "Application",
@@ -563,6 +575,16 @@ fullctl.application.Application = $tc.define(
       });
 
       fullctl[id] = this;
+
+      var trial_button_element = $('[data-element=btn_start_trial]')
+      if(trial_button_element.length) {
+        var trial_button = new fullctl.application.TrialButton(trial_button_element);
+        $(trial_button).on("api-write:success", () => {
+          window.location.reload();
+        });
+      }
+
+      this.application_access_granted = grainy.check("service."+this.id+"."+fullctl.org.id, "r");
 
     },
 

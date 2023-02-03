@@ -40,7 +40,6 @@ class AuthError(ServiceBridgeError):
 
 
 class Bridge:
-
     # set to > 0 if you want the bridge to cache GET
     # responses for the specified duration (seconds)
     cache_duration = 0
@@ -200,7 +199,6 @@ class Bridge:
         return data
 
     def update_if_changed(self, obj, data):
-
         diff = {}
 
         for field, value in data.items():
@@ -243,7 +241,6 @@ class AaaCtl(Bridge):
     """
 
     def requires_billing(self, product_name):
-
         subscription = self.require_subscription(product_name)
 
         if not subscription:

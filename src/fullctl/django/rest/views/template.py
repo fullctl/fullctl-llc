@@ -7,7 +7,6 @@ from fullctl.django.rest.mixins import CachedObjectMixin, OrgQuerysetMixin
 
 class TemplateRenderView(CachedObjectMixin, OrgQuerysetMixin, viewsets.GenericViewSet):
     def _render(self, request, instance, type, pk, *args, **kwargs):
-
         model = self.queryset.model
 
         if pk == "default":

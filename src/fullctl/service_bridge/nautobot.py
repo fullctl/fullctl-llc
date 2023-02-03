@@ -30,7 +30,6 @@ class Nautobot(Bridge):
         data_object_cls = NautobotObject
 
     def __init__(self, key=None, org=None, **kwargs):
-
         if not key:
             key = DEFAULT_NAUTOBOT_TOKEN
 
@@ -107,11 +106,9 @@ class CustomField(Nautobot):
         data_object_cls = CustomFieldObject
 
     def sync(self, fields):
-
         nautobot_fields = {nbf.name: nbf for nbf in self.objects()}
 
         for field in fields:
-
             nautobot_field = nautobot_fields.get(field["name"])
 
             if not nautobot_field:

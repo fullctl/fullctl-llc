@@ -28,7 +28,6 @@ class Ixctl(Bridge):
         data_object_cls = IxctlEntity
 
     def __init__(self, key=None, org=None, **kwargs):
-
         if not key:
             key = DEFAULT_SERVICE_KEY
 

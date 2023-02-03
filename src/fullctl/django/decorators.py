@@ -15,7 +15,6 @@ class require_auth:
     def __call__(self, fn):
         def wrapped(request, *args, **kwargs):
             if not request.user.is_authenticated:
-
                 return redirect(
                     reverse("social:begin", args=("twentyc",))
                     + f"?next={request.get_full_path()}"
@@ -53,10 +52,8 @@ class load_instance:
         public = self.public
 
         def wrapped(request, *args, **kwargs):
-
             org = request.org
             if not public and org not in Organization.accessible(request.user):
-
                 if request.user.is_authenticated and not getattr(
                     request, "impersonating", None
                 ):

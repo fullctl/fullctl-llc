@@ -9,7 +9,6 @@ import fullctl.django.tasks.util
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("django_fullctl", "0011_alter_managementtask_status"),
     ]

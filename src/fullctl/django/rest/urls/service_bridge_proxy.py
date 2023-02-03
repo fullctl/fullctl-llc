@@ -9,7 +9,6 @@ PROXIED = {}
 
 
 def proxy_api(service, host, endpoints):
-
     """
     proxies a fullctl service's api with it's endpoints
     exposed to the local service's api 1:1
@@ -66,7 +65,6 @@ def proxy_api_endpoint(service, host, endpoint):
 
 
 def setup(service, patterns):
-
     if service in PROXIED:
         print(f"Proxied api for service {service} already setup")
         return

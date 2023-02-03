@@ -16,7 +16,6 @@ from fullctl.django.context import current_request
 
 class RemotePermissionsError(IOError):
     def __init__(self):
-
         if not getattr(settings, "SERVICE_KEY", None):
             msg = "No SERVICE_KEY specified"
         else:
@@ -32,7 +31,6 @@ class Permissions(django_grainy.util.Permissions):
 
 
 def require_user(aaactl_user_id):
-
     """
     Fetches and syncs a user from aaactl using the service bridge
     """
@@ -40,7 +38,6 @@ def require_user(aaactl_user_id):
     user = get_user_model().objects.filter(social_auth__uid=aaactl_user_id).first()
 
     if not user:
-
         aaactl_user = aaactl.User().object(aaactl_user_id)
 
         user = get_user_model().objects.create_user(
@@ -79,14 +76,12 @@ class RemotePermissions(django_grainy.remote.Permissions):
 
     @transaction.atomic
     def handle_impersonation(self, response):
-
         user_id = response.headers.get("X-User")
 
         if not user_id:
             return
 
         with current_request() as request:
-
             if not request.user.is_superuser:
                 return
 
@@ -97,7 +92,6 @@ class RemotePermissions(django_grainy.remote.Permissions):
 
     def fetch(self, url, cache_key, **params):
         try:
-
             if self.cache > 0:
                 cached = cache.get(cache_key)
                 if cached:

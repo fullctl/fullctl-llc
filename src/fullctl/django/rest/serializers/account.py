@@ -35,7 +35,6 @@ class Organization(ModelSerializer):
 
 @register
 class ASN(serializers.Serializer):
-
     asn = serializers.IntegerField()
     name = serializers.SerializerMethodField()
 

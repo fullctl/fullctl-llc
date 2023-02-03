@@ -176,7 +176,6 @@ class Task(HandleRefModel):
 
     @classmethod
     def create_task(cls, *args, **kwargs):
-
         parent = kwargs.pop("parent", None)
         timeout = kwargs.pop("timeout", None)
         user = kwargs.pop("user", None)
@@ -212,7 +211,6 @@ class Task(HandleRefModel):
 
     @classmethod
     def last_run(cls, limit_id, age=0):
-
         """
         Returns the last time this task was run with the specified limit id
 
@@ -299,7 +297,6 @@ class Task(HandleRefModel):
 
     @property
     def qualifies(self):
-
         """
         Checks if the environment qualifies to process
         this task.
@@ -434,7 +431,6 @@ class Task(HandleRefModel):
         self.save()
 
     def _run(self):
-
         if self.status != "pending":
             raise TaskAlreadyStarted()
 
@@ -550,7 +546,6 @@ class TaskSchedule(HandleRefModel):
         self.save()
 
     def spawn_tasks(self):
-
         # first check that there isnt currently a task pending on the schedule already
 
         for task in self.tasks.all():
@@ -576,7 +571,6 @@ class TaskSchedule(HandleRefModel):
 
 
 class Monitor(HandleRefModel):
-
     email = models.EmailField(
         null=True, blank=True, help_text=_("Primary alert notification email")
     )
@@ -586,7 +580,6 @@ class Monitor(HandleRefModel):
 
     @property
     def is_enabled(self):
-
         if not self.task_schedule_id:
             return False
 
@@ -627,7 +620,6 @@ class Monitor(HandleRefModel):
             self.require_task_schedule
 
     def delete(self, **kwargs):
-
         super().delete(**kwargs)
 
         if self.task_schedule:

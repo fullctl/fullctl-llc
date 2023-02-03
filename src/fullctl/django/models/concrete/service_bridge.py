@@ -24,7 +24,6 @@ log = logging.getLogger(__name__)
 
 
 def handler_choices():
-
     r = []
 
     for handler_info in handlers.values():
@@ -160,7 +159,6 @@ class ServiceBridgeAction(HandleRefModel):
         return f"ServiceBridgeAction({self.name})[{self.target} {self.action} {self.reference}]"
 
     def reference_object(self, obj):
-
         """
         Attempts to load and return the reference object for this action
 
@@ -173,7 +171,6 @@ class ServiceBridgeAction(HandleRefModel):
         service_name = self.reference_service_name
 
         try:
-
             # TODO: should lookup field be a property of ServiceBridgeAction ?
 
             lookup_field = getattr(obj.ServiceBridge, f"lookup_{service_name}")
@@ -182,7 +179,6 @@ class ServiceBridgeAction(HandleRefModel):
             return obj.reference.object
 
     def run_as_task(self, obj):
-
         """
         Creates a task for this action and the specified ServiceBridgeModel instance
 
@@ -197,7 +193,6 @@ class ServiceBridgeAction(HandleRefModel):
             pass
 
     def run(self, obj):
-
         """
         Runs this action for the specified ServiceBridgeModel instance
         """
@@ -206,7 +201,6 @@ class ServiceBridgeAction(HandleRefModel):
         fn(obj)
 
     def push(self, obj):
-
         """
         Pushes data for the specified ServiceBridgeModel instance to the reference
         using th service bridge
@@ -223,17 +217,14 @@ class ServiceBridgeAction(HandleRefModel):
         # data = obj.service_bridge_data(service_name, self.data_map)
 
         if not self.function:
-
             # No function handler is specified, perform a data push
 
             if not reference_object:
-
                 # reference object does not exist yet, create it
 
                 client.create(obj.service_bridge_data(service_name))
 
             elif not self.data_map:
-
                 # reference object exists and no custom field mapping has been provided
                 # perform a PUT update using the pre-defined service bridge field map for
                 # the service
@@ -243,7 +234,6 @@ class ServiceBridgeAction(HandleRefModel):
                 client.update(reference_object, obj.service_bridge_data(service_name))
 
             else:
-
                 # reference object exists and custom field mapping has been provided
                 # perform a PATCH update using the custom field mapping
 
@@ -254,7 +244,6 @@ class ServiceBridgeAction(HandleRefModel):
                     obj.service_bridge_data(service_name, self.data_map),
                 )
         else:
-
             # Function handler specified, attempt to run it
 
             try:
@@ -277,7 +266,6 @@ class ServiceBridgeAction(HandleRefModel):
         """
 
         if self.function:
-
             try:
                 fn, _, _ = handlers[self.function]
             except KeyError:

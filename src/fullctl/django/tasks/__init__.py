@@ -11,7 +11,6 @@ def specify_task(task):
 
 
 def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None):
-
     """
     Creates tasks from JSON config
     """

@@ -31,8 +31,18 @@ def can_delete(request, namespace):
 
 
 @register.filter
-def themed_path(path):
+def can_access(request, namespace):
+    namespace = namespace.format(org=request.org)
+    return (
+        request.perms.check(namespace, "c")
+        or request.perms.check(namespace, "r")
+        or request.perms.check(namespace, "u")
+        or request.perms.check(namespace, "d")
+    )
 
+
+@register.filter
+def themed_path(path):
     """
     Takes a template file path and re-routes
     it to a theme if the the requesting user
@@ -43,7 +53,6 @@ def themed_path(path):
     """
 
     with current_request() as request:
-
         default_theme = getattr(settings, "DEFAULT_THEME", None)
 
         # no request in context, return path as is
@@ -67,7 +76,6 @@ def themed_path(path):
             theme = None
 
         if theme:
-
             # theme override was found
 
             # keep reference to original path

@@ -9,7 +9,6 @@ import fullctl.django.tasks.util
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("django_fullctl", "0007_auditlog_ip_address"),

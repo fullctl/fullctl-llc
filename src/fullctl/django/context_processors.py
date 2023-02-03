@@ -5,7 +5,6 @@ from fullctl.service_bridge.aaactl import ServiceApplication
 
 
 def conf(request):
-
     return {
         "google_analytics_id": getattr(settings, "GOOGLE_ANALYTICS_ID", None),
         "cloudflare_analytics_id": getattr(settings, "CLOUDFLARE_ANALYTICS_ID", "asdf"),
@@ -15,7 +14,6 @@ def conf(request):
 
 
 def account_service(request):
-
     context = {}
     org = getattr(request, "org", None)
 
@@ -47,15 +45,26 @@ def account_service(request):
         context.update(
             service_applications=[
                 service_application.for_org(org)
-                for service_application in ServiceApplication().objects(group="fullctl")
+                for service_application in ServiceApplication().objects(
+                    group="fullctl", org=(org_slug or None)
+                )
             ],
         )
+
+    # load this applications information from aaactl
+    # into `service_info` variable
+
+    for svc_app in context.get("service_applications", []):
+        if svc_app.slug != settings.SERVICE_TAG:
+            continue
+
+        context.update(service_info=svc_app)
+        break
 
     return context
 
 
 def permissions(request):
-
     # in case of a RemotePermissionsError being set in the
     # `error_response` attribute of the request, we DO NOT
     # want to attempt to retrieve permissions again
@@ -81,5 +90,9 @@ def permissions(request):
             context[key] = is_accessible
         else:
             context[key] = request.perms.check(request.org, op)
+
+    context["billing"] = request.perms.check(
+        f"billing.{request.org.permission_id}", "c"
+    )
 
     return {"permissions": context}

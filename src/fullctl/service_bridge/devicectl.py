@@ -43,7 +43,6 @@ class Device(Devicectl):
         ref_tag = "device"
 
     def request_dummy_device(self, org_slug, name, purpose):
-
         device = self.first(name=name, org_slug=org_slug)
 
         if device:

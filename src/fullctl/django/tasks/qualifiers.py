@@ -25,7 +25,6 @@ class Setting(Base):
     """
 
     def __init__(self, setting, value):
-
         self.setting = setting
         self.value = value
 
@@ -33,7 +32,6 @@ class Setting(Base):
         return f"{self.__class__.__name__} {self.setting}"
 
     def check(self, task):
-
         try:
             _value = getattr(settings, self.setting)
         except AttributeError:

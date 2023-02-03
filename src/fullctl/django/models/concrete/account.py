@@ -31,7 +31,6 @@ COLOR_SCHEMES = (
 @reversion.register()
 @grainy_model(namespace="user")
 class UserSettings(HandleRefModel):
-
     user = models.OneToOneField(
         get_user_model(), on_delete=models.CASCADE, related_name="settings"
     )
@@ -109,7 +108,6 @@ class Organization(HandleRefModel):
 
     @classmethod
     def accessible(cls, user):
-
         """
         Returns a list of organizations that are accessible by the
         user.
@@ -141,7 +139,6 @@ class Organization(HandleRefModel):
         org_namespaces = perms.pset.expand("?.?", exact=True)
 
         for ns in org_namespaces:
-
             try:
                 int(ns[1])
             except (ValueError, IndexError):
@@ -212,6 +209,12 @@ class Organization(HandleRefModel):
     def display_name(self):
         if self.personal:
             return _("Personal")
+        return self.name
+
+    @property
+    def display_name_verbose(self):
+        if self.personal:
+            return _("your personal organization")
         return self.name
 
     def __str__(self):

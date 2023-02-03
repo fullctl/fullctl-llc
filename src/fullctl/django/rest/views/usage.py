@@ -13,15 +13,13 @@ from fullctl.django.rest.usage import REGISTERED
 
 @route
 class Usage(CachedObjectMixin, OrgQuerysetMixin, viewsets.GenericViewSet):
-
     serializer_class = Serializers.usage
     queryset = models.Organization.objects.all()
 
     ref_tag = "usage"
 
     @grainy_endpoint("billing.{request.org.permission_id}")
-    def list(self, request, org, *args, **kwargs):
-
+    def list(self, request, *args, **kwargs):
         """
         List organization's usage for metered apis
         """
@@ -31,6 +29,8 @@ class Usage(CachedObjectMixin, OrgQuerysetMixin, viewsets.GenericViewSet):
         # TODO: support ranges eventually
         start = datetime.datetime.now()
         end = datetime.datetime.now()
+
+        org = request.org
 
         for metric_cls in REGISTERED.values():
             metric = metric_cls(org)
