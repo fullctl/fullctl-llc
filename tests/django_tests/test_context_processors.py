@@ -45,6 +45,7 @@ def test_permissions_crud(db, dj_account_objects, settings):
     request.perms = dj_account_objects.perms
 
     full_perms = {
+        "billing": False,
         "create_instance": True,
         "read_instance": True,
         "update_instance": True,
@@ -79,6 +80,7 @@ def test_permissions_readonly(db, dj_account_objects, settings):
     request.perms = dj_account_objects.perms
 
     readonly_perms = {
+        "billing": False,
         "create_instance": False,
         "read_instance": True,
         "update_instance": False,
