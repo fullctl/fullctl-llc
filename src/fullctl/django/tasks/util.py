@@ -5,7 +5,6 @@ from django.conf import settings
 
 
 def worker_id():
-
     """
     Returns the worker id for this instance
 

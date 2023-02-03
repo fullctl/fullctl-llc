@@ -5,7 +5,6 @@ from django.views import View
 
 
 class TemplateFileView(View):
-
     TemplateModel = None
 
     def get(self, request, template_type):

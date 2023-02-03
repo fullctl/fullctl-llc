@@ -10,7 +10,6 @@ Serializers, register = serializer_registry()
 
 @register
 class User(ModelSerializer):
-
     ref_tag = "user"
 
     class Meta:
@@ -34,7 +33,6 @@ class Organization(ModelSerializer):
 
 @register
 class OrganizationUser(serializers.Serializer):
-
     ref_tag = "org_user"
     user = serializers.IntegerField()
     default_org = serializers.IntegerField()

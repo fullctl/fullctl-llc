@@ -20,7 +20,6 @@ class Organization(viewsets.GenericViewSet):
     queryset = models.Organization.objects.all()
 
     def list(self, request, *args, **kwargs):
-
         """
         List the organizations that the requesting user belongs
         to or has permissions to
@@ -36,14 +35,12 @@ class Organization(viewsets.GenericViewSet):
 
 @route
 class User(viewsets.GenericViewSet):
-
     ref_tag = "user"
     serializer_class = Serializers.asn
 
     @action(detail=False, methods=["GET"])
     @grainy_endpoint()
     def asns(self, request, org, *args, **kwargs):
-
         """
         Lists the asns that the requesting user has been verified for.
         """

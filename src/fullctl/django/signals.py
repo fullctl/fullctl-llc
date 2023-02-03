@@ -9,7 +9,6 @@ import fullctl.django.auditlog as auditlog
 
 
 def auditlog_on_save(**kwargs):
-
     """
     audit log object changes whenever a new version
     of an object is saved
@@ -36,7 +35,6 @@ post_revision_commit.connect(auditlog_on_save)
 
 @receiver(post_delete)
 def auditlog_on_delete(sender, **kwargs):
-
     """
     auditlog object deletions
     """

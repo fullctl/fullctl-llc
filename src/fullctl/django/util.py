@@ -9,7 +9,6 @@ else:
 
 
 def host_url():
-
     """
     Will see if a current request context exist and if it
     does return host url as it exists on the requests HTTP_HOST attribute.
@@ -24,7 +23,6 @@ def host_url():
 
 
 def verified_asns(perms):
-
     if not pdb_models:
         raise ImportError(
             "Peeringdb module not loaded, is `django_peeringdb` in INSTALLED_APPS?"

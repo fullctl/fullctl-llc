@@ -15,7 +15,6 @@ from fullctl.service_bridge.client import AaaCtl
 
 
 class base:
-
     def load_org_instance(self, request, data):
         data.update(org=request.org)
 
@@ -50,7 +49,6 @@ class load_object(base):
         self.instance_class = instance_class
 
     def __call__(self, fn):
-
         decorator = self
 
         def wrapped(self, request, *args, **kwargs):
@@ -86,7 +84,6 @@ class grainy_endpoint_response(grainy_rest_viewset_response):
         self.enable_apply_perms = kwargs.pop("enable_apply_perms", True)
 
     def apply_perms(self, request, response, view_function, view):
-
         if self.enable_apply_perms:
             return super().apply_perms(request, response, view_function, view)
         return response
@@ -126,7 +123,6 @@ class grainy_endpoint(base):
             **decorator.kwargs,
         )
         def inner(self, request, *args, **kwargs):
-
             """
             inner wrapper, called after grainy permissioning logic ran
 
@@ -168,7 +164,6 @@ class grainy_endpoint(base):
 
         @wraps(fn)
         def outer(self, request, *args, **kwargs):
-
             """
             outer wrapper, called before grainy permissioning logic runs
 
@@ -214,7 +209,6 @@ class billable(_aaactl):
         self.product = product
 
     def __call__(self, fn):
-
         product = self.product
 
         # if billing integration is disabled we just
@@ -224,7 +218,6 @@ class billable(_aaactl):
             return fn
 
         def wrapped(viewset, request, *args, **kwargs):
-
             if not self.connected:
                 return fn(viewset, request, *args, **kwargs)
 

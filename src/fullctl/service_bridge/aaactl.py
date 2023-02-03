@@ -27,7 +27,6 @@ class Aaactl(Bridge):
         data_object_cls = AaactlEntity
 
     def __init__(self, key=None, org=None, **kwargs):
-
         if not key:
             key = DEFAULT_SERVICE_KEY
 
@@ -73,7 +72,6 @@ class OrganizationProduct(Aaactl):
         ref_tag = "org_product"
 
     def get_product_property(self, component, org, property_name):
-
         for org_product in self.objects(component=component, org=org):
             if not org_product.product_data:
                 continue

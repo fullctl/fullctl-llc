@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("django_fullctl", "0025_auto_20221025_1215"),
     ]

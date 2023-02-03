@@ -29,7 +29,6 @@ class SystemViewSet(viewsets.GenericViewSet):
 
 
 class HeartbeatViewSet(SystemViewSet):
-
     ref_tag = "heartbeat"
     serializer_class = HeartbeatSerializer
 
@@ -43,14 +42,12 @@ class HeartbeatViewSet(SystemViewSet):
 
 
 class StatusViewSet(SystemViewSet):
-
     ref_tag = "status"
     serializer_class = StatusSerializer
     checks = []
 
     @grainy_endpoint("service_bridge.system")
     def list(self, request):
-
         """
         Returns service bridge status for all the service bridges
         in use
@@ -151,7 +148,6 @@ class DataViewSet(viewsets.ModelViewSet):
             qset = qset.filter(pk=request.GET.get("id"))
 
         for url_param, django_field in self.valid_filters:
-
             value = request.GET.get(url_param)
 
             if isinstance(django_field, Exclude):
@@ -160,7 +156,6 @@ class DataViewSet(viewsets.ModelViewSet):
                 qset = getattr(self, f"filter_{django_field.name}")(qset, value)
                 self._filtered = True
             elif value is not None:
-
                 if django_field.endswith("__in"):
                     value = value.split(",")
 
@@ -170,7 +165,6 @@ class DataViewSet(viewsets.ModelViewSet):
         return qset.filter(**filters)
 
     def join_relations(self, qset, request):
-
         join = request.GET.get("join")
         if not join:
             return qset, []
@@ -184,7 +178,6 @@ class DataViewSet(viewsets.ModelViewSet):
         return qset, join
 
     def prepare_write_data(self, request):
-
         data = request.data.copy()
         org_slug = data.get("org")
         if org_slug:
@@ -195,7 +188,6 @@ class DataViewSet(viewsets.ModelViewSet):
 
     @grainy_endpoint("service_bridge")
     def create(self, request, *args, **kwargs):
-
         data = self.prepare_write_data(request)
 
         serializer = self.serializer_class(data=data)
@@ -211,7 +203,6 @@ class DataViewSet(viewsets.ModelViewSet):
 
     @grainy_endpoint("service_bridge")
     def partial_update(self, request, pk, *args, **kwargs):
-
         data = self.prepare_write_data(request)
         instance = self.get_object()
 

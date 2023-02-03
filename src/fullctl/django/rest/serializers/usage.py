@@ -7,7 +7,6 @@ Serializers, register = serializer_registry()
 
 @register
 class Usage(serializers.Serializer):
-
     name = serializers.CharField()
     units = serializers.FloatField()
     start = serializers.DateTimeField()

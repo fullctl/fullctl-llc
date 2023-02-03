@@ -33,7 +33,6 @@ class Worker:
         self.process = None
 
     async def work(self):
-
         """
         Starts the worker on the tasks or waits for the currently
         assigned task to complete.
@@ -70,7 +69,6 @@ class Worker:
 
 
 class Command(CommandInterface):
-
     help = "Process task queue"
 
     always_commit = True
@@ -103,18 +101,14 @@ class Command(CommandInterface):
         asyncio.run(_main())
 
     async def _process_workers(self):
-
         while True:
-
             await asyncio.sleep(self.sleep_interval)
 
             for worker in self.workers:
                 await worker.work()
 
     async def _poll_tasks(self):
-
         while True:
-
             await asyncio.sleep(self.sleep_interval)
 
             if not self.worker_available:
@@ -143,9 +137,7 @@ class Command(CommandInterface):
             await self.delegate_task(task)
 
     async def _progress_schedules(self):
-
         while True:
-
             await asyncio.sleep(self.sleep_interval)
             await sync_to_async(progress_schedules)()
 

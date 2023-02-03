@@ -10,7 +10,6 @@ _service_bridge_sync = contextvars.ContextVar("service_bridge_sync")
 
 @contextmanager
 def current_request(request=None):
-
     """
     Will yield the current request, if there is one.
 

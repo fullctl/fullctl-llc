@@ -4,7 +4,6 @@ from fullctl.django.rest.serializers import ModelSerializer
 
 
 class Data(ModelSerializer):
-
     ref_tag = "meta_data"
     meta_source = None
 

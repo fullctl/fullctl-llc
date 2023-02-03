@@ -44,9 +44,7 @@ class RequestAugmentation:
         if (
             not hasattr(request.user, "org_set") or not request.user.org_set.exists()
         ) and "org_tag" not in kwargs:
-
             if not request.user.is_authenticated:
-
                 # user is not authenticated, return
                 # Guest org
 
@@ -58,7 +56,6 @@ class RequestAugmentation:
                 request.org = Organization.objects.get(slug=kwargs["org_tag"])
 
             elif request.user.org_set.exists():
-
                 default_org = request.user.org_set.filter(is_default=True).first()
 
                 if default_org:

@@ -10,7 +10,6 @@ import fullctl.django.models.concrete.account
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

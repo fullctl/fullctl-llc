@@ -99,7 +99,6 @@ class Relationships:
 
     @classmethod
     def preload(cls, name, objects):
-
         """
         Preload the specified relationship on a set of objects
 

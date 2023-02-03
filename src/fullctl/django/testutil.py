@@ -13,7 +13,6 @@ from fullctl.django.models.concrete import Organization, OrganizationUser
 
 
 def reset_auto_fields():
-
     """
     Resets the primary key field on Organization instances
     """

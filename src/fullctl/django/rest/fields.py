@@ -8,7 +8,6 @@ class DynamicChoiceField(ChoiceField):
     """
 
     def __init__(self, choices, **kwargs):
-
         if callable(choices):
             choices = choices()
 

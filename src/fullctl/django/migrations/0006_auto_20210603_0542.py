@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("django_fullctl", "0005_auto_20210528_1252"),

@@ -22,7 +22,6 @@ def make_variable_name(value):
 
 
 class TemplateModel(HandleRefModel):
-
     name = models.CharField(max_length=255)
     body = models.TextField()
 
@@ -60,12 +59,10 @@ class TemplateModel(HandleRefModel):
         """
 
         if self.body:
-
             # if body is not empty, we use a dict loader
             # to make jinja load it as the template
             loader = DictLoader({self.template_path: self.body})
         else:
-
             # if body is empty we will load the default
             # template from file
             #

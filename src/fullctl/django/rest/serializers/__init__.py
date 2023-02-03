@@ -42,7 +42,6 @@ class ModelSerializer(serializers.ModelSerializer):
 
 
 class RequireContext:
-
     required_context = []
 
     def validate(self, data):

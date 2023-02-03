@@ -18,7 +18,6 @@ def test_fetch_tasks():
 
 @pytest.mark.django_db
 def test_claim_task():
-
     task = models.TestTask.create_task(1, 2)
     orm.claim_task(task)
 
@@ -30,7 +29,6 @@ def test_claim_task():
 
 @pytest.mark.django_db
 def test_work_tasks():
-
     task = models.TestTask.create_task(1, 2)
 
     orm.claim_task(task)
@@ -46,7 +44,6 @@ def test_work_tasks():
 
 @pytest.mark.django_db
 def test_parent_task():
-
     task_par = models.TestTask.create_task(1, 2)
     task_chl = models.TestTask.create_task(7, 3, parent=task_par)
 
@@ -75,7 +72,6 @@ def test_parent_task():
 
 @pytest.mark.django_db
 def test_task_qualifiers(settings):
-
     task = models.QualifierTestTask.create_task(1, 2)
 
     # worker qualifies, task should be in tasks

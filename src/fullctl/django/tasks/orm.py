@@ -30,7 +30,6 @@ def fetch_task(**filters):
 
 
 def fetch_tasks(limit=1, **filters):
-
     tasks = []
 
     # filter tasks waiting for execution
@@ -65,7 +64,6 @@ def fetch_tasks(limit=1, **filters):
 
 
 def claim_task(task):
-
     """
     Claims the specified task
     """
@@ -81,7 +79,6 @@ def claim_task(task):
 
 
 def work_task(task):
-
     """
     processes the specified task
     """
@@ -90,7 +87,6 @@ def work_task(task):
 
 
 def progress_schedules(**filters):
-
     """
     fetch and process due task schedules (one at a time)
     """

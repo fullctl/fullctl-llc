@@ -49,7 +49,6 @@ UNWANTED_FIELD_TYPES = (
 
 
 def cleaned_value(key, value):
-
     for skey in SENSITIVE_KEYS:
         if skey in key.lower():
             value = "[redacted]"
@@ -65,7 +64,6 @@ def cleaned_value(key, value):
 
 
 def model_tag(model):
-
     """
     Return the model identifier tag used for auditlog actions
 
@@ -80,7 +78,6 @@ def model_tag(model):
 
 
 def get_config(model):
-
     """
     Returns the AuditLog meta class for the model if it
     exists.
@@ -111,7 +108,6 @@ def get_fields(model):
 
 
 def is_enabled(model):
-
     """
     Returns whether the specified model is enabled for audit
     log.
@@ -137,7 +133,6 @@ class Context:
     """
 
     def __init__(self):
-
         # context variable fields
         self.fields = {}
 
@@ -188,7 +183,6 @@ class Context:
         return self.fields[name].get("value")
 
     def log(self, action, log_object=None, info=None, **data):
-
         if data:
             self.set("data", data)
 
@@ -235,7 +229,6 @@ class auditlog:
 
     def __call__(self, fn):
         def wrapped(*args, **kwargs):
-
             params = inspect.getcallargs(fn, *args, **kwargs)
             request = None
             user = None

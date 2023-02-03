@@ -5,7 +5,6 @@ from fullctl.service_bridge.aaactl import ServiceApplication
 
 
 def conf(request):
-
     return {
         "google_analytics_id": getattr(settings, "GOOGLE_ANALYTICS_ID", None),
         "cloudflare_analytics_id": getattr(settings, "CLOUDFLARE_ANALYTICS_ID", "asdf"),
@@ -15,7 +14,6 @@ def conf(request):
 
 
 def account_service(request):
-
     context = {}
     org = getattr(request, "org", None)
 
@@ -67,7 +65,6 @@ def account_service(request):
 
 
 def permissions(request):
-
     # in case of a RemotePermissionsError being set in the
     # `error_response` attribute of the request, we DO NOT
     # want to attempt to retrieve permissions again
