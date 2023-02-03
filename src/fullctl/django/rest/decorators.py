@@ -15,8 +15,6 @@ from fullctl.service_bridge.client import AaaCtl
 
 
 class base:
-    def load_org(self, request, data):
-        data.update(org=request.org)
 
     def load_org_instance(self, request, data):
         data.update(org=request.org)
@@ -141,8 +139,6 @@ class grainy_endpoint(base):
 
             if decorator.instance_class:
                 decorator.load_org_instance(request, kwargs)
-            else:
-                decorator.load_org(request, kwargs)
 
             # if an api key is set, that should become the permission
             # holder
