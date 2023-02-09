@@ -822,6 +822,12 @@ twentyc.rest.Widget = twentyc.cls.extend(
               data[input.attr("name")] = input.val();
             }
           }
+
+          // treat blank values as null where necessary
+
+          if(input.data("blank-as-null") == "yes" && input.val() == "") {
+            data[input.attr("name")] = null;
+          }
         });
       });
       return data;
