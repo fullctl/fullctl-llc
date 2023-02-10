@@ -1208,6 +1208,59 @@ twentyc.rest.Input = twentyc.cls.extend(
 );
 
 /**
+ * Checkbox widget
+ *
+ * Wires a html element (input type="checkbox") to the API
+ *
+ * The select element should have the following attributes set
+ *
+ * # required
+ *
+ * - data-api-base: api root or full path to endpoint
+ *
+ * @class Button
+ * @extends twentyc.rest.Input
+ * @namespace twentyc.rest
+ * @param {jQuery result} jq jquery result holding the button element
+ */
+
+
+twentyc.rest.Checkbox = twentyc.cls.extend(
+  "Checkbox",
+  {
+    payload : function() {
+      var pl = {};
+      pl[this.element.attr('name')] = (this.element.prop("checked") ? true : false);
+      return pl;
+    },
+    bind : function(jq) {
+      this.Widget_bind(jq);
+      this.method = jq.data("api-method") || "POST";
+
+      this.element.on("change", function(ev) {
+
+        var confirm_required = this.element.data("confirm");
+        if(confirm_required && !confirm(confirm_required))
+          return;
+
+        this.clear_errors();
+
+        var action = this.action;
+        var fn = this[this.method.toLowerCase()].bind(this);
+
+        fn(action, this.payload()).then(
+          this.post_success.bind(this),
+          this.post_failure.bind(this)
+        );
+      }.bind(this));
+
+    }
+  },
+  twentyc.rest.Input
+);
+
+
+/**
  * Button widget
  *
  * Wires a html element (typically `<a>` or `<button>` to the API
