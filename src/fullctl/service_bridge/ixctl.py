@@ -65,7 +65,7 @@ class InternetExchangeMember(Ixctl):
     def set_mac_address(self, asn, ip, mac_address, source):
         data = {"mac_address": mac_address, "source": source}
 
-        ip4 = ipaddress.ip_interface(ip).ip
+        ip = ipaddress.ip_interface(ip).ip
 
         self.put(f"data/member/sync/{asn}/{ip}/mac-address", data=data)
 
