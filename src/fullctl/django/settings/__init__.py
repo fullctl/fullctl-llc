@@ -114,6 +114,9 @@ class SettingsManager(confu.util.SettingsManager):
         # No-reply email
         self.set_from_env("NO_REPLY_EMAIL", self.scope["SERVER_EMAIL"])
 
+        # URL to POST Feature Request form to
+        self.set_option("POST_FEATURE_REQUEST_URL", "")
+
         # django secret key
         self.set_from_env("SECRET_KEY")
 

@@ -39,6 +39,7 @@ def account_service(request):
         service_logo_light=f"{settings.SERVICE_TAG}/logo-lightbg.svg",
         service_tag=settings.SERVICE_TAG,
         service_name=settings.SERVICE_TAG.replace("ctl", ""),
+        post_feature_request_url=settings.POST_FEATURE_REQUEST_URL,
     )
 
     if settings.OAUTH_TWENTYC_URL:
