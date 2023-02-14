@@ -10,6 +10,7 @@ def conf(request):
         "cloudflare_analytics_id": getattr(settings, "CLOUDFLARE_ANALYTICS_ID", "asdf"),
         "support_email": settings.SUPPORT_EMAIL,
         "no_reply_email": settings.NO_REPLY_EMAIL,
+        "post_feature_request_url": settings.POST_FEATURE_REQUEST_URL,
     }
 
 
@@ -39,7 +40,6 @@ def account_service(request):
         service_logo_light=f"{settings.SERVICE_TAG}/logo-lightbg.svg",
         service_tag=settings.SERVICE_TAG,
         service_name=settings.SERVICE_TAG.replace("ctl", ""),
-        post_feature_request_url=settings.POST_FEATURE_REQUEST_URL,
     )
 
     if settings.OAUTH_TWENTYC_URL:
