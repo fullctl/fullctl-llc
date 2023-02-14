@@ -298,6 +298,18 @@ fullctl.application.Component = $tc.define(
   }
 );
 
+/**
+ * Modal widget
+ *
+ * @class Modal
+ * @extends fullctl.application.Component
+ * @namespace fullctl.application
+ * @constructor
+ * @param {string} type type of modal
+ * @param {string} title title to use for modal
+ * @param {jQuery result} content jquery result holding the element to insert into modal body
+ */
+
 fullctl.application.Modal = $tc.extend(
   "Modal",
   {
@@ -975,6 +987,15 @@ fullctl.ConfigPreview = $tc.extend(
   },
   twentyc.rest.Form
 );
+
+/**
+ * Special modal widget for handling new feature requests
+ *
+ * @class ModalFeatureRequest
+ * @extends fullctl.application.Modal
+ * @namespace fullctl.application
+ * @constructor
+ */
 
 fullctl.application.ModalFeatureRequest = $tc.extend(
   "ModalFeatureRequest",
