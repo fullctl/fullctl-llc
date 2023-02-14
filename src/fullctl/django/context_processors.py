@@ -9,6 +9,7 @@ def conf(request):
         "google_analytics_id": getattr(settings, "GOOGLE_ANALYTICS_ID", None),
         "cloudflare_analytics_id": getattr(settings, "CLOUDFLARE_ANALYTICS_ID", "asdf"),
         "support_email": settings.SUPPORT_EMAIL,
+        "contact_us_email": settings.CONTACT_US_EMAIL,
         "no_reply_email": settings.NO_REPLY_EMAIL,
         "post_feature_request_url": settings.POST_FEATURE_REQUEST_URL,
     }

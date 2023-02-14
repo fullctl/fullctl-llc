@@ -114,9 +114,6 @@ class SettingsManager(confu.util.SettingsManager):
         # No-reply email
         self.set_from_env("NO_REPLY_EMAIL", self.scope["SERVER_EMAIL"])
 
-        # URL to POST Feature Request form to
-        self.set_option("POST_FEATURE_REQUEST_URL", "")
-
         # django secret key
         self.set_from_env("SECRET_KEY")
 
@@ -361,6 +358,13 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_twentyc_oauth()
 
         self.set_option("SUPPORT_EMAIL", self.get("SERVER_EMAIL"))
+
+        # Contact Us email
+        self.set_from_env("CONTACT_US_EMAIL", self.get("SUPPORT_EMAIL"))
+
+        # URL to POST Feature Request form to
+        self.set_option("POST_FEATURE_REQUEST_URL", "")
+
 
         # allow propagation of user field changes during oauth process
         # with exception of id fields
