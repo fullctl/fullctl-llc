@@ -976,6 +976,34 @@ fullctl.ConfigPreview = $tc.extend(
   twentyc.rest.Form
 );
 
+fullctl.application.ModalFeatureRequest = $tc.extend(
+  "ModalFeatureRequest",
+  {
+    ModalFeatureRequest: function () {
+      var modal = this;
+      var form = this.form = new twentyc.rest.Form(
+        fullctl.template("form_feature_request")
+      );
+
+      $(this.form).on("api-write:success", (ev, e, payload, response) => {
+        modal.hide();
+      });
+
+      this.Modal("save", "Feature Request", form.element);
+      form.wire_submit(this.$e.button_submit);
+    }
+  },
+  fullctl.application.Modal
+);
+
+fullctl.feature_request = document.addEventListener("DOMContentLoaded", () => {
+  const feature_request_button = document.querySelector('[data-element="feature_request_btn"]');
+
+  feature_request_button.addEventListener('click', () => {
+    new fullctl.application.ModalFeatureRequest();
+  })
+});
+
 fullctl.help_box = document.addEventListener("DOMContentLoaded", () => {
   const help_button = document.querySelector(".help-btn");
   const box = document.querySelector(".help-box");

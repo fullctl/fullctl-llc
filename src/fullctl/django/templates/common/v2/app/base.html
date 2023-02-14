@@ -318,9 +318,9 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
         </div>
         <div class="col-auto">
           <a href="mailto:hello@fullctl.com">Contact Us</a> |
-          <div type="button" data-bs-toggle="modal" data-bs-target="#featureRequestModal">
+          <a data-element="feature_request_btn" type="button">
             Feature Request
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -345,29 +345,6 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
 </div>
 {% endblock %}
 <!-- Modal -->
-<div class="modal fade" id="featureRequestModal" tabindex="-1" aria-labelledby="featureRequestModal" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" data-element="title">Feature Request</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <iframe
-          class="clickup-embed clickup-dynamic-height"
-          src="https://forms.clickup.com/14289126/f/dm276-5327/E6NH3HHIK1GCM0S3B5"
-          onwheel=""
-          width="100%"
-          height="100%"
-          style="background:
-          transparent; border: 1px solid #ccc;"
-        >
-        </iframe>
-        <script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
-      </div>
-    </div>
-  </div>
-</div>
 </footer>
 {% endblock %}
 </div>

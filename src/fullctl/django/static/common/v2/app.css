@@ -1415,7 +1415,7 @@ footer div{
 footer a:is(:hover, :focus),
 footer div[type="button"]:is(:hover, :focus){
   color: currentColor;
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
 .help-box {
