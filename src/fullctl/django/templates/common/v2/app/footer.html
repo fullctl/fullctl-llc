@@ -1,0 +1,35 @@
+{% load i18n static %}
+<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col footer-left">
+      <div class="row align-items-center">
+        <div class="col-sm-auto theme-switcher" type="button">
+          <span class="icon icon-lg icon-theme-switcher"></span>
+        </div>
+        <div class="col-auto">
+          <a href="mailto:{{ contact_us_email }}">Contact Us</a> |
+          <a {% if post_feature_request_url == "" %}href="mailto:{{ support_email }}" {% else %}data-element="feature_request_btn"{% endif %} type="button">
+            Feature Request
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto footer-center">Copyright © 2014 - 2022 20C, LLC</div>
+    <div class="col footer-right">
+      <div class="row align-items-center">
+        <div class="ms-auto col-auto">{{ version }}</div>
+        <div class="help-box js-hide">
+          <div class="banner-img">
+            <img src="{% static "common/v2/imgs/help.png" %}" alt="">
+          </div>
+          <a href="{{ docs_url }}" target="_blank">Help Center</a>
+          <a href="mailto:{{ support_email }}">Contact Support</a>
+          <a href="{{ legal_url }}">Legal Notes</a>
+        </div>
+        <div class="col-sm-auto help-btn" type="button">
+          <span class="icon icon-lg icon-help"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
