@@ -357,6 +357,24 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_service_bridges()
         self.set_twentyc_oauth()
 
+        # allow propagation of user field changes during oauth process
+        # with exception of id fields
+        if propagate_user_fields:
+            self.set_option("SOCIAL_AUTH_NO_DEFAULT_PROTECTED_USER_FIELDS", True)
+            self.set_option("SOCIAL_AUTH_PROTECTED_USER_FIELDS", ("id", "pk"))
+
+        # toggle billing integration with aaactl
+        # if false, billing checks on api end points will be disabled
+        self.set_bool("BILLING_INTEGRATION", billing_integration)
+
+        # terminate session on browser close
+        self.set_option("SESSION_EXPIRE_AT_BROWSER_CLOSE", True)
+        self.set_support()
+
+    def set_support(self):
+        """
+        Sets up variables required for support related functionality
+        """
         self.set_option("SUPPORT_EMAIL", self.get("SERVER_EMAIL"))
 
         # Contact Us email
@@ -370,19 +388,6 @@ class SettingsManager(confu.util.SettingsManager):
 
         # Legal URL
         self.set_option("LEGAL_URL", "https://www.fullctl.com/legal")
-
-        # allow propagation of user field changes during oauth process
-        # with exception of id fields
-        if propagate_user_fields:
-            self.set_option("SOCIAL_AUTH_NO_DEFAULT_PROTECTED_USER_FIELDS", True)
-            self.set_option("SOCIAL_AUTH_PROTECTED_USER_FIELDS", ("id", "pk"))
-
-        # toggle billing integration with aaactl
-        # if false, billing checks on api end points will be disabled
-        self.set_bool("BILLING_INTEGRATION", billing_integration)
-
-        # terminate session on browser close
-        self.set_option("SESSION_EXPIRE_AT_BROWSER_CLOSE", True)
 
     # TODO: review implementation
     def set_languages_docs(self):
