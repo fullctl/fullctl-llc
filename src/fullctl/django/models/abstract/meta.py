@@ -84,6 +84,9 @@ class Data(HandleRefModel):
     def update(self, data):
         self.data = data
 
+    def __str__(self):
+        return f"{self.type}:{self.source_name}:{self.date}"
+
 
 class Request(HandleRefModel):
 
@@ -373,7 +376,7 @@ class Response(HandleRefModel):
         for date, _target, data in req.process_response(self, target, timezone.now()):
             self._write_meta_data(req, date, req.prepare_data(data), _target, target_field, source_name)
 
-        meta_data_cls.cleanup(target=target)
+        # meta_data_cls.cleanup(target=target)
 
 
     def _write_meta_data(self, request, date, data, target, target_field, source_name):
