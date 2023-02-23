@@ -12,7 +12,6 @@ _historic = contextvars.ContextVar("historic")
 
 @contextmanager
 def historic(start_dt=None, end_dt=None):
-
     """
     Will yield a date range
     """

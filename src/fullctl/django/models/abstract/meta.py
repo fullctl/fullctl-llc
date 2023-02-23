@@ -3,9 +3,7 @@ Abstract classes to facilitate the fetching, caching and retrieving of meta data
 sourced from third party sources.
 """
 import json
-import time
-import datetime
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 import confu.schema
 import requests
@@ -182,7 +180,13 @@ class Request(HandleRefModel):
         request = cls.get_cache(target)
 
         if request:
-            return cls.process(target, request.url, request.http_status, request.response.data, cached=True)
+            return cls.process(
+                target,
+                request.url,
+                request.http_status,
+                request.response.data,
+                cached=True,
+            )
 
         return cls.send(target)
 
@@ -200,7 +204,6 @@ class Request(HandleRefModel):
         override this to handle converting a target to a requestable url
         """
         return None
-
 
     @classmethod
     def send(cls, target):
@@ -235,7 +238,12 @@ class Request(HandleRefModel):
         target_field = cls.config("target_field")
         response_cls = cls._meta.get_field("response").related_model
 
-        params = {target_field: target, "url": url, "source": source, "type": cls.target_to_type(target)}
+        params = {
+            target_field: target,
+            "url": url,
+            "source": source,
+            "type": cls.target_to_type(target),
+        }
 
         if payload:
             params.update(payload=json.dumps(payload))
@@ -368,19 +376,16 @@ class Response(HandleRefModel):
         return self.request.config("meta_data_cls", self.config("meta_data_cls"))
 
     def write_meta_data(self, req):
-        meta_data_cls = self.meta_data_cls
         target_field = self.config("target_field", req.config("target_field"))
         source_name = req.config("source_name")
         target = getattr(req, target_field)
 
         for date, _target, data in req.process_response(self, target, timezone.now()):
-            self._write_meta_data(req, date, req.prepare_data(data), _target, target_field, source_name)
-
-        # meta_data_cls.cleanup(target=target)
-
+            self._write_meta_data(
+                req, date, req.prepare_data(data), _target, target_field, source_name
+            )
 
     def _write_meta_data(self, request, date, data, target, target_field, source_name):
-
         meta_data_cls = self.meta_data_cls
         meta_data_type = meta_data_cls.config("type")
         period = meta_data_cls.config("period")
@@ -388,8 +393,11 @@ class Response(HandleRefModel):
         end = date + timedelta(seconds=period)
 
         filters = {target_field: target, "source_name": source_name}
-        meta_data = meta_data_cls.objects.filter(date__gte=start, date__lte=end).filter(**filters).first()
-
+        meta_data = (
+            meta_data_cls.objects.filter(date__gte=start, date__lte=end)
+            .filter(**filters)
+            .first()
+        )
 
         if not meta_data:
             meta_data = meta_data_cls(data={}, source_name=source_name, date=date)
@@ -399,4 +407,3 @@ class Response(HandleRefModel):
         meta_data.type = meta_data_type
 
         meta_data.save()
-
