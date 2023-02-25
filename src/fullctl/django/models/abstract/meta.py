@@ -289,7 +289,7 @@ class Request(HandleRefModel):
                     data=data,
                     request=req,
                 )
-            
+
             req.response.write_meta_data(req)
 
             return req
@@ -387,7 +387,7 @@ class Response(HandleRefModel):
 
     def _write_meta_data(self, request, date, data, target, target_field, source_name):
         meta_data_cls = self.meta_data_cls
-        
+
         meta_data_type = meta_data_cls.config("type")
         period = meta_data_cls.config("period")
         start = date - timedelta(seconds=period)
@@ -400,10 +400,10 @@ class Response(HandleRefModel):
             .first()
         )
 
-        
-        
         if not meta_data:
-            meta_data_recent = meta_data_cls.objects.filter(**filters).order_by("-date").first()
+            meta_data_recent = (
+                meta_data_cls.objects.filter(**filters).order_by("-date").first()
+            )
             if meta_data_recent and meta_data_recent.data == data:
                 # while a meta data entry does not exist close to the date, the data is the same as the most recent entry
 
