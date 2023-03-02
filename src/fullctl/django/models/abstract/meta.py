@@ -308,7 +308,7 @@ class Request(HandleRefModel):
     @classmethod
     def get_cache(cls, target):
         qset = cls.get_cache_queryset(target)
-        qset = qset.filter(updated__gte=cls.valid_cache_datetime())
+        qset = qset.filter(updated__gte=cls.valid_cache_datetime(target))
 
         if qset.exists():
             return qset.first()
@@ -329,12 +329,15 @@ class Request(HandleRefModel):
         return cls.objects.filter(**filters)
 
     @classmethod
-    def cache_expiry(cls):
+    def cache_expiry(cls, target):
         return cls.config("cache_expiry")
 
     @classmethod
-    def valid_cache_datetime(cls):
-        expiry = cls.cache_expiry()
+    def valid_cache_datetime(cls, target):
+        expiry = cls.cache_expiry(target)
+        if expiry is None: 
+            # no cache expiry, return a date far in the past (100 years)
+            return timezone.now() - timedelta(days=365*100)
         return timezone.now() - timedelta(seconds=expiry)
 
     def process_response(self, response, target, date):

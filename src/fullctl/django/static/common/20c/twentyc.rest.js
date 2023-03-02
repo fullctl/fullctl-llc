@@ -830,6 +830,9 @@ twentyc.rest.Widget = twentyc.cls.extend(
           }
         });
       });
+
+      $(this).trigger("payload:after", [data]);
+
       return data;
 
     },
