@@ -149,15 +149,27 @@ fullctl.widget.SelectionList = $tc.extend(
       this.List(jq);
       this.delete_selected_button = jq_delete_selected_button;
 
-      this.list_head.find('tr').first().prepend('<th class="center"><input type="checkbox" value="all"></th>');
+      this.list_head.find('tr').first().prepend(
+        '<th class="center checkbox-cell">'+
+          '<input type="checkbox" value="all">'+
+        '</th>'
+      );
 
       $(this).on("load:after", () => {
         this.set_delete_selected_button();
         this.unselect_select_all_checkbox();
       });
 
+      // select checkbox by clicking on th
+      this.list_head.find('th.checkbox-cell ').click(function(e) {
+        let checkbox = $(this).find('input[type="checkbox"][value="all"]');
+        if(!$(e.target).is(checkbox)) {
+          checkbox.prop('checked', !checkbox.prop('checked')).change();
+        }
+      })
+
       let selection_list = this;
-      this.list_head.find('th input[type="checkbox"][value="all"]').click(function() {
+      this.list_head.find('th input[type="checkbox"][value="all"]').change(function() {
         if ($(this).prop("checked")) {
           selection_list.select_all();
         } else {
@@ -168,7 +180,10 @@ fullctl.widget.SelectionList = $tc.extend(
     },
 
     build_row : function(data) {
-      return this.template('row').prepend('<td class="select-checkbox center"><input type="checkbox" class="row-chbx" name="list-row"></td>');
+      return this.template('row').prepend(
+        '<td class="select-checkbox checkbox-cell center">'+
+          '<input type="checkbox" class="row-chbx" name="list-row">'+
+        '</td>');
     },
 
     insert : function(data) {
@@ -178,10 +193,19 @@ fullctl.widget.SelectionList = $tc.extend(
 
       this.apply_data(data, row_element);
 
-      if(this.formatters.row)
+      if(this.formatters.row) {
         this.formatters.row(row_element, data)
+      }
 
-      row_element.find('.row-chbx').click(() => {
+      // select checkbox by clicking on td
+      row_element.find('.checkbox-cell').click(function(e) {
+        let checkbox = row_element.find('.row-chbx');
+        if(!$(e.target).is(checkbox)) {
+          checkbox.prop('checked', !checkbox.prop('checked')).change();
+        }
+      });
+
+      row_element.find('.row-chbx').change(() => {
         this.set_delete_selected_button();
         this.unselect_select_all_checkbox();
       });
