@@ -3,6 +3,9 @@ from django.conf import settings
 
 from fullctl.django.context import current_request
 
+from django.contrib.staticfiles import finders
+from django.utils.safestring import mark_safe
+
 register = template.Library()
 
 
@@ -101,3 +104,30 @@ def themed_path(path):
                 return orig_path
 
         return path
+
+
+@register.filter
+def include_css(path):
+    """
+    This will take a path to a css file and include it
+    in the template.
+    """
+
+    # user django finders module to find location of file
+    # in staticfiles dirs
+
+    path = finders.find(path)
+
+    if isinstance(path, list):
+        path = path[0]
+
+    if not path:
+        raise IOError(f"File not found: {path}")
+
+    # read file contents
+
+    with open(path, "r") as f:
+        content = f.read()
+
+    # return content wrapped in style tag
+    return mark_safe(f"<style>{content}</style>")
