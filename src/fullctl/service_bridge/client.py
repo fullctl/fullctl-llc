@@ -8,9 +8,10 @@ import requests.exceptions
 
 from fullctl.service_bridge.data import DataObject
 
-def trim_endpoint(endpoint):
 
+def trim_endpoint(endpoint):
     return endpoint.strip("/")
+
 
 # Location of test data
 TEST_DATA_PATH = "."
@@ -140,7 +141,6 @@ class Bridge:
         return self._data(requests.post(url, **self._requests_kwargs(**kwargs)))
 
     def put(self, endpoint, **kwargs):
-
         url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
         print("URL", self.url, url, endpoint)
         return self._data(requests.put(url, **self._requests_kwargs(**kwargs)))
