@@ -70,7 +70,7 @@ class Bridge:
         return self.Meta.data_object_cls
 
     def __init__(self, host, key, org_slug, **kwargs):
-        self.url = f"{host}/api/"
+        self.url = urllib.parse.urljoin(host, "/api/")
         self.org = org_slug
         self.key = key
         self.host = host
