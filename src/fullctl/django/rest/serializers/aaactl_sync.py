@@ -42,7 +42,9 @@ class OrganizationUser(serializers.Serializer):
         fields = ["user", "orgs", "default_org"]
 
     def save(self):
-        user = get_user_model().objects.get(social_auth__uid=self.validated_data["user"])
+        user = get_user_model().objects.get(
+            social_auth__uid=self.validated_data["user"]
+        )
 
         default_org = self.validated_data["default_org"]
 
