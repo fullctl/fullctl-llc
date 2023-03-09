@@ -10,6 +10,10 @@ from fullctl.service_bridge.data import DataObject
 
 
 def trim_endpoint(endpoint):
+    """
+    urljoin is not guaranteed to strip trailing double slashes on
+    either side of the endpoint, so we do it manually
+    """
     return endpoint.strip("/")
 
 
@@ -137,12 +141,10 @@ class Bridge:
 
     def post(self, endpoint, **kwargs):
         url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
-        print("URL", self.url, url, endpoint)
         return self._data(requests.post(url, **self._requests_kwargs(**kwargs)))
 
     def put(self, endpoint, **kwargs):
         url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
-        print("URL", self.url, url, endpoint)
         return self._data(requests.put(url, **self._requests_kwargs(**kwargs)))
 
     def patch(self, endpoint, **kwargs):
