@@ -1061,14 +1061,16 @@ tbody.list-footer td {
   text-align: center;
 }
 
-div.column-list-3 {
-  column-count: 3;
+div.grid-col-3 {
+  padding: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 0.5rem;
 }
 
 div.inner-list {
   padding: 5px;
 }
-
 
 td.inner-list-container {
   padding-left: 0px;
@@ -1077,9 +1079,7 @@ td.inner-list-container {
   padding-top: 0px;
 }
 
-
 div.inner-list-head {
-  margin-top: -1rem;
   padding: 8px;
 }
 
