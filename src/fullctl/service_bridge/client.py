@@ -181,7 +181,7 @@ class Bridge:
                 raise
 
     def object(self, id, raise_on_notfound=True, join=None):
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}/{id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{id}"
         params = {}
 
         if join:
@@ -195,7 +195,7 @@ class Bridge:
             return None
 
     def objects(self, **kwargs):
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}"
+        url = f"{self.url_prefix}/{self.ref_tag}"
         for k, v in kwargs.items():
             if isinstance(v, list):
                 kwargs[k] = ",".join([str(a) for a in v])
@@ -204,12 +204,12 @@ class Bridge:
             yield self.data_object_cls(ref_tag=self.ref_tag, **row)
 
     def create(self, data):
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}"
+        url = f"{self.url_prefix}/{self.ref_tag}"
         data = self.post(url, json=data)
         return data
 
     def destroy(self, obj):
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         try:
             data = self.delete(url)
             return data
@@ -217,12 +217,12 @@ class Bridge:
             return {}
 
     def update(self, obj, data):
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         data = self.put(url, json=data)
         return data
 
     def partial_update(self, obj, data):
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         data = self.patch(url, json=data)
         return data
 
@@ -236,7 +236,7 @@ class Bridge:
         if not diff:
             return
 
-        url = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         data = self.patch(url, data=diff)
 
         return data
@@ -257,7 +257,7 @@ class Bridge:
         return None
 
     def api_url(self, id):
-        endpoint = f"{trim_endpoint(self.url_prefix)}/{self.ref_tag}/{id}"
+        endpoint = f"{self.url_prefix}/{self.ref_tag}/{id}"
         url = urljoin(self.url, endpoint)
         return url
 
