@@ -17,16 +17,23 @@ def trim_endpoint(endpoint):
     return endpoint.strip("/")
 
 
-def urljoin(left, right):
+def urljoin(left, *args):
     """
     Simplified urljoin that gets of extra / at the edges
     of parts
     """
 
-    if not left:
-        return f"/{trim_endpoint(right)}/"
+    right = []
 
-    return f"{left.rstrip('/')}/{trim_endpoint(right)}/"
+    for parts in args:
+        right.extend([trim_endpoint(part) for part in parts.split("/")])
+
+    right = "/".join(right)
+
+    if not left:
+        return f"/{right}/"
+
+    return f"{left.rstrip('/')}/{right}/"
 
 
 # Location of test data
