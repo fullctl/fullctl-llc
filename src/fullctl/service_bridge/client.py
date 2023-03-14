@@ -118,7 +118,9 @@ class Bridge:
             return json.load(fh)[self.results_key]
 
     def get(self, endpoint, **kwargs):
-        url = f"{self.url}/{endpoint}/"
+        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+
+        print("GET", url)
 
         # if the url starts with a test:// protocol, attempt
         # to load test data from path instead.
@@ -238,7 +240,9 @@ class Bridge:
         return None
 
     def api_url(self, id):
-        return f"{self.url}/{self.url_prefix}{self.ref_tag}/{id}"
+        endpoint = f"{self.url_prefix}{self.ref_tag}/{id}"
+        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+        return url
 
 
 class AaaCtl(Bridge):
