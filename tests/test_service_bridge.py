@@ -1,6 +1,6 @@
 import pytest
 
-from fullctl.service_bridge.client import urljoin
+from fullctl.service_bridge.client import url_join
 
 
 @pytest.mark.parametrize(
@@ -31,4 +31,4 @@ def test_urljoin(a, b, c, expected):
     """
     Tests that calling urljoin with  a,b and c will match the expected result
     """
-    assert urljoin(a, b, c) == expected
+    assert url_join(a, b, c) == expected

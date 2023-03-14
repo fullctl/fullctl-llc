@@ -5,7 +5,7 @@ try:
 except (ImportError, AttributeError):
     DEFAULT_SERVICE_KEY = ""
 
-from fullctl.service_bridge.client import Bridge, DataObject, urljoin
+from fullctl.service_bridge.client import Bridge, DataObject, url_join
 
 CACHE = {}
 
@@ -34,7 +34,7 @@ class Aaactl(Bridge):
         kwargs.setdefault("cache", CACHE)
 
         super().__init__(settings.AAACTL_URL, key, org, **kwargs)
-        self.url = urljoin(self.url, "service-bridge/")
+        self.url = url_join(self.url, "service-bridge/")
 
 
 class ServiceApplicationObject(AaactlEntity):

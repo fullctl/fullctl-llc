@@ -17,7 +17,7 @@ def trim_endpoint(endpoint):
     return endpoint.strip("/")
 
 
-def urljoin(left, *args):
+def url_join(left, *args):
     """
     Simplified urljoin that gets of extra / at the edges
     of parts
@@ -93,7 +93,7 @@ class Bridge:
         return self.Meta.data_object_cls
 
     def __init__(self, host, key, org_slug, **kwargs):
-        self.url = urljoin(host, "/api/")
+        self.url = url_join(host, "/api/")
         self.org = org_slug
         self.key = key
         self.host = host
@@ -137,7 +137,7 @@ class Bridge:
             return json.load(fh)[self.results_key]
 
     def get(self, endpoint, **kwargs):
-        url = urljoin(self.url, endpoint)
+        url = url_join(self.url, endpoint)
 
         # if the url starts with a test:// protocol, attempt
         # to load test data from path instead.
@@ -159,19 +159,19 @@ class Bridge:
         return data
 
     def post(self, endpoint, **kwargs):
-        url = urljoin(self.url, endpoint)
+        url = url_join(self.url, endpoint)
         return self._data(requests.post(url, **self._requests_kwargs(**kwargs)))
 
     def put(self, endpoint, **kwargs):
-        url = urljoin(self.url, endpoint)
+        url = url_join(self.url, endpoint)
         return self._data(requests.put(url, **self._requests_kwargs(**kwargs)))
 
     def patch(self, endpoint, **kwargs):
-        url = urljoin(self.url, endpoint)
+        url = url_join(self.url, endpoint)
         return self._data(requests.patch(url, **self._requests_kwargs(**kwargs)))
 
     def delete(self, endpoint, **kwargs):
-        url = urljoin(self.url, endpoint)
+        url = url_join(self.url, endpoint)
         try:
             return self._data(requests.delete(url, **self._requests_kwargs(**kwargs)))
         except ServiceBridgeError as exc:
@@ -258,7 +258,7 @@ class Bridge:
 
     def api_url(self, id):
         endpoint = f"{self.url_prefix}/{self.ref_tag}/{id}"
-        url = urljoin(self.url, endpoint)
+        url = url_join(self.url, endpoint)
         return url
 
 
