@@ -4,6 +4,12 @@ Task qualifiers to facilitate selective task processing
 
 from django.conf import settings
 
+__all__ = [
+    "Base",
+    "Setting",
+    "SettingUnset",
+    "ConcurrencyLimit",
+]
 
 class Base:
 
@@ -68,3 +74,22 @@ class SettingUnset(Base):
         except AttributeError:
             return True
         return False
+
+
+class ConcurrencyLimit(Base):
+
+    """
+    Limits how many instance of the task can be worked on at
+    the same time
+    """
+
+    def __init__(self, limit):
+        self.limit = limit
+
+    def __str__(self):
+        return f"{self.__class__.__name__} {self.limit}"
+
+    def check(self, task):
+        return task.__class__.objects.filter(
+            status="pending", queue_id__isnull=False
+        ).count() < self.limit

@@ -30,6 +30,10 @@ def fetch_task(**filters):
 
 
 def fetch_tasks(limit=1, **filters):
+    """
+    fetches pending tasks ready to be worked on
+    """
+
     tasks = []
 
     # filter tasks waiting for execution
