@@ -26,7 +26,6 @@ class Base:
 
 
 class Dynamic(Base):
-    
     def set(self, *args, **kwargs):
         raise NotImplementedError()
 
