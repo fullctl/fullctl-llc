@@ -513,13 +513,15 @@ fullctl.application.Header = $tc.extend(
     wire_app_switcher : function() {
       this.widget("app_switcher", ($e) => {
         var others = $e.app_switcher.find('.others')
-        var selected = $e.app_switcher.find('.selected')
+        const selected = $e.app_switcher.find('.selected')
         selected.click(() => {
           others.show();
           selected.addClass('app_bg muted');
         });
         $(document.body).click(function(e) {
-          if( !$(e.target).parent().hasClass('selected') ) {
+          if (
+            !( $(e.target).is(selected) || $(e.target).parent().hasClass('selected') )
+          ) {
             others.hide();
             selected.removeClass('app_bg muted');
           }
