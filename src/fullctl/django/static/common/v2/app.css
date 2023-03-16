@@ -97,6 +97,11 @@ svg {
   width: 100%;
 }
 
+:root[data-theme="light"] img.img-dark,
+:root:not([data-theme="light"]) img.img-light {
+  display: none !important;
+}
+
 main {
   flex: 1;
 }
