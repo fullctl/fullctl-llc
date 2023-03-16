@@ -8,10 +8,10 @@ from datetime import timedelta
 
 import confu.schema
 import requests
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.conf import settings
 
 from fullctl.django.models.abstract import HandleRefModel
 
@@ -20,6 +20,7 @@ __all__ = ["Request", "Response", "Data", "NoMetaClassDefined"]
 
 class NoMetaClassDefined(ValueError):
     pass
+
 
 class DataMixin:
     def clean_data(self):
@@ -353,14 +354,13 @@ class Request(HandleRefModel):
 
         return getattr(settings, setting_name)
 
-
     @classmethod
     def cache_expiry(cls, target):
         # try to get the expiry from the settings
         try:
             expiry = cls.cache_expiry_from_settings(target)
         except AttributeError:
-            expiry = cls.config('cache_expiry')
+            expiry = cls.config("cache_expiry")
         return expiry
 
     @classmethod
