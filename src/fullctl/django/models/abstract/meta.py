@@ -47,6 +47,30 @@ class DataMixin:
                 raise ValidationError(f"Invalid meta-data in {name}: {exc}")
 
 
+class DataMixin:
+    def clean_data(self):
+        """
+        If the model has a DataSchema confu schema
+        defined, the schema will be used to validate the data
+        in self.data
+        """
+
+        if not hasattr(self, "DataSchema"):
+            return
+
+        for name in dir(self.DataSchema):
+            if name.startswith("_"):
+                continue
+
+            data = getattr(self, name)
+            schema = getattr(self.DataSchema, name)
+
+            try:
+                confu.schema.validate(schema(), data, raise_errors=True)
+            except confu.schema.ValidationError as exc:
+                raise ValidationError(f"Invalid meta-data in {name}: {exc}")
+
+
 class Data(HandleRefModel):
 
     """

@@ -1,22 +1,27 @@
-0.1.0:
+Unreleased:
+  added: []
+  fixed: []
+  changed: []
+  deprecated: []
+  removed: []
+  security: []
+1.0.0:
   added:
-  - initial release
-0.1.1:
-  fixed:
-  - import error in task_interface.py
-0.2.0:
-  fixed:
-  - import errors from splitting out fullctl core
+  - all 1.0 changes!
+  - pdbctl service bridge
+  - pdbctl integration
+  - support for python 3.11
+  removed:
+  - support for python 3.6
 0.3.0:
   added:
   - asn autocomplete lookup from peering db data
-Unreleased:
+0.2.0:
+  fixed:
+  - import errors from splitting out fullctl core
+0.1.1:
+  fixed:
+  - import error in task_interface.py
+0.1.0:
   added:
-    - pdbctl service bridge
-    - pdbctl integration
-  changed: []
-  deprecated: []
-  fixed: []
-  removed:
-    - support for python 3.6
-  security: []
+  - initial release

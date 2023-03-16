@@ -1077,6 +1077,10 @@ div.grid-col-3 {
   row-gap: 0.5rem;
 }
 
+div.column-list-3 {
+  column-count: 3;
+}
+
 div.inner-list {
   padding: 5px;
 }
@@ -1088,7 +1092,9 @@ td.inner-list-container {
   padding-top: 0px;
 }
 
+
 div.inner-list-head {
+  margin-top: -1rem;
   padding: 8px;
 }
 

@@ -1,0 +1,55 @@
+ARG poetry_pin="==1.2.2"
+ARG uid=6300
+ARG user=fullctl
+ARG python_ver=3.9
+
+ARG virtual_env=/venv
+ARG install_to=/srv/service
+
+ARG build_deps=" \
+    gcc \
+    git \
+    "
+ARG run_deps=" \
+    libpq \
+    "
+
+
+
+
+
+
+
+
+
+FROM python:${python_ver}-slim as base
+
+ARG virtual_env
+
+# env to pass to sub images
+ENV PYTHONUNBUFFERED=1
+ENV VIRTUAL_ENV=$virtual_env
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# build container
+FROM base as builder
+
+ARG build_deps
+ARG poetry_pin
+
+RUN apt-get update && apt-get upgrade
+
+# Use Pip to install Poetry
+RUN python3 -m pip install --upgrade pip && pip install "poetry$poetry_pin"
+
+# Create a VENV
+RUN python3 -m venv "$VIRTUAL_ENV"
+
+WORKDIR /build
+
+# poetry install
+COPY pyproject.toml poetry.lock ./
+
+# Need to upgrade pip and wheel within Poetry for all its installs
+RUN poetry run pip install --upgrade pip wheel
+RUN poetry install --no-root
