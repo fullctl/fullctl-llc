@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('django_fullctl', '0029_response_content'),
+        ("django_fullctl", "0029_response_content"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='response',
-            name='content',
-            field=models.TextField(blank=True, help_text='raw content of response - may not be set if data and content are equal.', null=True),
+            model_name="response",
+            name="content",
+            field=models.TextField(
+                blank=True,
+                help_text="raw content of response - may not be set if data and content are equal.",
+                null=True,
+            ),
         ),
     ]

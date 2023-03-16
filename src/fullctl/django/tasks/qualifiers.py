@@ -11,6 +11,7 @@ __all__ = [
     "ConcurrencyLimit",
 ]
 
+
 class Base:
 
     """
@@ -90,6 +91,9 @@ class ConcurrencyLimit(Base):
         return f"{self.__class__.__name__} {self.limit}"
 
     def check(self, task):
-        return task.__class__.objects.filter(
-            status="pending", queue_id__isnull=False
-        ).count() < self.limit
+        return (
+            task.__class__.objects.filter(
+                status="pending", queue_id__isnull=False
+            ).count()
+            < self.limit
+        )

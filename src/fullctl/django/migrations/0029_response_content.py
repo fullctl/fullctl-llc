@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('django_fullctl', '0028_request_identifier'),
+        ("django_fullctl", "0028_request_identifier"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='response',
-            name='content',
-            field=models.TextField(default=''),
+            model_name="response",
+            name="content",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
     ]

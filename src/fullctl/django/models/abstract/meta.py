@@ -13,38 +13,11 @@ from django.utils import timezone
 
 from fullctl.django.models.abstract import HandleRefModel
 
-__all__ = [
-    "Request",
-    "Response",
-    "Data",
-    "NoMetaClassDefined"
-]
+__all__ = ["Request", "Response", "Data", "NoMetaClassDefined"]
+
 
 class NoMetaClassDefined(ValueError):
     pass
-
-class DataMixin:
-    def clean_data(self):
-        """
-        If the model has a DataSchema confu schema
-        defined, the schema will be used to validate the data
-        in self.data
-        """
-
-        if not hasattr(self, "DataSchema"):
-            return
-
-        for name in dir(self.DataSchema):
-            if name.startswith("_"):
-                continue
-
-            data = getattr(self, name)
-            schema = getattr(self.DataSchema, name)
-
-            try:
-                confu.schema.validate(schema(), data, raise_errors=True)
-            except confu.schema.ValidationError as exc:
-                raise ValidationError(f"Invalid meta-data in {name}: {exc}")
 
 
 class DataMixin:
@@ -257,7 +230,9 @@ class Request(HandleRefModel):
         return requests.get(url)
 
     @classmethod
-    def process(cls, target, url, http_status, getdata, payload=None, cached=False, content=None):
+    def process(
+        cls, target, url, http_status, getdata, payload=None, cached=False, content=None
+    ):
         """
         processes a response and return the `Request` object created for it
         """
@@ -328,7 +303,7 @@ class Request(HandleRefModel):
                 req.response.write_meta_data(req)
             except NoMetaClassDefined:
                 pass
-            
+
             return req
 
         return req
@@ -372,9 +347,9 @@ class Request(HandleRefModel):
     @classmethod
     def valid_cache_datetime(cls, target):
         expiry = cls.cache_expiry(target)
-        if expiry is None: 
+        if expiry is None:
             # no cache expiry, return a date far in the past (100 years)
-            return timezone.now() - timedelta(days=365*100)
+            return timezone.now() - timedelta(days=365 * 100)
         return timezone.now() - timedelta(seconds=expiry)
 
     def process_response(self, response, target, date):
@@ -392,7 +367,11 @@ class Response(HandleRefModel):
 
     source = models.CharField(max_length=255)
     data = models.JSONField(null=True)
-    content = models.TextField(help_text="raw content of response - may not be set if data and content are equal.", null=True, blank=True)
+    content = models.TextField(
+        help_text="raw content of response - may not be set if data and content are equal.",
+        null=True,
+        blank=True,
+    )
 
     class Config:
         meta_data_cls = None
@@ -466,17 +445,20 @@ class Response(HandleRefModel):
         meta_data.save()
 
     def add_attachment(self, file_name, file_data, content_type):
+        attachment_cls = self.config("attachment_cls")
 
-        attachment_cls = self.config('attachment_cls')
+        return attachment_cls.objects.create(
+            response=self,
+            file_name=file_name,
+            file_data=file_data,
+            content_type=content_type,
+        )
 
-        return attachment_cls.objects.create(response=self, file_name=file_name, file_data=file_data, content_type=content_type)
-
-        
 
 class Attachment(HandleRefModel):
     """
     File attachmnent for meta data response
-    
+
     Needs to implement a `response` foreign key relationship to a `Response` class
     """
 

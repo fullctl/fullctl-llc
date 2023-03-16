@@ -3,16 +3,19 @@ Implements request and response models for universal non-specific
 requests and responses using the meta-data request caching system
 """
 
-from django.utils.translation import gettext_lazy as _
 from django.db import models
-from fullctl.django.models.abstract.meta import Request as BaseRequest, Response as BaseResponse, Attachment as BaseAttachment
+from django.utils.translation import gettext_lazy as _
 
+from fullctl.django.models.abstract.meta import Attachment as BaseAttachment
+from fullctl.django.models.abstract.meta import Request as BaseRequest
+from fullctl.django.models.abstract.meta import Response as BaseResponse
 
 __all__ = [
     "Request",
     "Response",
     "Attachment",
 ]
+
 
 class Request(BaseRequest):
     """
@@ -28,11 +31,12 @@ class Request(BaseRequest):
 
     class HandleRef:
         tag = "request"
-    
+
     class Config:
         source_name = "generic"
         cache_expiry = 86400
         target_field = "identifier"
+
 
 class Response(BaseResponse):
     """
@@ -57,13 +61,16 @@ class Response(BaseResponse):
         meta_data_cls = None
         attachment_cls = None
 
+
 class Attachment(BaseAttachment):
 
     """
     file attachment model
     """
 
-    response = models.ForeignKey(Response, on_delete=models.CASCADE, related_name="attachments")
+    response = models.ForeignKey(
+        Response, on_delete=models.CASCADE, related_name="attachments"
+    )
 
     class Meta:
         db_table = "meta_attachment"
@@ -72,6 +79,6 @@ class Attachment(BaseAttachment):
 
     class HandleRef:
         tag = "attachment"
-    
-    
+
+
 Response.Config.attachment_cls = Attachment
