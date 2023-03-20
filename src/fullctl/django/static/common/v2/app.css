@@ -127,6 +127,14 @@ main {
   --bs-btn-padding-y: var(--size-100);
 }
 
+.btn-expand {
+  border-radius: 100vmax;
+  display: inline-flex;
+  border: 1px solid;
+  padding: var(--size-100);
+  border-color: var(--theme-secondary-border-color);
+}
+
 a.btn:hover {
   text-decoration: none;
 }
