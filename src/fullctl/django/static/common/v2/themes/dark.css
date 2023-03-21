@@ -76,7 +76,7 @@
   /* need to manually find this */
   --clr-filter-black-to-foreground: invert(7%) sepia(12%) saturate(1104%) hue-rotate(189deg) brightness(99%) contrast(93%);
 
-  --footer-clr: var(--clr-primary-300);
+  --footer-clr: var(--clr-primary-700);
   --th-clr: var(--clr-primary-500);
   --th-bg: var(--clr-bg-200);
   --card-header-bg: var(--clr-bg-300);
@@ -100,6 +100,10 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--background);
 }
 
 .btn {
@@ -360,6 +364,10 @@ a.prefixctl,
   background-color: var(--list-table-hover);
 }
 
+.list-table:not(.no-hover) tr:hover input[type="checkbox"] {
+  accent-color: var(--list-table-hover);
+}
+
 .list-table tr:hover .btn {
  border-color: var(--theme-secondary-border-color);
 }
@@ -430,6 +438,10 @@ div.menu div.section.tabs h5 {
 .table th {
   background-color: var(--th-bg);
   color: var(--th-clr);
+}
+
+.table th input[type="checkbox"] {
+  accent-color: var(--th-bg);
 }
 
 .table .table {

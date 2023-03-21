@@ -97,6 +97,11 @@ svg {
   width: 100%;
 }
 
+:root[data-theme="light"] img.img-dark,
+:root:not([data-theme="light"]) img.img-light {
+  display: none !important;
+}
+
 main {
   flex: 1;
 }
@@ -1395,16 +1400,21 @@ span.tag {
  */
 
 .btn-oauth {
-  width: 210px;
+  min-width: 240px;
+}
+
+.btn-oauth img {
+  height: 40px;
+  display: inline-block;
 }
 
 img.login-twentyc,
 img.login-peeringdb {
-  height: 40px;
+  max-height: 40px;
 }
 
 img.login-google {
-  width: 40px;
+  max-width: 40px;
 }
 
 

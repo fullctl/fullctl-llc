@@ -1,7 +1,9 @@
+ARG base_repo=python
+ARG base_tag=3.11-alpine
 
 ARG virtual_env=/venv
 ARG install_to=/srv/service
-ARG poetry_pin="==1.2.2"
+ARG poetry_pin="==1.4.1"
 
 ARG build_deps=" \
     build-base \
@@ -22,7 +24,7 @@ ARG run_deps=" \
     postgresql-libs \
     "
 
-FROM python:3.9-alpine as base
+FROM ${base_repo}:${base_tag} as base
 
 ARG virtual_env
 
