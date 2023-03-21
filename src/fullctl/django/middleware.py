@@ -1,9 +1,10 @@
 from django.http import Http404
 
+from django.contrib.auth import get_user_model
+
 from fullctl.django.auth import permissions
 from fullctl.django.context import current_request
 from fullctl.django.models import Organization
-
 
 class CurrentRequestContext:
 
@@ -40,7 +41,28 @@ class RequestAugmentation:
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         kwargs = request.resolver_match.kwargs
+
         request.perms = permissions(request.user)
+        request.perms.load()
+
+        if "impersonating" in request.session:
+
+            # impersonation is enabled, set the impersonated user
+            # as the current user on the request
+
+            impersonate_user = get_user_model().objects.get(
+                id=request.session["impersonating"]
+            )
+
+            request.impersonating = {"superuser": request.user, "user": impersonate_user}
+            request.user = impersonate_user
+
+            # fetch permissions for the impersonated user
+
+            request.perms = permissions(request.user)
+            request.perms.load()
+
+
         if (
             not hasattr(request.user, "org_set") or not request.user.org_set.exists()
         ) and "org_tag" not in kwargs:

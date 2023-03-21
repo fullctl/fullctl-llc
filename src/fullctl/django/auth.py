@@ -76,19 +76,42 @@ class RemotePermissions(django_grainy.remote.Permissions):
 
     @transaction.atomic
     def handle_impersonation(self, response):
+
+        """
+        Starts and stops user impersonation based on the 
+        headers sent with the response from aaactl
+        """
+
+        # aaactl will send the X-User header if user personation
+        # is currently active - it will hold the aaactl-side ID
+        # of the user.
+
         user_id = response.headers.get("X-User")
 
-        if not user_id:
-            return
-
         with current_request() as request:
+
+            if not user_id:
+
+                # if no X-User header is present, impersonation is stopped
+
+                if "impersonating" in request.session and request.session["impersonating"] != request.user.id:
+                    del request.session["impersonating"]
+                return
+
+            # if the X-User header is present, impersonation is started
+            # but only if the requesting user is a superuser.
+
             if not request.user.is_superuser:
                 return
 
+            # sometimes the imperesonated user is not in the local database
+            # yet - in this case, we need to fetch it from aaactl
+
             user = require_user(user_id)
 
-            request.impersonating = {"superuser": request.user, "user": user}
-            request.user = user
+            # start impersonation by setting the session variable
+            
+            request.session["impersonating"] = user.id
 
     def fetch(self, url, cache_key, **params):
         try:
