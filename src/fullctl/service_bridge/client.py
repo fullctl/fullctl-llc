@@ -17,6 +17,25 @@ def trim_endpoint(endpoint):
     return endpoint.strip("/")
 
 
+def url_join(left, *args):
+    """
+    Simplified urljoin that gets of extra / at the edges
+    of parts
+    """
+
+    right = []
+
+    for parts in args:
+        right.extend([trim_endpoint(part) for part in parts.split("/") if part])
+
+    right = "/".join(right)
+
+    if not left:
+        return f"/{right}/"
+
+    return f"{left.rstrip('/')}/{right}/"
+
+
 # Location of test data
 TEST_DATA_PATH = "."
 
@@ -54,7 +73,7 @@ class Bridge:
     cache_duration = 0
 
     results_key = "data"
-    url_prefix = "data/"
+    url_prefix = "data"
 
     class Meta:
         service = "base"
@@ -74,7 +93,7 @@ class Bridge:
         return self.Meta.data_object_cls
 
     def __init__(self, host, key, org_slug, **kwargs):
-        self.url = urllib.parse.urljoin(host, "/api/")
+        self.url = url_join(host, "/api/")
         self.org = org_slug
         self.key = key
         self.host = host
@@ -118,9 +137,7 @@ class Bridge:
             return json.load(fh)[self.results_key]
 
     def get(self, endpoint, **kwargs):
-        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
-
-        print("GET", url)
+        url = url_join(self.url, endpoint)
 
         # if the url starts with a test:// protocol, attempt
         # to load test data from path instead.
@@ -142,19 +159,19 @@ class Bridge:
         return data
 
     def post(self, endpoint, **kwargs):
-        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+        url = url_join(self.url, endpoint)
         return self._data(requests.post(url, **self._requests_kwargs(**kwargs)))
 
     def put(self, endpoint, **kwargs):
-        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+        url = url_join(self.url, endpoint)
         return self._data(requests.put(url, **self._requests_kwargs(**kwargs)))
 
     def patch(self, endpoint, **kwargs):
-        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+        url = url_join(self.url, endpoint)
         return self._data(requests.patch(url, **self._requests_kwargs(**kwargs)))
 
     def delete(self, endpoint, **kwargs):
-        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+        url = url_join(self.url, endpoint)
         try:
             return self._data(requests.delete(url, **self._requests_kwargs(**kwargs)))
         except ServiceBridgeError as exc:
@@ -164,7 +181,7 @@ class Bridge:
                 raise
 
     def object(self, id, raise_on_notfound=True, join=None):
-        url = f"{self.url_prefix}{self.ref_tag}/{id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{id}"
         params = {}
 
         if join:
@@ -178,7 +195,7 @@ class Bridge:
             return None
 
     def objects(self, **kwargs):
-        url = f"{self.url_prefix}{self.ref_tag}"
+        url = f"{self.url_prefix}/{self.ref_tag}"
         for k, v in kwargs.items():
             if isinstance(v, list):
                 kwargs[k] = ",".join([str(a) for a in v])
@@ -187,12 +204,12 @@ class Bridge:
             yield self.data_object_cls(ref_tag=self.ref_tag, **row)
 
     def create(self, data):
-        url = f"{self.url_prefix}{self.ref_tag}"
+        url = f"{self.url_prefix}/{self.ref_tag}"
         data = self.post(url, json=data)
         return data
 
     def destroy(self, obj):
-        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         try:
             data = self.delete(url)
             return data
@@ -200,12 +217,12 @@ class Bridge:
             return {}
 
     def update(self, obj, data):
-        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         data = self.put(url, json=data)
         return data
 
     def partial_update(self, obj, data):
-        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         data = self.patch(url, json=data)
         return data
 
@@ -219,7 +236,7 @@ class Bridge:
         if not diff:
             return
 
-        url = f"{self.url_prefix}{self.ref_tag}/{obj.id}"
+        url = f"{self.url_prefix}/{self.ref_tag}/{obj.id}"
         data = self.patch(url, data=diff)
 
         return data
@@ -240,8 +257,8 @@ class Bridge:
         return None
 
     def api_url(self, id):
-        endpoint = f"{self.url_prefix}{self.ref_tag}/{id}"
-        url = urllib.parse.urljoin(self.url, f"{trim_endpoint(endpoint)}/")
+        endpoint = f"{self.url_prefix}/{self.ref_tag}/{id}"
+        url = url_join(self.url, endpoint)
         return url
 
 

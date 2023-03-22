@@ -97,6 +97,11 @@ svg {
   width: 100%;
 }
 
+:root[data-theme="light"] img.img-dark,
+:root:not([data-theme="light"]) img.img-light {
+  display: none !important;
+}
+
 main {
   flex: 1;
 }
@@ -135,8 +140,6 @@ a.btn:hover {
   display: inline-flex;
 }
 
-
-
 .templates,
 .hidden,
 div[data-element="templates"],
@@ -165,6 +168,17 @@ button:focus {
   bottom: 0px;
   right: 0px;
   z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.loading-shim:after {
+  content: '';
+  display: block;
+  background: url("imgs/loading-shim.png") center/contain no-repeat;
+  height: 84%;
+  width: 100%;
+  max-height: 84px;
 }
 
 .nowrap {
@@ -1372,16 +1386,21 @@ span.tag {
  */
 
 .btn-oauth {
-  width: 210px;
+  min-width: 240px;
+}
+
+.btn-oauth img {
+  height: 40px;
+  display: inline-block;
 }
 
 img.login-twentyc,
 img.login-peeringdb {
-  height: 40px;
+  max-height: 40px;
 }
 
 img.login-google {
-  width: 40px;
+  max-width: 40px;
 }
 
 

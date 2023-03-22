@@ -1,5 +1,3 @@
-from urllib.parse import urljoin
-
 try:
     from django.conf import settings
 
@@ -7,7 +5,7 @@ try:
 except ImportError:
     DEFAULT_SERVICE_KEY = ""
 
-from fullctl.service_bridge.client import Bridge, DataObject
+from fullctl.service_bridge.client import Bridge, DataObject, url_join
 
 CACHE = {}
 
@@ -36,7 +34,7 @@ class Prefixctl(Bridge):
         kwargs.setdefault("cache", CACHE)
 
         super().__init__(settings.PREFIXCTL_URL, key, org, **kwargs)
-        self.url = urljoin(self.url, "service-bridge/")
+        self.url = url_join(self.url, "service-bridge/")
 
 
 class PrefixSetObject(PrefixctlEntity):
