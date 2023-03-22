@@ -76,9 +76,8 @@ class RemotePermissions(django_grainy.remote.Permissions):
 
     @transaction.atomic
     def handle_impersonation(self, response):
-
         """
-        Starts and stops user impersonation based on the 
+        Starts and stops user impersonation based on the
         headers sent with the response from aaactl
         """
 
@@ -89,12 +88,13 @@ class RemotePermissions(django_grainy.remote.Permissions):
         user_id = response.headers.get("X-User")
 
         with current_request() as request:
-
             if not user_id:
-
                 # if no X-User header is present, impersonation is stopped
 
-                if "impersonating" in request.session and request.session["impersonating"] != request.user.id:
+                if (
+                    "impersonating" in request.session
+                    and request.session["impersonating"] != request.user.id
+                ):
                     del request.session["impersonating"]
                 return
 
@@ -110,7 +110,7 @@ class RemotePermissions(django_grainy.remote.Permissions):
             user = require_user(user_id)
 
             # start impersonation by setting the session variable
-            
+
             request.session["impersonating"] = user.id
 
     def fetch(self, url, cache_key, **params):
