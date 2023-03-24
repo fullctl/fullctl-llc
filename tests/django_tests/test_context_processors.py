@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import HttpRequest
 
 from fullctl.django import context_processors
@@ -103,6 +105,7 @@ def test_conf(db, dj_account_objects, settings):
         "post_feature_request_url": "test://new-feature",
         "docs_url": "test://docs",
         "legal_url": "test://legal",
+        "current_year": datetime.now().year,
     }
 
     conf = context_processors.conf(request)
