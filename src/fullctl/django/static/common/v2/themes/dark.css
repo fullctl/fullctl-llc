@@ -180,6 +180,10 @@ div.modal .list-group-item {
   color: var(--foreground);
 }
 
+.no-color {
+  color: inherit !important;
+}
+
 /**
  * Bootstrap overrides
  */
@@ -218,6 +222,10 @@ header .nav a {
 
 header .icon {
   background-color: var(--theme-toolbar-color);
+}
+
+header .dropdown-item.selected .icon-org {
+  background-color: var(--clr-accent-400);
 }
 
 div.header .app-switcher .selected.prefixctl.expanded {

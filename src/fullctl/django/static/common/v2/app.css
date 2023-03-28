@@ -363,6 +363,10 @@ div.header-middle {
   border-left: solid 1px;
 }
 
+header .header-right {
+  padding-right: 0;
+}
+
 div.header select {
   border: none;
   border-radius: 15px;
@@ -419,13 +423,31 @@ div.header .app-switcher .others a:hover .icon {
   visibility: visible;
 }
 
-div.dropdown-meny.show,
+div.dropdown-menu.show,
 span.dropdown.show {
   display: inline-block !important;
 }
 
 div.header-control {
   border-left: solid 1px;
+}
+
+header .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+header .dropdown-item [data-field="name"],
+header .dropdown-item .label {
+  margin: 0 0.25rem;
+}
+
+header .dropdown-item .manage-org {
+  margin-left: auto;
+}
+
+header h4 {
+  margin-bottom: 0;
 }
 
 /**

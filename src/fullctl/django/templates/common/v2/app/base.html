@@ -161,14 +161,20 @@ fullctl.permissions = {{ permissions|safe }}
           {% if permissions.update_instance and oauth_manages_org %}
           <a class="dropdown-item" href="{{ account_service.urls.manage_org }}">
             <span class="icon icon-settings"></span>
-            {% trans "Manage Organization" %}
+            <span class="label">
+              {% trans "Manage Organization" %}
+            </span>
           </a>
           {% endif %}
 
           {% if oauth_manages_org %}
 
           <a class="dropdown-item" href="{{ account_service.urls.create_org }}">
-            <span class="icon icon-add"></span>{% trans "Create Organization" %}</a>
+            <span class="icon icon-add"></span>
+            <span class="label">
+              {% trans "Create Organization" %}
+            </span>
+          </a>
           {% endif %}
         </div>
       </div>
@@ -193,11 +199,24 @@ fullctl.permissions = {{ permissions|safe }}
         </div>
 
         <div class="dropdown-menu dropdown-menu-right px-2" aria-labelledby="user-menu">
-          <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
-          <span class="email">{{ request.user.email }}</span>
+          <div class="dropdown-item no-color">
+            <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+          </div>
+          <div class="dropdown-item no-color">
+            <span class="email">{{ request.user.email }}</span>
+          </div>
           <div class="horizontal-line"></div>
+          <a class="dropdown-item" href="{{ account_service.urls.manage_account|safe }}">
+            <span class="icon icon-settings"></span>
+            <span class="label">
+              {% trans "Manage Profile" %}
+            </span>
+          </a>
           <a class="dropdown-item" href="/logout/">
-            <span class="icon icon-logout"></span>{% trans "Logout" %}
+            <span class="icon icon-logout"></span>
+            <span class="label">
+              {% trans "Logout" %}
+            </span>
           </a>
         </div>
       </div>

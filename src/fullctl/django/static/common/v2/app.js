@@ -517,7 +517,7 @@ fullctl.application.Header = $tc.extend(
           if(org == data.slug) {
             row.addClass('selected')
             row.find('.manage').click(() => {
-              new fullctl.application.Orgctl.PermissionsModal();
+              window.location = fullctl.aaactl_urls.manage_org;
             });
           } else {
             row.find('.manage').hide();
