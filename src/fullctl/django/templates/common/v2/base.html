@@ -16,6 +16,7 @@
     <script>
     $(document).ready(function() {
       twentyc.rest.config.csrf = "{{ csrf_token }}";
+      fullctl.static_path = "{% static "" %}";
 
       grainy.setup({
       {% for namespace, perm in request.perms.pset.permissions.items %}

@@ -60,6 +60,8 @@
   --bs-body-color-rgb: var(--foreground);
   --bs-body-bg: var(--background);
 
+  --source-of-truth-icon: url("../logos/ctl-mark-dark.png");
+
   color-scheme: dark;
 }
 
@@ -89,6 +91,8 @@
   --codeblock-even-bg: var(--clr-bg-200);
   --modal-bg: var(--clr-bg-200);
   --modal-clr: var(--clr-primary-800);
+
+  --source-of-truth-icon: url("../logos/ctl-mark-light.png");
 
   color-scheme: light;
 }

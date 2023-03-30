@@ -81,3 +81,15 @@ class InternetExchangeMember(Ixctl):
         router_ip = ipaddress.ip_interface(router_ip).ip
 
         self.put(f"data/member/sync/{asn}/{member_ip}/{router_ip}/md5", data=data)
+
+
+class RouteserverObject(IxctlEntity):
+    description = "Ixctl Route Server"
+    relationships = {
+        "ix": {"bridge": InternetExchange, "filter": ("ix", "ix_id")},
+    }
+
+class Routeserver(Ixctl):
+    class Meta(Ixctl.Meta):
+        ref_tag = "routeserver"
+        data_object_cls = RouteserverObject

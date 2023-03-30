@@ -16,9 +16,22 @@ fullctl.formatters = {}
 fullctl.modals = {}
 fullctl.util = {}
 fullctl.help_box = {}
+fullctl.static_path = "/s/0.0.0-dev/"
+
 
 fullctl.util.slugify = (txt) => {
   return txt.toLowerCase().replace(/\s/g, "-").replace(/_/g, "-").replace(/[^a-zA-Z0-9-]/g,"").replace(/-+/g, '-');
+};
+
+/**
+ * Works similarly to the django `static` template tag and will
+ * return the full path to a static file
+ * @param {String} path path to file
+ * @returns {String} full path to file
+ */
+
+fullctl.util.static = (path) => {
+  return fullctl.static_path+path;
 };
 
 fullctl.formatters.pretty_speed = (value) => {
@@ -51,6 +64,23 @@ fullctl.formatters.meta_data = (value) => {
   return node;
 }
 
+/**
+ * Formats `True` and `False` as checkmark and cross
+ * @method pretty_bool
+ * @param {String} value value of cell
+ * @param {Object} data object literal of row data
+ * @param {Object} cell jQuery object for container
+ */
+
+fullctl.formatters.yesno = (value, data, cell) => {
+  var path;
+  if(value && value !== "") {
+    path = fullctl.util.static("common/icons/Indicator/Check-Ind/Check.svg");
+  } else {
+    path = fullctl.util.static("common/icons/Indicator/X-Ind/X.svg");
+  }
+  return $('<img>').attr("src", path).addClass("indicator");
+}
 
 fullctl.loading_animation = () => {
   var anim = $('<div class="spinner loadingio-spinner-bars-k879i8bcs9"><div class="ldio-a9ruqenne8l"><div></div><div></div><div></div><div></div></div></div>');

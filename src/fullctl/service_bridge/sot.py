@@ -170,7 +170,40 @@ class SourceOfTruth:
         return objects
 
 
+class InternetExchange(SourceOfTruth):
+
+    """
+    Source of truth fetching for internet exchange objects
+    from ixctl and pdbctl
+    """
+
+    sources = [
+        (ixctl.InternetExchange, {"sot": True}),
+        (pdbctl.InternetExchange, {}),
+    ]
+
+    def filter_source_of_truth(self, exchanges):
+        filtered = []
+        pdb_ixctl_map = {}
+
+        for ix in exchanges:
+            if ix.source == "ixctl":
+                pdb_ixctl_map[ix.pdb_id] = True
+
+        for ix in exchanges:
+            if ix.source == "pdbctl" and ix.id in pdb_ixctl_map:
+                continue
+            filtered.append(ix)
+
+        return filtered
+
 class InternetExchangeMember(SourceOfTruth):
+
+    """
+    Source of truth fetching for internet exchange member objects
+    from ixctl and pdbctl (netixlan)
+    """
+
     sources = [
         (ixctl.InternetExchangeMember, {"sot": True}),
         (pdbctl.NetworkIXLan, {}),
