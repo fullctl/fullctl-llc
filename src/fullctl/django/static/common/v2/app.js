@@ -559,10 +559,17 @@ fullctl.application.Header = $tc.extend(
         w.load()
 
         this.wire_app_switcher();
+        this.wire_stop_impersonation();
 
         return w;
       });
     },
+
+    /**
+     * wires the service application switcher in the header
+     * @method wire_app_switcher
+     * @return {void} 
+     */
 
     wire_app_switcher : function() {
       this.widget("app_switcher", ($e) => {
@@ -582,7 +589,28 @@ fullctl.application.Header = $tc.extend(
         });
         return {};
       });
+    },
+
+    /**
+     * wires the stop impersonation button in the header
+     * @method wire_stop_impersonation
+     */
+
+    wire_stop_impersonation : function() {
+
+      var stop_impersonation = $('[data-element="stop_impersonation"]')
+      if(!stop_impersonation.length)
+        return;
+
+      this.widget("stop_impersonation", ($e) => {
+        var button = new twentyc.rest.Button(stop_impersonation);
+        $(button).on("api-write:success", (event, endpoint, payload, response) => {
+          window.location.href = "/";
+        });
+      });
     }
+
+
   },
   fullctl.application.Component
 );

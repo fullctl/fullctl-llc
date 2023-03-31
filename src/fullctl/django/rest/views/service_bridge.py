@@ -224,6 +224,9 @@ class DataViewSet(viewsets.ModelViewSet):
 
     @grainy_endpoint("service_bridge")
     def destroy(self, request, pk, *args, **kwargs):
+        self._destroy(request, pk, *args, **kwargs)
+
+    def _destroy(self, request, pk, *args, **kwargs):
         instance = self.get_object()
         serializer = self.serializer_class(instance)
         response = Response(serializer.data)

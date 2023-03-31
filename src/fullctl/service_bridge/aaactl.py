@@ -80,3 +80,24 @@ class OrganizationProduct(Aaactl):
                 return org_product.product_data.__dict__[property_name]
 
         return None
+
+class Impersonation(Aaactl):
+
+    class Meta(Aaactl.Meta):
+        ref_tag = "impersonation"
+
+    def stop(self, superuser_id):
+
+        """
+        Stops the impersonation of a user for the 
+        given superuser
+        """
+
+        impersonation = self.first(superuser=superuser_id)
+
+        print("impersonation", impersonation, superuser_id)
+
+        if not impersonation:
+            return
+        
+        self.destroy(impersonation)

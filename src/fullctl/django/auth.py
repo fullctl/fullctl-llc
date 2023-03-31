@@ -95,6 +95,7 @@ class RemotePermissions(django_grainy.remote.Permissions):
                     "impersonating" in request.session
                     and request.session["impersonating"] != request.user.id
                 ):
+                    print("stopping impersonation")
                     del request.session["impersonating"]
                 return
 

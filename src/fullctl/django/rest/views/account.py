@@ -8,6 +8,8 @@ from fullctl.django.rest.route.account import route
 from fullctl.django.rest.serializers.account import Serializers
 from fullctl.django.util import verified_asns
 
+import fullctl.service_bridge.aaactl as aaactl
+
 
 @route
 class Organization(viewsets.GenericViewSet):
@@ -47,3 +49,22 @@ class User(viewsets.GenericViewSet):
 
         serializer = Serializers.asn(verified_asns(request.perms), many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["POST"])
+    @grainy_endpoint()
+    def stop_impersonation(self, request, *args, **kwargs):
+        """
+        Stop impersonating a user via the aaactl service bridge
+        """
+
+        if not getattr(request, "impersonating", None):
+            return Response({})
+    
+        try:
+            del request.session["impersonating"]
+        except KeyError:
+            pass
+
+        aaactl.Impersonation().stop(request.impersonating["superuser"].social_auth.first().uid)
+
+        return Response({})

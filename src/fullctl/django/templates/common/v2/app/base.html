@@ -61,6 +61,9 @@ fullctl.permissions = {{ permissions|safe }}
       {% blocktrans with user=request.user logged_in_user=request.impersonating.superuser %}
       You are currently impersonating <b>{{ user }}</b> - logged in as <b>{{ logged_in_user }}</b>
       {% endblocktrans %}
+      <a class="action" data-element="stop_impersonation" 
+        data-api-base="{% url "fullctl_account_api:user-stop-impersonation" %}"
+        data-api-method="POST">[{% trans "Stop Impersonating" %}]</a>
       </div>
     </div>
     <div class="col-12 col-sm-2"></div>

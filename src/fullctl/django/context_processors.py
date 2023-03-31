@@ -26,6 +26,11 @@ def account_service(request):
     else:
         org_slug = ""
 
+    impersonated_user_id = 0
+
+    if hasattr(request, "impersonating"):
+        impersonated_user_id = request.impersonating["user"].social_auth.first().uid
+
     # TODO abstract so other auth services can be
     # defined
     context.update(
@@ -35,6 +40,7 @@ def account_service(request):
                 # TODO: flesh out to redirect to org/create
                 "create_org": f"{settings.OAUTH_TWENTYC_URL}/account/",
                 "manage_org": f"{settings.OAUTH_TWENTYC_URL}/account/?org={org_slug}",
+                "stop_impersonation": f"{settings.OAUTH_TWENTYC_URL}/admin/auth/user/{impersonated_user_id}/action/stop_impersonation/",
             },
         },
         # TODO: deprecated
