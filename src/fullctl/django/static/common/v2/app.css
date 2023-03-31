@@ -1022,6 +1022,12 @@ div.list-th {
   border-left: 1px transparent solid;
 }
 
+.compact-row img.indicator {
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: bottom;
+}
+
 .secondary .property .field img.indicator {
   display: inline-block;
 }
