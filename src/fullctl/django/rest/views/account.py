@@ -3,12 +3,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 import fullctl.django.models as models
+import fullctl.service_bridge.aaactl as aaactl
 from fullctl.django.rest.decorators import grainy_endpoint
 from fullctl.django.rest.route.account import route
 from fullctl.django.rest.serializers.account import Serializers
 from fullctl.django.util import verified_asns
-
-import fullctl.service_bridge.aaactl as aaactl
 
 
 @route
@@ -59,12 +58,14 @@ class User(viewsets.GenericViewSet):
 
         if not getattr(request, "impersonating", None):
             return Response({})
-    
+
         try:
             del request.session["impersonating"]
         except KeyError:
             pass
 
-        aaactl.Impersonation().stop(request.impersonating["superuser"].social_auth.first().uid)
+        aaactl.Impersonation().stop(
+            request.impersonating["superuser"].social_auth.first().uid
+        )
 
         return Response({})

@@ -81,15 +81,14 @@ class OrganizationProduct(Aaactl):
 
         return None
 
-class Impersonation(Aaactl):
 
+class Impersonation(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "impersonation"
 
     def stop(self, superuser_id):
-
         """
-        Stops the impersonation of a user for the 
+        Stops the impersonation of a user for the
         given superuser
         """
 
@@ -99,5 +98,5 @@ class Impersonation(Aaactl):
 
         if not impersonation:
             return
-        
+
         self.destroy(impersonation)

@@ -568,7 +568,7 @@ fullctl.application.Header = $tc.extend(
     /**
      * wires the service application switcher in the header
      * @method wire_app_switcher
-     * @return {void} 
+     * @return {void}
      */
 
     wire_app_switcher : function() {
