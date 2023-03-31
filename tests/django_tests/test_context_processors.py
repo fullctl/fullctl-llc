@@ -15,6 +15,7 @@ def test_account_service(db, dj_account_objects, settings):
         "urls": {
             "create_org": "localhost/account/",
             "manage_org": "localhost/account/?org=test",
+            "manage_account": "localhost/account/?edit=account",
             "billing_setup": "localhost/billing/setup?org=test",
         }
     }
@@ -31,6 +32,7 @@ def test_account_service_no_org(db, dj_account_objects, settings):
         "urls": {
             "create_org": "localhost/account/",
             "manage_org": "localhost/account/?org=",
+            "manage_account": "localhost/account/?edit=account",
             "billing_setup": "localhost/billing/setup?org=",
         }
     }
