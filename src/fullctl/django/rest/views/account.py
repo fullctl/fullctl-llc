@@ -50,7 +50,6 @@ class User(viewsets.GenericViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=["POST"])
-    @grainy_endpoint()
     def stop_impersonation(self, request, *args, **kwargs):
         """
         Stop impersonating a user via the aaactl service bridge
