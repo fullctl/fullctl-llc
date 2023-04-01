@@ -35,6 +35,7 @@ def account_service(request):
         account_service={
             "urls": {
                 "billing_setup": f"{settings.OAUTH_TWENTYC_URL}/billing/setup?org={org_slug}",
+                "manage_account": f"{settings.OAUTH_TWENTYC_URL}/account/?edit=account",
                 # TODO: flesh out to redirect to org/create
                 "create_org": f"{settings.OAUTH_TWENTYC_URL}/account/",
                 "manage_org": f"{settings.OAUTH_TWENTYC_URL}/account/?org={org_slug}",

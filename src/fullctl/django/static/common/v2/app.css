@@ -298,6 +298,10 @@ div.loading-anim {
   margin-top: 24px;
 }
 
+.marg-bottom-lg {
+  margin-bottom: 24px;
+}
+
 .marg-bot-sm {
   margin-bottom: 5px;
 }
@@ -371,6 +375,10 @@ div.header-middle {
   border-left: solid 1px;
 }
 
+header .header-right {
+  padding-right: 0;
+}
+
 div.header select {
   border: none;
   border-radius: 15px;
@@ -427,13 +435,31 @@ div.header .app-switcher .others a:hover .icon {
   visibility: visible;
 }
 
-div.dropdown-meny.show,
+div.dropdown-menu.show,
 span.dropdown.show {
   display: inline-block !important;
 }
 
 div.header-control {
   border-left: solid 1px;
+}
+
+header .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+header .dropdown-item [data-field="name"],
+header .dropdown-item .label {
+  margin: 0 0.25rem;
+}
+
+header .dropdown-item .manage-org {
+  margin-left: auto;
+}
+
+header h4 {
+  margin-bottom: 0;
 }
 
 /**
@@ -772,6 +798,11 @@ span.icon-report {
   mask-image: url(icons/file-earmark-text.svg);
 }
 
+span.icon-as {
+  -webkit-mask-image: url(icons/database.svg);
+  mask-image: url(icons/database.svg);
+}
+
 [data-true] {
   display: none;
 }
@@ -1088,11 +1119,11 @@ div.list-body div.secondary {
 }
 
 div.list-body .primary-row-name {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   letter-spacing: 0;
   line-height: 24px;
-  margin: 16px 0px 16px 8px;
+  margin: 16px 0px;
 }
 
 tbody.list-footer {

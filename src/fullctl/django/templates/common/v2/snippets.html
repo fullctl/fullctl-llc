@@ -27,16 +27,28 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
 <script>
 window.addEventListener("load", function(){
-window.cookieconsent.initialise({
-  "palette": {
-    "popup": {
-      "background": "#252e39"
+
+  const footer_margin_bottom = parseInt($(".app-footer").css("margin-bottom").replace(/\D/g, ""));
+
+  window.cookieconsent.initialise({
+    "palette": {
+      "popup": {
+        "background": "#252e39"
+      },
+      "button": {
+        "background": "#14a7d0"
+      }
     },
-    "button": {
-      "background": "#14a7d0"
+    onPopupOpen: function() {
+      const cookie_consent_resize_observer = new ResizeObserver(entries => {
+        $(".app-footer").css(
+          "margin-bottom", (this.element.clientHeight + footer_margin_bottom) + "px"
+        );
+      });
+      cookie_consent_resize_observer.observe(this.element);
     }
-  }
-})});
+  })
+});
 </script>
 
 <!-- /cookie-consent -->
