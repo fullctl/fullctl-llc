@@ -59,6 +59,8 @@
   --bs-body-color: var(--foreground);
   --bs-body-color-rgb: var(--foreground);
   --bs-body-bg: var(--background);
+  --bs-link-color: var(--foreground);
+  --bs-link-hover-color: var(--foreground);
 
   --source-of-truth-icon: url("../logos/ctl-mark-dark.png");
 
@@ -69,8 +71,6 @@
   --theme-bg-secondary: #3E464F;
   --clr-border-400: var(--clr-primary-500);
   --theme-secondary-border-color: rgba(25, 27, 34, 0.15);
-
-
 
   --foreground: var(--clr-primary-900);
   --background: var(--clr-bg-300);
@@ -93,6 +93,9 @@
   --modal-clr: var(--clr-primary-800);
 
   --source-of-truth-icon: url("../logos/ctl-mark-light.png");
+
+  --bs-link-color: rgb(13, 110, 253);
+  --bs-link-hover-color: rgb(13, 110, 253);
 
   color-scheme: light;
 }
