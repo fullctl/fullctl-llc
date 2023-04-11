@@ -27,12 +27,6 @@
   --theme-secondary-border-color: rgba(255, 255, 255, 0.15);
   --theme-toolbar-color: #fff;
 
-  --theme-alert-info-bg: #7747FF;
-  --theme-alert-info-color: #fff;
-  --theme-alert-info-border: rgba(255, 255, 255, 0.12);
-  --theme-alert-info-link-color: #d1ff27;
-
-
 
   --foreground: var(--clr-primary-100);
   --background: var(--clr-bg-900);
@@ -203,17 +197,6 @@ main .dropdown-item:hover {
 .form-select {
   color: var(--foreground);
   background-image: var(--dropdown-svg-url);
-}
-
-.alert-warning {
-  --bs-alert-color: var(--foreground);
-  --bs-alert-bg: var(--box-bg);
-  --bs-alert-border-color: var(--clr-accent-600);
-}
-
-.alert-warning .btn-warning {
-  background-color: var(--primary-btn-bg);
-  color: var(--primary-btn-clr);
 }
 
 /**
@@ -548,18 +531,24 @@ div.menu div.menu-deco-border {
  * bootstrap alerts
  */
 
-.alert-info {
-  font-family: 'Space Mono';
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--theme-alert-info-color);
-  background: var(--theme-alert-info-bg);
-  border-color: var(--theme-alert-info-border);
+.alert {
+  --bs-alert-color: var(--foreground);
+  --bs-alert-bg: var(--box-bg);
 }
 
-.alert-info a {
-  color: var(--theme-alert-info-link-color);
+.alert-warning {
+  --bs-alert-border-color: var(--clr-accent-600);
 }
+
+.alert-info {
+  --bs-alert-border-color: var(--clr-accent-400);
+}
+
+.alert-warning .btn-warning {
+  background-color: var(--primary-btn-bg);
+  color: var(--primary-btn-clr);
+}
+
 
 tbody.list-footer button {
   border-color: transparent;
