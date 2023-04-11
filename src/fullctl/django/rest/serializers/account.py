@@ -76,8 +76,6 @@ class ContactMessage(serializers.Serializer):
 
         service = aaactl.ServiceApplication().first(slug=settings.SERVICE_TAG).id
 
-        print("Contact message type", typ, settings.SERVICE_TAG, service)
-
         aaactl.ContactMessage().create(dict(
             name=name,
             email=email,
