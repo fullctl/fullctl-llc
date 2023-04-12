@@ -28,5 +28,4 @@ class TemplateFileView(View):
 
         # set content type to text/plain and return HttpResponse
 
-        response = HttpResponse(template_text, content_type="text/plain")
-        return response
+        return HttpResponse(template_text, content_type="text/plain")
