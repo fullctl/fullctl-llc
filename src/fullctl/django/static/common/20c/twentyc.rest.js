@@ -133,7 +133,7 @@ twentyc.rest = {
 
       return trailing_slash ? `${joinedUrl}/` : joinedUrl;
     }
-  
+
   }
 
 };
@@ -485,7 +485,7 @@ twentyc.rest.Client = twentyc.cls.define(
     endpoint_url : function(endpoint) {
       if(!endpoint)
         return twentyc.rest.url.url_join(this.base_url);
-      
+
       return twentyc.rest.url.url_join(this.base_url, endpoint);
     },
 

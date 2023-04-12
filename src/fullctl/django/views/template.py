@@ -8,15 +8,16 @@ class TemplateFileView(View):
     TemplateModel = None
 
     def get(self, request, template_type):
-        
         # check that template_type exists as a choice
         # in the TemplateModel type field
 
-        type_choices = [choice[0] for choice in self.TemplateModel._meta.get_field("type").choices]
+        type_choices = [
+            choice[0] for choice in self.TemplateModel._meta.get_field("type").choices
+        ]
 
         if template_type not in type_choices:
             return HttpResponse(status=404)
-    
+
         try:
             tmpl = self.TemplateModel(type=template_type)
             path = os.path.join(tmpl.template_loader_paths[0], tmpl.template_path)

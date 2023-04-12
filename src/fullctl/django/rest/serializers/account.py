@@ -60,7 +60,9 @@ class ContactMessage(serializers.Serializer):
     """
 
     message = serializers.JSONField()
-    type = serializers.ChoiceField(choices=["support", "feature-request", "general", "demo-request"])
+    type = serializers.ChoiceField(
+        choices=["support", "feature-request", "general", "demo-request"]
+    )
 
     ref_tag = "contact_message"
 
