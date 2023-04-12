@@ -4,4 +4,5 @@ CONTACT_MESSAGE_TYPE = (
     ("general", _("General")),
     ("support", _("Support")),
     ("feature-request", _("Feature Request")),
+    ("demo-request", _("Demo Request")),
 )

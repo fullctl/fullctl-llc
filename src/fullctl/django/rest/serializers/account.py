@@ -53,8 +53,14 @@ class ASN(serializers.Serializer):
 
 @register
 class ContactMessage(serializers.Serializer):
+
+    """
+    Prepares a contact message for submission to the aaactl service bridge
+    for the support contact backend.
+    """
+
     message = serializers.JSONField()
-    type = serializers.ChoiceField(choices=["support", "feature-request", "general"])
+    type = serializers.ChoiceField(choices=["support", "feature-request", "general", "demo-request"])
 
     ref_tag = "contact_message"
 
