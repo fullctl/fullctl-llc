@@ -10,7 +10,7 @@ Core classes and functions for service applications
 
 ## License
 
-Copyright 2020-2022 20C, LLC
+Copyright 2020-2023 FullCtl, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this softare except in compliance with the License.

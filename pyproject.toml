@@ -3,7 +3,8 @@ name = "fullctl"
 repository = "https://github.com/fullctl/fullctl"
 version = "1.2.0"
 description = "Core classes and functions for service applications"
-authors = ["20C <code@20c.com>"]
+authors = ["FullCtl <code@fullctl.com>"]
+readme = "README.md"
 license = "Apache-2.0"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
