@@ -1,4 +1,7 @@
+from functools import wraps
+
 import django.http
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -91,3 +94,23 @@ class service_bridge_sync:
 
         wrapped.__name__ = fn.__name__
         return wrapped
+
+
+def origin_allowed(origins):
+    """
+    Origin white listing for CORS enabled views.
+    """
+
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            origin = request.META.get("HTTP_ORIGIN")
+            if origin not in origins:
+                response_data = {"status": "error", "message": "Origin not allowed"}
+                return JsonResponse(response_data, status=403)
+
+            return view_func(request, *args, **kwargs)
+
+        return _wrapped_view
+
+    return decorator

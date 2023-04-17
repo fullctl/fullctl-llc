@@ -5,10 +5,30 @@ from django.contrib.staticfiles import views as static_file_views
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+import fullctl.django.rest.urls.service_bridge_proxy as proxy
 import fullctl.django.views
 from fullctl.django.views.api_schema import api_schema
 
 urlpatterns = []
+
+if settings.SERVICE_TAG != "aaactl":
+    proxy.setup(
+        "aaactl",
+        proxy.proxy_api(
+            "aaactl",
+            settings.AAACTL_URL,
+            [
+                (
+                    "billing/org/{org_tag}/start_trial/",
+                    "billing/<str:org_tag>/start_trial/",
+                    "start-trial",
+                )
+            ],
+        ),
+    )
+
+    urlpatterns = proxy.urlpatterns(["aaactl"])
+
 
 if getattr(settings, "PDBCTL_URL", None):
     import fullctl.django.autocomplete.pdb

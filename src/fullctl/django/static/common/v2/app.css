@@ -1571,3 +1571,36 @@ span.fullctl-sot {
   display: inline-block;
   margin-left: 5px;
 }
+
+/*
+ * service cross promotion
+ */
+
+.cross-promotion {
+
+  position: absolute;
+  top: 0px;
+  left: -2px;
+}
+
+.cross-promotion .alert {
+  padding: 3px;
+  border-radius: 0px 5px 5px 0px;
+  margin-top: 3px;
+  padding-left: 5px;
+}
+
+.cross-promotion .alert-info {
+  background-color: #2b2e39;
+  border-color: #d1ff27;
+}
+
+.cross-promotion .btn {
+  padding: 3px;
+  font-size: 12px;
+}
+
+.cross-promotion img.app-logo {
+  height: 18px;
+  display: inline;
+}

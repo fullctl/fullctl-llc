@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 import fullctl.django.models as models
+import fullctl.django.rest.throttle as throttle
 import fullctl.service_bridge.aaactl as aaactl
 from fullctl.django.rest.decorators import grainy_endpoint
 from fullctl.django.rest.route.account import route
@@ -68,3 +69,23 @@ class User(viewsets.GenericViewSet):
         )
 
         return Response({})
+
+    @action(
+        detail=False,
+        methods=["POST"],
+        serializer_class=Serializers.contact_message,
+        throttle_classes=[throttle.ContactMessage],
+    )
+    def contact_support(self, request, *args, **kwargs):
+        """
+        Contact support through aaactl
+        """
+
+        serializer = Serializers.contact_message(
+            data=request.data, context={"user": request.user}
+        )
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return Response(serializer.data)

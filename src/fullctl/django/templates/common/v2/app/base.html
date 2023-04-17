@@ -85,7 +85,7 @@ fullctl.permissions = {{ permissions|safe }}
           {% for service_app in service_applications %}
           {%   if service_app.slug != service_tag %}
           {%     with "common/logos/"|add:service_app.slug|add:"-dark.svg" as other_app_logo %}
-            <a class="list-item" data-slug="{{ service_app.slug }}" data-grainy-remove="{{ service_app.grainy }}.{{ request.org.remote_id}}" href="{{ service_app.org_redirect }}">
+            <a {% if not service_app.always_show_dashboard %}data-grainy-remove="{{ service_app.grainy }}.{{ request.org.remote_id}}"{% endif %} href="{{ service_app.org_redirect }}">
               {% if not service_app.logo %}
                 <img class="app-logo" src="{% static other_app_logo %}" alt="{{ service_app.slug }}">
               {% else %}
@@ -230,8 +230,15 @@ fullctl.permissions = {{ permissions|safe }}
 </header>
 {% endblock %}
 
+
+<!-- cross promote trials -->
+
+{% include "common/v2/app/cross-promote-trials.html" %}
+
 <main>
 {% block "error_content" %}{% endblock %}
+
+<!-- app trial -->
 
 {% if not request|can_access:service_info.org_namespace %}
 
@@ -270,7 +277,7 @@ fullctl.permissions = {{ permissions|safe }}
     {% else %}
     <div class="alert alert-danger marg-top-lg">
 {% blocktrans trimmed with app_id=request.app_id app_slug=service_info.slug app_name=service_info.name org_name=request.org.display_name_verbose %}
-You do not have access to {{ app_name }} for {{ org_name }}.
+You do not have access to {{ app_name }} for {{ org_name }}. If you have recently started a trial or have activated a subscription, please try again in a moment. If you continue to have issues, please contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>
 {% endblocktrans %}
     </div>
     {% endif %}
@@ -293,6 +300,9 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
 </div>
 <div style="display:none">
 {% endif %}
+
+<!-- main app content -->
+
 {% block "app_content" %}
 <div class="container-fluid toolbar-outer">
   <div class="container">

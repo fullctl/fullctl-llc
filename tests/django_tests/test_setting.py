@@ -117,6 +117,7 @@ def test_SettingsManager_set_default_append():
     settings_manager.set_option("DEBUG", True)
     settings_manager.set_option("TEMPLATES", "")
     settings_manager.set_option("MIDDLEWARE", [""])
+    settings_manager.set_option("REST_FRAMEWORK", {})
     settings_manager.set_default_append()
 
     # logging define extra formatters and handlers for convenience

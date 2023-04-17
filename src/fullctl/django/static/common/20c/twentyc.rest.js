@@ -69,8 +69,76 @@ twentyc.rest = {
      */
 
     csrf : ""
+  },
+
+  /**
+   * object holding URL utility functions
+   * @property url
+   * @type Object
+   * @namespace twentyc.rest
+   */
+
+  url: {
+    /**
+     * Trims leading and trailing slashes from the given endpoint.
+     *
+     * @method trim_endpoint
+     * @param {String} endpoint - The endpoint string to trim.
+     * @return {String} The trimmed endpoint string.
+     */
+    trim_endpoint: function (endpoint) {
+      // urljoin is not guaranteed to strip trailing double slashes on
+      // either side of the endpoint, so we do it manually
+      return endpoint.replace(/^\/+|\/+$/g, "");
+    },
+
+    /**
+     * Joins URL parts, removing extra slashes at the edges of the parts.
+     *
+     * @method url_join
+     * @param {String} left - The leftmost URL part.
+     * @param {...String} args - The remaining URL parts.
+     * @return {String} The joined URL string with removed extra slashes.
+     */
+    url_join: function (left, ...args) {
+      // Simplified urljoin that gets rid of extra / at the edges
+      // of parts
+
+      let right = [];
+      let trailing_slash = !twentyc.rest.no_end_slash;
+
+      // trim left
+
+      left = left.replace(/\/+$/g, "");
+
+      for (const parts of args) {
+        right = right.concat(
+          parts
+            .split("/")
+            .filter((part) => part)
+            .map((part) => this.trim_endpoint(part))
+        );
+      }
+
+      if(!right.length)
+        return trailing_slash ? `${left}/` : left;
+
+      right = right.join("/");
+
+      if (!left) {
+        return trailing_slash ? `/${right}/` : `/${right}`;
+      }
+
+      const joinedUrl = `${left.replace(/\/$/, "")}/${right}`;
+
+      return trailing_slash ? `${joinedUrl}/` : joinedUrl;
+    }
+
   }
+
 };
+
+
 
 /**
  * Wrapper for API responses
@@ -415,12 +483,10 @@ twentyc.rest.Client = twentyc.cls.define(
      */
 
     endpoint_url : function(endpoint) {
-
-      var end_slash = (twentyc.rest.no_end_slash ? "" : "/");
-
       if(!endpoint)
-        return this.base_url+end_slash;
-      return this.base_url+"/"+endpoint+end_slash;
+        return twentyc.rest.url.url_join(this.base_url);
+
+      return twentyc.rest.url.url_join(this.base_url, endpoint);
     },
 
     /**

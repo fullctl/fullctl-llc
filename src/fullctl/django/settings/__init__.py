@@ -34,6 +34,19 @@ def read_file(name):
         return fh.read()
 
 
+class exposed_list(str):
+
+    """
+    Allows setting a list using a comma delimited string
+    TODO: move to confu
+    """
+
+    def __list__(self):
+        if not self:
+            return []
+        return self.split(",")
+
+
 # TODO : add dict access and logging
 class SettingsManager(confu.util.SettingsManager):
     # settings manager extensions
@@ -272,6 +285,28 @@ class SettingsManager(confu.util.SettingsManager):
         }
         self.set_option("LOGGING", LOGGING)
 
+        self.set_rest_throttles()
+
+    def set_rest_throttles(self):
+        """
+        Sets up rest api throttling
+        """
+
+        REST_FRAMEWORK = self.get("REST_FRAMEWORK")
+
+        # if DEFAULT_THROTTLE_RATES does not exist, create it empty
+
+        if "DEFAULT_THROTTLE_RATES" not in REST_FRAMEWORK:
+            REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {}
+
+        # set up env vars for throttling
+
+        self.set_option("THROTTLE_CONTACT_MESSAGE", "10/minute")
+
+        REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"].update(
+            {"contact_message": self.get("THROTTLE_CONTACT_MESSAGE")}
+        )
+
     def set_service_bridges(self):
         # no default so we error sooner
         self.set_option("AAACTL_URL", "")
@@ -381,7 +416,7 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_from_env("CONTACT_US_EMAIL", self.get("SUPPORT_EMAIL"))
 
         # URL to POST Feature Request form to
-        self.set_option("POST_FEATURE_REQUEST_URL", "")
+        self.set_option("POST_FEATURE_REQUEST_URL", "/api/account/user/contact_message")
 
         # Docs URL
         self.set_option("DOCS_URL", "https://docs.fullctl.com")

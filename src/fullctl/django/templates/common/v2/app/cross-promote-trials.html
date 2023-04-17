@@ -1,0 +1,45 @@
+{% load i18n static %}
+<div style="position:relative">
+<div class="cross-promotion">
+{% for service_app in service_applications %}
+{%     with "common/logos/"|add:service_app.slug|add:"-dark.svg" as other_app_logo %}
+{% if service_app.cross_promote and service_app.slug != service_info.slug %}
+{% if service_app.org_can_trial and not service_app.org_has_access and permissions.billing %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info left">
+                <!-- start trial call to action -->
+                <div class="msg-start-trial">
+                    <span>
+                    Start your <img class="app-logo" src="{% static other_app_logo %}" alt="{{ app_name }}"> trial for {{ request.org.display_name_verbose }}
+                    </span>
+                    <span>
+                        <button data-element="btn_start_trial_crosspromo" data-service-url="{{ service_app.org_redirect }}" data-service-id="{{ service_app.id }}" data-api-base="{% url "proxies-api-aaactl-start-trial" org_tag=request.org.slug %}" class="primary btn">
+                        <div class="row align-items-center">
+                            <div class="col label pe-0">{% trans "Start trial" %}</div>
+                            <div class="col-auto">
+                            <span class="icon icon-add"></span>
+                            </div>
+                        </div>
+                        </button>
+                    </span>
+                </div>
+
+                <!-- trial started go to service call to action -->
+                <div class="msg-trial-started" style="display:none">
+                    <span>
+                    Trial for <img class="app-logo" src="{% static other_app_logo %}" alt="{{ app_name }}"> started.
+                    <a href="{{ service_app.org_redirect }}">Go to {{ service_app.name }}</a><span class="icon fullctl icon-logout"></span>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endif %}
+{% endwith %}
+{% endfor %}
+</div>
+</div>

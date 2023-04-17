@@ -192,6 +192,9 @@ class DataViewSet(viewsets.ModelViewSet):
 
     @grainy_endpoint("service_bridge")
     def create(self, request, *args, **kwargs):
+        return self._create(request, *args, **kwargs)
+
+    def _create(self, request, *args, **kwargs):
         data = self.prepare_write_data(request)
 
         serializer = self.serializer_class(data=data)

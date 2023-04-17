@@ -1,7 +1,6 @@
 {% load static i18n %}
 <form data-template="form_feature_request"
-  data-api-base="{{ post_feature_request_url }}"
-  data-api-action=""
+  data-api-base="{% url "fullctl_account_api:user-contact-support" %}"
   data-api-method="POST"
   class="container-fluid"
 >

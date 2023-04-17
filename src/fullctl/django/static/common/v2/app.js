@@ -654,12 +654,29 @@ fullctl.application.Toolbar = $tc.extend(
   fullctl.application.Component
 );
 
+/**
+ * Start-Trial button widget
+ *
+ * @class TrialButton
+ * @extends twentyc.rest.Button
+ * @constructor
+ * @param {Object} element - the element to attach the widget to
+ */
+
 fullctl.application.TrialButton = $tc.extend(
   "TrialButton",
   {
+    TrialButton : function(element) {
+      this.Button(element);
+      // set service id from data-service-id attribute, if present
+      // otherwise use fullctl.service.id
+
+      this.service_id = this.element.data("service-id") || fullctl.service_info.id;
+    },
+
     payload : function() {
       return {
-        service_id : fullctl.service_info.id
+        service_id : this.service_id
       }
     }
   },
@@ -690,6 +707,8 @@ fullctl.application.Application = $tc.define(
 
       fullctl[id] = this;
 
+      // wire start trial button for current service
+
       var trial_button_element = $('[data-element=btn_start_trial]')
       if(trial_button_element.length) {
         var trial_button = new fullctl.application.TrialButton(trial_button_element);
@@ -697,6 +716,18 @@ fullctl.application.Application = $tc.define(
           window.location.reload();
         });
       }
+
+      // wire start trial buttons for cross promoted services
+
+      var crosspromo_trial_button_element = $('[data-element=btn_start_trial_crosspromo]');
+      crosspromo_trial_button_element.each(function(idx,button) {
+        var trial_button = new fullctl.application.TrialButton($(button));
+        $(trial_button).on("api-write:success", () => {
+          $(button).parents(".alert").find('.msg-start-trial').hide();
+          $(button).parents(".alert").find('.msg-trial-started').show();
+        });
+      });
+
 
       this.application_access_granted = grainy.check("service."+this.id+"."+fullctl.org.id, "r");
 
@@ -1097,22 +1128,42 @@ fullctl.ConfigPreview = $tc.extend(
  * @extends fullctl.application.Modal
  * @namespace fullctl.application
  * @constructor
+ * @param {String} title
+ * @param {String} message_type - the message type to use for example "support"
  */
 
 fullctl.application.ModalFeatureRequest = $tc.extend(
   "ModalFeatureRequest",
   {
-    ModalFeatureRequest: function () {
+    ModalFeatureRequest: function (title, message_type) {
       var modal = this;
+
+      // init form
+
       var form = this.form = new twentyc.rest.Form(
         fullctl.template("form_feature_request")
       );
+
+      // close the model if the form is submitted successfully
 
       $(this.form).on("api-write:success", (ev, e, payload, response) => {
         modal.hide();
       });
 
-      this.Modal("save", "Feature Request", form.element);
+      // append the message type to the payload
+      // convert the messsage itself to dict containing `content`
+
+      $(this.form).on("payload:after", (ev, payload) => {
+        payload.type = message_type;
+        payload.message = { content: payload.message };
+      });
+
+      // construct modal
+
+      this.Modal("save", (!title ? "Feature Request" : title), form.element);
+
+      // wire form to modal's submit button
+
       form.wire_submit(this.$e.button_submit);
     }
   },
@@ -1120,10 +1171,11 @@ fullctl.application.ModalFeatureRequest = $tc.extend(
 );
 
 fullctl.feature_request = document.addEventListener("DOMContentLoaded", () => {
-  const feature_request_button = document.querySelector('[data-element="feature_request_btn"]');
+  const feature_request_button = $('[data-element="feature_request_btn"]');
 
-  feature_request_button.addEventListener('click', () => {
-    new fullctl.application.ModalFeatureRequest();
+  feature_request_button.on('click', function() {
+    let message_type = $(this).data("message-type");
+    new fullctl.application.ModalFeatureRequest($(this).attr("title"), message_type);
   })
 });
 
