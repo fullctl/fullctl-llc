@@ -2,6 +2,7 @@
 <div class="container-fluid">
   <div class="row align-items-center">
     <div class="col footer-left">
+      {% block footer_left %}
       <div class="row align-items-center">
         <div class="col-sm-auto theme-switcher" type="button">
           <span class="icon icon-lg icon-theme-switcher"></span>
@@ -13,15 +14,17 @@
           </a>
         </div>
       </div>
+      {% endblock %}
     </div>
     <div class="col-auto footer-center">
-      {% block copyright %}
+      {% block footer_center %}
         Copyright © 2014 - {{ current_year }} FullCtl, LLC
       {% endblock %}
     </div>
     <div class="col footer-right">
-      <div class="row align-items-center">
-        <div class="ms-auto col-auto">{{ version }}</div>
+      {% block footer_right %}
+      <div class="row align-items-center justify-content-end">
+        <div class="col-auto">{{ version }}</div>
         <div class="help-box js-hide">
           <div class="banner-img">
             <img src="{% static "common/v2/imgs/help.png" %}" alt="">
@@ -34,6 +37,7 @@
           <span class="icon icon-lg icon-help"></span>
         </div>
       </div>
+      {% endblock %}
     </div>
   </div>
 </div>
