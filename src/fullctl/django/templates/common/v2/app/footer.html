@@ -15,7 +15,9 @@
       </div>
     </div>
     <div class="col-auto footer-center">
-      Copyright © 2014 - {{ current_year }} FullCtl, LLC
+      {% block copyright %}
+        Copyright © 2014 - {{ current_year }} FullCtl, LLC
+      {% endblock %}
     </div>
     <div class="col footer-right">
       <div class="row align-items-center">
