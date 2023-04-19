@@ -68,6 +68,7 @@ for import_path, namespace in getattr(settings, "FULLCTL_ADDON_URLS", []):
 
 urlpatterns += [
     path("_diag", fullctl.django.views.diag),
+    path("health/", fullctl.django.views.healthcheck),
     path("apidocs/schema.json", api_schema, name="api_schema"),
     path(
         "api/account/",

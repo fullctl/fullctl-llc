@@ -12,6 +12,8 @@ from django.utils.safestring import mark_safe
 
 from fullctl.django.decorators import require_auth
 
+from django.db import connection
+
 
 @require_auth()
 def org_redirect(request):
@@ -32,6 +34,15 @@ def diag(request):
 
     return HttpResponse(mark_safe(f"<div><pre>Meta:\n{escape(txt)}</pre></div>"))
 
+def healthcheck(request):
+    """
+    Performs a simple database version query
+    """
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT version()")
+
+    return HttpResponse("")
 
 @require_auth()
 def login(request):
