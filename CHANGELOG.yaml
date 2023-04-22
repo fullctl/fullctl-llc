@@ -5,6 +5,16 @@ Unreleased:
   deprecated: []
   removed: []
   security: []
+1.3.0:
+  added:
+  - healthcheck URL for base services
+  - auditctl support
+  fixed:
+  - metadata issues
+  - url_join with ints
+  - task ConcurrencyLimit qualifier
+  changed:
+  - UI updates
 1.2.0:
   added:
   - contact form interface

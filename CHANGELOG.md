@@ -4,6 +4,18 @@
 ## Unreleased
 
 
+## 1.3.0
+### Added
+- healthcheck URL for base services
+- auditctl support
+### Fixed
+- metadata issues
+- url_join with ints
+- task ConcurrencyLimit qualifier
+### Changed
+- UI updates
+
+
 ## 1.2.0
 ### Added
 - contact form interface
