@@ -399,6 +399,7 @@ select.secondary {
 }
 
 div.controls input[type="text"],
+.input-group.searchbar select.form-select,
 div.controls select.form-control {
   background: transparent;
   border-color: var(--theme-secondary-border-color);

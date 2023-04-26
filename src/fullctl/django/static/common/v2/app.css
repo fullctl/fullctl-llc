@@ -874,6 +874,7 @@ div.menu .button {
   flex-wrap: nowrap;
 }
 
+.input-group.searchbar select.form-select,
 .input-group.searchbar input {
   padding: var(--size-200);
   border-top-left-radius: var(--size-200);
@@ -892,6 +893,16 @@ div.menu .button {
 .input-group.searchbar .btn.curved {
   border-top-right-radius: var(--size-200) !important;
   border-bottom-right-radius: var(--size-200) !important;
+}
+
+.input-group span.static-label {
+  background-color: var(--background);
+  color: var(--foreground);
+  border-color: var(--theme-secondary-border-color);
+}
+
+.input-group.searchbar select.form-select {
+  margin-left: 0px;
 }
 
 /**
