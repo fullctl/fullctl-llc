@@ -184,6 +184,11 @@ button:focus {
   align-items: center;
 }
 
+.input-group-text.loading-indicator-container {
+  width: 50px;
+}
+
+.loading-indicator,
 .loading-shim:after {
   content: '';
   display: block;

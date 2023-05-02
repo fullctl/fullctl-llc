@@ -23,7 +23,7 @@
   --clr-border-200: var(--clr-primary-500);
   --clr-border-400: var(--clr-primary-700);
 
-
+  
   --theme-secondary-border-color: rgba(255, 255, 255, 0.15);
   --theme-toolbar-color: #fff;
 
@@ -58,6 +58,8 @@
 
   --source-of-truth-icon: url("../logos/ctl-mark-dark.png");
 
+  --clr-bg-loading-indicator: #0c0e14;
+
   color-scheme: dark;
 }
 
@@ -90,6 +92,8 @@
 
   --bs-link-color: rgb(13, 110, 253);
   --bs-link-hover-color: rgb(13, 110, 253);
+
+  --clr-bg-loading-indicator: #d5d5d5;
 
   color-scheme: light;
 }
@@ -317,6 +321,10 @@ div.validation-error {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+.loading-indicator-container {
+  background-color: var(--clr-bg-loading-indicator);
+  border-color: var(--theme-secondary-border-color);
+}
 
 a[data-action].prefixctl,
 a[data-action].prefixctl:hover,
