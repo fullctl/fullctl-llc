@@ -707,7 +707,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
       }
       if(!this.loading_shim_disabled)
         this.loading_shim.show();
-      
+
       this.element.siblings(".loading-indicator-container").show();
 
       $(this).trigger("processing");
