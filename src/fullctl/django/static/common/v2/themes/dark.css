@@ -59,6 +59,7 @@
   --source-of-truth-icon: url("../logos/ctl-mark-dark.png");
 
   --clr-bg-loading-indicator: #0c0e14;
+  --default-input-bg: #3b3b3b;
 
   color-scheme: dark;
 }
@@ -201,6 +202,25 @@ main .dropdown-item:hover {
 .form-select {
   color: var(--foreground);
   background-image: var(--dropdown-svg-url);
+}
+
+
+.toolbar-control .form-select {
+  color: var(--foreground);
+  background-image: url(../../icons/ui-caret-caret/down.svg);
+  background-color: var(--default-input-bg);
+  background-position: right 0.5rem center; /* Adjust these values for horizontal and vertical position */
+  background-repeat: no-repeat;
+  background-size:  0.5rem; /* Adjust this value for the size of the caret */
+  -webkit-appearance: none; /* Remove default caret in Webkit browsers */
+  -moz-appearance: none; /* Remove default caret in Mozilla browsers */
+  appearance: none; /* Remove default caret for other browsers */
+  padding-right: 2rem; /* Add extra padding to the right to make space for the caret */
+}
+
+
+.toolbar-control .form-select:disabled {
+  opacity: 0.5;
 }
 
 /**

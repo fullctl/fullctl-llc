@@ -559,6 +559,15 @@ div.toolbar span.toolbar-control>img.caret {
   top: 19px;
 }
 
+div.toolbar span.toolbar-control div.input-group {
+}
+
+div.toolbar span.toolbar-control .btn {
+  padding: 8px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 div.toolbar-field {
   position: relative;
   font-size: 16px;
@@ -1623,4 +1632,16 @@ span.fullctl-sot {
 .cross-promotion img.app-logo {
   height: 18px;
   display: inline;
+}
+
+img.service-link {
+  height: 25px;
+  border: none;
+  display: inline;
+  vertical-align: middle;
+}
+
+img.service-link ~ span.icon {
+  margin-left: 5px;
+  vertical-align: middle;
 }

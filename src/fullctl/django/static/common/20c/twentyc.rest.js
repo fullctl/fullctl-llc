@@ -707,6 +707,8 @@ twentyc.rest.Widget = twentyc.cls.extend(
       }
       if(!this.loading_shim_disabled)
         this.loading_shim.show();
+      
+      this.element.siblings(".loading-indicator-container").show();
 
       $(this).trigger("processing");
     },
@@ -724,6 +726,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
       this.busy = false
       if(this.loading_shim && !window.debug_loading_shim)
         this.loading_shim.hide();
+      //this.element.siblings(".loading-indicator-container").hide();
       $(this).trigger("ready");
     },
 
@@ -1219,6 +1222,7 @@ twentyc.rest.Input = twentyc.cls.extend(
       this.busy = true
       this.element.prop("disabled", true);
       $(this).trigger("processing");
+      this.element.siblings(".loading-indicator-container").show();
     },
 
 
@@ -1233,6 +1237,7 @@ twentyc.rest.Input = twentyc.cls.extend(
     done_processing : function() {
       this.busy = false
       this.element.prop("disabled", false);
+      this.element.siblings(".loading-indicator-container").hide();
       $(this).trigger("ready");
     },
 
