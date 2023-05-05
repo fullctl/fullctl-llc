@@ -45,6 +45,20 @@ def healthcheck(request):
     return HttpResponse("")
 
 
+def authcheck(request):
+    """
+    Checks if the user's access token is still valid
+
+    The check itself is performed by middleware, status of the resonse
+    will be set to 401 if the token is invalid. 200 otherwise.
+    """
+
+    if not request.user.is_authenticated:
+        return HttpResponse("", status=401)
+
+    return HttpResponse("")
+
+
 @require_auth()
 def login(request):
     return redirect("/")

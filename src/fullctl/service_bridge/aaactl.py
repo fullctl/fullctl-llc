@@ -105,3 +105,8 @@ class Impersonation(Aaactl):
 class ContactMessage(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "contact_message"
+
+
+class OauthAccessToken(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "oauth_access_token"

@@ -1,6 +1,7 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.http import Http404
 
+import fullctl.service_bridge.aaactl as aaactl
 from fullctl.django.auth import permissions
 from fullctl.django.context import current_request
 from fullctl.django.models import Organization
@@ -99,3 +100,40 @@ class RequestAugmentation:
             request.org = Organization(name="Guest")
 
             return
+
+
+class TokenValidationMiddleware:
+
+    """
+    Uses the aaactl service bridge to check if the oAuth access
+    token used to authenticate the requesting user is still
+    valid.
+
+    If it is no longer valid, the user is logged out forcing
+    them to re-authenticate with aaactl.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user = request.user
+        if user.is_authenticated:
+            social_auth = user.social_auth.filter(provider="twentyc").first()
+
+            if not social_auth:
+                # user does not have a social auth record,
+                # this is an edge case where the user was created
+                # manually through create_superuser or via django-admin
+                return self.get_response(request)
+
+            access_token = social_auth.extra_data["access_token"]
+            aaactl_token = aaactl.OauthAccessToken().first(token=access_token)
+
+            if not aaactl_token or aaactl_token.expired:
+                # token no longer valid on aaactl side, invalidate session
+                # TODO: possibly extend token expiry on certain actions
+                logout(request)
+
+        response = self.get_response(request)
+        return response

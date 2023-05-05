@@ -16,7 +16,38 @@ fullctl.formatters = {}
 fullctl.modals = {}
 fullctl.util = {}
 fullctl.help_box = {}
+fullctl.auth = {};
 fullctl.static_path = "/s/0.0.0-dev/"
+
+
+/**
+ * starts periodically checking the /authcheck endpoint
+ * and will display an alert if the user is no longer
+ * authenticated
+ *
+ * interval is set to 15 seconds.
+ *
+ * @method start_check
+ */
+fullctl.auth.start_check = function() {
+  this.auth_check_timer = setInterval(() => {
+    $.get("/authcheck/").fail(() => {
+      clearInterval(this.auth_check_timer);
+      alert("Your session has expired");
+      window.location.reload();
+    });
+  }, 15000);
+}
+
+/**
+ * stops the periodic auth check
+ *
+ * @method stop_check
+ */
+
+fullctl.auth.stop_check = function() {
+  clearInterval(this.auth_check_timer);
+}
 
 
 fullctl.util.slugify = (txt) => {
@@ -746,6 +777,8 @@ fullctl.application.Application = $tc.define(
 
 
       this.application_access_granted = grainy.check("service."+this.id+"."+fullctl.org.id, "r");
+
+      fullctl.auth.start_check();
 
     },
 

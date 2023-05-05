@@ -383,6 +383,9 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_option("LOGOUT_REDIRECT_URL", "/login")
         self.set_option("LOGIN_URL", "/login")
 
+        MIDDLEWARE = self.get("MIDDLEWARE")
+        MIDDLEWARE.append("fullctl.django.middleware.TokenValidationMiddleware")
+
     def set_twentyc_service(self, billing_integration=True, propagate_user_fields=True):
         """
         Sets up everything needed for a twentyc service.
