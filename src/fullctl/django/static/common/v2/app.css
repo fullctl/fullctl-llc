@@ -1646,3 +1646,47 @@ img.service-link ~ span.icon {
   margin-left: 5px;
   vertical-align: middle;
 }
+
+/*
+ * autocomplete stylings
+ */
+
+div.autocomplete-item {
+  position: relative;
+  margin: -5px;
+  padding: 5px;
+  border-bottom: 1px solid var(--secondary-list-btn-bg);
+}
+
+div.autocomplete-item .autocomplete-secondary {
+  font-size: 12px;
+}
+
+div.autocomplete-item .autocomplete-extra {
+  font-size: 11px;
+}
+
+.modal-control .select2-selection.select2-selection--single {
+  height: 60px;
+  padding: 5px;
+}
+
+.modal-control .select2-selection.select2-selection--single .select2-selection__placeholder {
+  white-space: normal;
+}
+
+.modal-control .autocomplete-primary {
+  height: auto;
+  line-height: initial;
+}
+
+.modal-control .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b,
+.modal-control .select2-container--default .select2-selection--single .select2-selection__arrow b {
+  left: 0%;
+  top: 77%;
+}
+
+.modal .controls input.select2-search__field {
+  border: none;
+  border-bottom: 1px solid transparent;
+}

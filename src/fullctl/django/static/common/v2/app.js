@@ -65,6 +65,16 @@ fullctl.util.static = (path) => {
   return fullctl.static_path+path;
 };
 
+fullctl.util.is_valid_ip4 = (ip) => {
+  // Regular expression to match IPv4 addresses with optional prefix length
+  const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/([1-9]|[1-2][0-9]|3[0-2]))?$/;
+
+  // Test the input against the regular expression
+  const isValid = ipv4Regex.test(ip);
+
+  return isValid;
+}
+
 fullctl.formatters.pretty_speed = (value) => {
   if(value >= 1000000)
     value = parseInt(value / 1000000)+"T";

@@ -539,6 +539,24 @@ div.modal-body div.border-top-seperator {
   border: 1px solid var(--clr-border-400);
 }
 
+.modal-control .select2-container--default .select2-selection--single {
+  background-color: var(--modal-bg);
+  border: 1px solid var(--theme-secondary-border-color);
+}
+
+.modal-control .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+  border-color: transparent transparent var(--foreground) transparent;
+}
+.modal-control .select2-container--default .select2-selection--single .select2-selection__arrow b {
+  border-color: var(--foreground) transparent transparent transparent;
+}
+
+.modal .controls input.select2-search__field {
+  background-color: transparent;
+  border-bottom: 1px solid var(--theme-secondary-border-color);
+  outline: 0;
+}
+
 .controls .select2-container--default .select2-selection--single .select2-selection__rendered {
   color: var(--foreground);
 }
@@ -546,6 +564,13 @@ div.modal-body div.border-top-seperator {
 span.select2-dropdown {
   border-color: var(--clr-border-400);
   background-color: var(--background);
+  box-shadow: 5px 5px #0000004d;
+}
+
+.modal span.select2-dropdown {
+  border-color: var(--clr-border-400);
+  background-color: var(--modal-bg);
+  box-shadow: 5px 5px #0000004d;
 }
 
 div.controls label {
@@ -757,3 +782,10 @@ footer .help-box {
   color: var(--foreground);
   background: transparent;
 }
+
+
+div.autocomplete-item .autocomplete-primary {
+  color: var(--foreground);
+}
+
+
