@@ -88,7 +88,6 @@ class RemotePermissions(django_grainy.remote.Permissions):
         user_id = response.headers.get("X-User")
 
         with current_request() as request:
-
             # no request in context, nothing to do
             if not request:
                 return

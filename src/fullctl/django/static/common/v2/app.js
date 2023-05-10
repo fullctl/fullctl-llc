@@ -1284,7 +1284,7 @@ fullctl.theme_switching = document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/** 
+/**
  * Holds extension functions and classes that deal
  * with third party library quality of life utilities
  * @class fullctl.ext
@@ -1305,14 +1305,14 @@ fullctl.ext.select2 = {
    * Initializes autocomplete on a select2 element using
    * the fullctl autocomplete response schema which contains
    * a `results` array of objects with the following structure:
-   * 
+   *
    * {
    *   id,
    *   primary, # primary text (name etc.)
    *   secondary, # Secondary text (second row, description etc.)
    *   extra, # Extra text (third row, additional info etc.)
    * }
-   * 
+   *
    * @method init_autocomplete
    * @param {jQuery} jq - the select2 element
    * @param {jQuery} parent - the parent element to attach the dropdown to
@@ -1340,7 +1340,7 @@ fullctl.ext.select2 = {
       },
       width: '20em',
       placeholder: opt.placeholder,
-    
+
       templateResult: function(state) {
 
         // overrides the template used when an item is rendered into
@@ -1385,7 +1385,7 @@ fullctl.ext.select2 = {
       let initial = opt.initial;
       let option = $(new Option(initial.primary, initial.id, true, true))
       option.data("selection_data", initial)
-      jq.append(option.get(0)).trigger("change")  
+      jq.append(option.get(0)).trigger("change")
     }
   }
 }

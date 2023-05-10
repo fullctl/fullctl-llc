@@ -32,7 +32,7 @@ def proxy_api_endpoint(service, host, endpoint):
 
         # drf_request = Request(request, parsers=[JSONParser])
         _kwargs = {}
- 
+
         if method in ["post", "put", "patch"]:
             _kwargs.update(json=json.loads(request.body))
         elif method == "get":
