@@ -1284,6 +1284,113 @@ fullctl.theme_switching = document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/** 
+ * Holds extension functions and classes that deal
+ * with third party library quality of life utilities
+ * @class fullctl.ext
+ *
+ */
+
+fullctl.ext = {}
+
+/**
+ * Select2 extension utilities
+ * @class fullctl.ext.select2
+ */
+
+fullctl.ext.select2 = {
+
+
+  /**
+   * Initializes autocomplete on a select2 element using
+   * the fullctl autocomplete response schema which contains
+   * a `results` array of objects with the following structure:
+   * 
+   * {
+   *   id,
+   *   primary, # primary text (name etc.)
+   *   secondary, # Secondary text (second row, description etc.)
+   *   extra, # Extra text (third row, additional info etc.)
+   * }
+   * 
+   * @method init_autocomplete
+   * @param {jQuery} jq - the select2 element
+   * @param {jQuery} parent - the parent element to attach the dropdown to
+   * @param {Object} opt - options
+   * @param {String} opt.url - the url to fetch the autocomplete data from
+   * @param {String} opt.placeholder - the placeholder text
+   * @param {Function} opt.process - a function to process the autocomplete data
+   * @param {Object} opt.initial - the initial value (object containing id,primary,secondary and extra)
+   */
+
+  init_autocomplete: function(jq, parent, opt) {
+
+    jq.select2({
+      dropdownParent : parent,
+      ajax: {
+        url: opt.url,
+        dataType: 'json',
+        processResults : function(data, params) {
+          if(opt.process)
+            opt.process(data, params.term, params);
+          return {
+            results: data.results
+          }
+        },
+      },
+      width: '20em',
+      placeholder: opt.placeholder,
+    
+      templateResult: function(state) {
+
+        // overrides the template used when an item is rendered into
+        // the results list
+
+        if(!state.id) {
+          return state.text;
+        }
+
+        return $('<div>').addClass('autocomplete-item').append(
+          $('<div>').addClass('autocomplete-primary').text(state.text.primary)
+        ).append(
+          $('<div>').addClass('autocomplete-secondary').text(state.text.secondary)
+        ).append(
+          $('<div>').addClass('autocomplete-extra').text(state.text.extra)
+        )
+      },
+      templateSelection: function(state) {
+
+        // overrides the template used when an item is selected
+
+        if(!state.id) {
+          return state.text;
+        }
+
+        if(!state.selected_text)
+          state.selected_text = $(state.element).data('selection_data')
+
+        return $('<div>').addClass('autocomplete-item').append(
+          $('<div>').addClass('autocomplete-primary').text(state.selected_text.primary)
+        ).append(
+          $('<div>').addClass('autocomplete-secondary').text(state.selected_text.secondary)
+        ).append(
+          $('<div>').addClass('autocomplete-extra').text(state.selected_text.extra)
+        )
+      }
+    });
+
+    // if initial is set, select the initial value
+
+    if(opt.initial) {
+      let initial = opt.initial;
+      let option = $(new Option(initial.primary, initial.id, true, true))
+      option.data("selection_data", initial)
+      jq.append(option.get(0)).trigger("change")  
+    }
+  }
+}
+
+
 $.fn.grainy_toggle = function(namespace, level) {
   if(grainy.check(namespace, level)) {
     this.show();
@@ -1291,5 +1398,9 @@ $.fn.grainy_toggle = function(namespace, level) {
     this.hide();
   }
 };
+
+$(document).on('select2:open', () => {
+  document.querySelector('.select2-search__field').focus();
+});
 
 })(jQuery, twentyc.cls);
