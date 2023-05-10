@@ -1382,10 +1382,21 @@ fullctl.ext.select2 = {
     // if initial is set, select the initial value
 
     if(opt.initial) {
-      let initial = opt.initial;
-      let option = $(new Option(initial.primary, initial.id, true, true))
-      option.data("selection_data", initial)
-      jq.append(option.get(0)).trigger("change")
+
+      // check if initial is callable
+      if(typeof opt.initial === "function") {
+        opt.initial((initial) => {
+          let option = $(new Option(initial.primary, initial.id, true, true))
+          option.data("selection_data", initial)
+          jq.append(option.get(0)).trigger("change")
+        })
+      } else {
+        let initial = opt.initial;
+        let option = $(new Option(initial.primary, initial.id, true, true))
+        option.data("selection_data", initial)
+        jq.append(option.get(0)).trigger("change")
+      }
+
     }
   }
 }
