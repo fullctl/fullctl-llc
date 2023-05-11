@@ -2,16 +2,23 @@ from dal import autocomplete
 from django.utils import html
 
 import fullctl.service_bridge.devicectl as devicectl
+from fullctl.django.models.concrete import Organization
 
 
 class devicectl_port(autocomplete.Select2QuerySetView):
     def get_queryset(self):
+        try:
+            org = Organization.objects.get(slug=self.request.GET.get("org"))
+        except Organization.DoesNotExist:
+            return []
+
+        if not self.request.perms.check(f"port.{org.permission_id}", "r"):
+            return []
+
         if not self.q:
             return []
-        qs = [
-            o
-            for o in devicectl.Port().objects(org_slug=self.request.org.slug, q=self.q)
-        ]
+
+        qs = [o for o in devicectl.Port().objects(org_slug=org.slug, q=self.q)]
         return qs
 
     def get_result_label(self, port):
