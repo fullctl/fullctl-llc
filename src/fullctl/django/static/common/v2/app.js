@@ -906,7 +906,6 @@ fullctl.application.ContainerApplication = $tc.extend(
       });
 
       $(this.$c.toolbar.$w[selector_name]).one("load:after", () => {
-
         if(this["preselect_"+ref_tag]) {
           this[selector_name](this["preselect_"+ref_tag])
         } else {
@@ -919,6 +918,7 @@ fullctl.application.ContainerApplication = $tc.extend(
       $(this.$c.toolbar.$e[selector_name]).on("change", () => {
         this.sync();
         this.sync_url(this.$c.toolbar.$e[selector_name].val())
+        this.sync_title(this.$c.toolbar.$e[selector_name].val())
         if(this.$t.settings) { this.$t.settings.sync(); }
       });
 
