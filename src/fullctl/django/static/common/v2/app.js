@@ -1254,6 +1254,58 @@ fullctl.help_box = document.addEventListener("DOMContentLoaded", () => {
   })
 });
 
+/**
+ * Searchbar component for filtering elements
+ *
+ * @param {*} jq searchbar element
+ * @class Searchbar
+ * @namespace fullctl.application
+ * @constructor
+ * @param {(str) => undefined} filter_function function to call when filtering
+ * @param {(str) => undefined} clear_filter_function function to reverse what happens in the `filter_function`
+ */
+
+fullctl.application.Searchbar = function(jq, filter_function, clear_filter_function) {
+  const filter_input = jq.find('[data-element="filter"]');
+  const search_btn = jq.find('[data-element="filter_submit"]');
+  const clear_search_btn = jq.find('[data-element="filter_clear"]');
+
+  const search_prefix = (prefix) => {
+    filter_function(prefix.toLowerCase());
+    search_btn.removeClass("curved");
+    clear_search_btn.show();
+  }
+
+  const clear_search = () => {
+    clear_filter_function();
+    search_btn.addClass("curved");
+    clear_search_btn.hide();
+    filter_input.val("")
+  }
+
+  filter_input.on("keyup", function(event) {
+    if (event.key === "Enter") {
+      if ($(this).val() != "") {
+        search_prefix($(this).val())
+      } else {
+        clear_search();
+      }
+    }
+  });
+
+  search_btn.click(() => {
+    if (filter_input.val() != "") {
+      search_prefix(filter_input.val())
+    } else {
+      clear_search();
+    }
+  });
+
+  clear_search_btn.click(() => {
+    clear_search();
+  })
+}
+
 fullctl.theme_switching = document.addEventListener("DOMContentLoaded", () => {
   function toggle_theme() {
     if (detect_theme() === 'dark')
