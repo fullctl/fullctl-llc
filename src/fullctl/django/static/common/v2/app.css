@@ -56,6 +56,10 @@ body {
 body {
   text-rendering: optimizeSpeed;
   line-height: 1.5;
+  /* always show body scroll bar so we dont get jittery widths between cotent
+   * that overflows and content that doesn't
+   */
+  overflow-y: scroll;
 }
 
 /* A elements that don't have a class get default styles */
@@ -851,6 +855,23 @@ a.nav-link {
 a.nav-link.active {
   border-bottom: 2px solid;
 }
+
+.fullctl-inner-tabs .nav .nav-item {
+  margin-right: 10px;
+}
+
+.fullctl-inner-tabs .nav {
+  border: none;
+  margin-bottom: 25px;
+}
+
+.fullctl-inner-tabs .nav .nav-link {
+  border: 0px;
+  border-bottom: 1px solid;
+  border-radius: 0px;
+}
+
+
 
 /**
  * menu
