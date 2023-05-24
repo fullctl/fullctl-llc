@@ -1641,8 +1641,9 @@ span.fullctl-sot {
   padding-left: 5px;
 }
 
+.notification.bg-info,
 .cross-promotion .alert-info {
-  background-color: #2b2e39;
+  background-color: #2b2e39 !important;
   border-color: #d1ff27;
 }
 
@@ -1710,4 +1711,27 @@ div.autocomplete-item .autocomplete-extra {
 .modal .controls input.select2-search__field {
   border: none;
   border-bottom: 1px solid transparent;
+}
+
+div.notifications {
+  position: fixed;
+  top: 75px;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 5px;
+  z-index: 100;
+}
+
+div.notifications .badge.notification {
+  padding: 10px;
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
+  min-width: 200px;
+  max-width: 600px;
+}
+
+div.notifications .badge.notification.bg-info {
+  border-width: 1px;
+  border-style: solid;
 }

@@ -238,6 +238,11 @@ fullctl.permissions = {{ permissions|safe }}
 <main>
 {% block "error_content" %}{% endblock %}
 
+{% block "notifications" %}
+<div class="notifications">
+</div>
+{% endblock %}
+
 <!-- app trial -->
 
 {% if not request|can_access:service_info.org_namespace %}

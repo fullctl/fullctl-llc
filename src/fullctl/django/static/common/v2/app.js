@@ -18,7 +18,68 @@ fullctl.util = {}
 fullctl.help_box = {}
 fullctl.auth = {};
 fullctl.static_path = "/s/0.0.0-dev/"
+fullctl.session_expired = false;
 
+class NotificationManager {
+  constructor() {
+    this.notifications = [];
+    this.max_notifications = 3;
+  }
+
+  /**
+   * Add a new notification
+   * @param {string} type - notification type (danger, info, success)
+   * @param {string} message - HTML message content
+   * @param {function} [click_handler] - custom click handler (optional)
+   * @param {number} [auto_close_seconds] - auto close in seconds (optional)
+   */
+  add_notification(type, message, click_handler, auto_close_seconds) {
+    // Remove old notification if needed
+    if (this.notifications.length === this.max_notifications) {
+      this.notifications.shift().remove();
+    }
+
+    // Create new notification element
+    const notification = $(`<div class="notification badge bg-${type}">${message}</div>`);
+
+    // Append the notification to the .notifications element
+    $('.notifications').append(notification);
+
+    // Add click listener for custom click handler (if provided) and removing the notification
+    notification.on('click', () => {
+      if (click_handler) {
+        click_handler();
+      }
+      notification.remove();
+    });
+
+    // Auto close the notification after n seconds (if provided)
+    if (auto_close_seconds) {
+      setTimeout(() => {
+        notification.remove();
+      }, auto_close_seconds * 1000);
+    }
+
+    // Add to the notifications array
+    this.notifications.push(notification);
+  }
+
+  danger(html_message, click_handler, auto_close_seconds) {
+    this.add_notification("danger", html_message, click_handler, auto_close_seconds);
+  }
+
+  info(html_message, click_handler, auto_close_seconds) {
+    this.add_notification("info",	html_message, click_handler, auto_close_seconds);
+  }
+
+  success(html_message, click_handler, auto_close_seconds) {
+    this.add_notification("success", html_message, click_handler, auto_close_seconds);
+  }
+
+}
+
+// Create a NotificationManager instance in the window.fullctl namespace
+fullctl.notification_manager = new NotificationManager();
 
 /**
  * starts periodically checking the /authcheck endpoint
@@ -33,8 +94,14 @@ fullctl.auth.start_check = function() {
   this.auth_check_timer = setInterval(() => {
     $.get("/authcheck/").fail(() => {
       clearInterval(this.auth_check_timer);
-      alert("Your session has expired");
-      window.location.reload();
+      if(!fullctl.session_expired) {
+        $(fullctl).trigger("session-expired");
+        fullctl.notification_manager.danger("Your session has expired. <a href=\"\">Reconnect</a>.", ()=>{
+          window.location.href = "";
+        });
+      }
+      fullctl.session_expired = true;
+      
     });
   }, 15000);
 }
