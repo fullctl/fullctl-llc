@@ -1733,3 +1733,16 @@ div.autocomplete-item .autocomplete-extra {
   border: none;
   border-bottom: 1px solid transparent;
 }
+
+/* table display */
+.table-disp {
+  display: table;
+}
+
+.table-row-disp {
+  display: table-row;
+}
+
+.table-cell-disp {
+  display: table-cell;
+}
