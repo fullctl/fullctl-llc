@@ -265,6 +265,12 @@ button {
   cursor: pointer;
 }
 
+.label-oneline {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 1900px) {
   .container {
     max-width: 1400px;
@@ -542,7 +548,7 @@ input.slim {
 }
 
 .list-body label {
-  font-size: 11px;
+  font-size: var(--fs-400);
   margin: 0px;
 }
 
@@ -943,6 +949,7 @@ div.menu .button {
   border-bottom-left-radius: var(--size-200);
   flex: 1;
   border: 1px solid;
+  width: 100%;
 }
 
 .input-group.searchbar .btn {
@@ -1193,7 +1200,6 @@ div.list-body div.secondary {
 
 div.list-body .primary-row-name {
   font-size: 24px;
-  font-weight: bold;
   letter-spacing: 0;
   line-height: 24px;
   margin: 16px 0px;
