@@ -875,6 +875,17 @@ span.icon-as {
   mask-image: url(icons/database.svg);
 }
 
+span.icon-triangle-fill-up {
+  -webkit-mask-image: url(icons/triangle-fill.svg);
+  mask-image: url(icons/triangle-fill.svg);
+}
+
+span.icon-triangle-fill-down {
+  -webkit-mask-image: url(icons/triangle-fill.svg);
+  mask-image: url(icons/triangle-fill.svg);
+  rotate: 180deg;
+}
+
 [data-true] {
   display: none;
 }
