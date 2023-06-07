@@ -56,6 +56,10 @@ body {
 body {
   text-rendering: optimizeSpeed;
   line-height: 1.5;
+  /* always show body scroll bar so we dont get jittery widths between cotent
+   * that overflows and content that doesn't
+   */
+  overflow-y: scroll;
 }
 
 /* A elements that don't have a class get default styles */
@@ -271,6 +275,12 @@ button {
   cursor: pointer;
 }
 
+.label-oneline {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 1900px) {
   .container {
     max-width: 1400px;
@@ -340,6 +350,52 @@ div.loading-anim {
 
 .indent-on .indent-toggled {
   padding-left: 20px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 
 /**
@@ -506,7 +562,7 @@ input.slim {
 }
 
 .list-body label {
-  font-size: 11px;
+  font-size: var(--fs-400);
   margin: 0px;
 }
 
@@ -567,9 +623,6 @@ div.toolbar span.toolbar-control>img.caret {
   position: absolute;
   right: 18px;
   top: 19px;
-}
-
-div.toolbar span.toolbar-control div.input-group {
 }
 
 div.toolbar span.toolbar-control .btn {
@@ -837,6 +890,17 @@ span.icon-filter {
   mask-image: url(icons/funnel.svg);
 }
 
+span.icon-triangle-fill-up {
+  -webkit-mask-image: url(icons/triangle-fill.svg);
+  mask-image: url(icons/triangle-fill.svg);
+}
+
+span.icon-triangle-fill-down {
+  -webkit-mask-image: url(icons/triangle-fill.svg);
+  mask-image: url(icons/triangle-fill.svg);
+  rotate: 180deg;
+}
+
 [data-true] {
   display: none;
 }
@@ -866,6 +930,23 @@ a.nav-link {
 a.nav-link.active {
   border-bottom: 2px solid;
 }
+
+.fullctl-inner-tabs .nav .nav-item {
+  margin-right: 10px;
+}
+
+.fullctl-inner-tabs .nav {
+  border: none;
+  margin-bottom: 25px;
+}
+
+.fullctl-inner-tabs .nav .nav-link {
+  border: 0px;
+  border-bottom: 1px solid;
+  border-radius: 0px;
+}
+
+
 
 /**
  * menu
@@ -915,6 +996,7 @@ div.menu .button {
   border-bottom-left-radius: var(--size-200);
   flex: 1;
   border: 1px solid;
+  width: 100%;
 }
 
 .input-group.searchbar .btn {
@@ -1165,7 +1247,6 @@ div.list-body div.secondary {
 
 div.list-body .primary-row-name {
   font-size: 24px;
-  font-weight: bold;
   letter-spacing: 0;
   line-height: 24px;
   margin: 16px 0px;
@@ -1635,8 +1716,9 @@ span.fullctl-sot {
   padding-left: 5px;
 }
 
+.notification.bg-info,
 .cross-promotion .alert-info {
-  background-color: #2b2e39;
+  background-color: #2b2e39 !important;
   border-color: #d1ff27;
 }
 
@@ -1704,4 +1786,40 @@ div.autocomplete-item .autocomplete-extra {
 .modal .controls input.select2-search__field {
   border: none;
   border-bottom: 1px solid transparent;
+}
+
+/* table display */
+.table-disp {
+  display: table;
+}
+
+.table-row-disp {
+  display: table-row;
+}
+
+.table-cell-disp {
+  display: table-cell;
+}
+
+div.notifications {
+  position: fixed;
+  top: 75px;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 5px;
+  z-index: 100;
+}
+
+div.notifications .badge.notification {
+  padding: 10px;
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
+  min-width: 200px;
+  max-width: 600px;
+}
+
+div.notifications .badge.notification.bg-info {
+  border-width: 1px;
+  border-style: solid;
 }

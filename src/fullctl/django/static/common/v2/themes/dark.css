@@ -49,6 +49,7 @@
   --codeblock-even-bg: var(--clr-bg-800);
   --modal-clr: var(--clr-primary-200);
   --modal-bg: var(--clr-bg-700);
+  --switch-bg: var(--clr-bg-850);
 
   --bs-body-color: var(--foreground);
   --bs-body-color-rgb: var(--foreground);
@@ -88,6 +89,7 @@
   --codeblock-even-bg: var(--clr-bg-200);
   --modal-bg: var(--clr-bg-200);
   --modal-clr: var(--clr-primary-800);
+  --switch-bg: var(--clr-bg-210);
 
   --source-of-truth-icon: url("../logos/ctl-mark-light.png");
 
@@ -205,6 +207,23 @@ main .dropdown-item:hover {
 
 .no-color {
   color: inherit !important;
+}
+
+.slider {
+  border: 1px solid var(--clr-border-400);
+  background-color: var(--switch-bg);
+}
+
+.slider:before {
+  background-color: var(--clr-primary-500);
+}
+
+input:checked + .slider:before {
+  background-color: var(--clr-accent-400);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--clr-accent-400);
 }
 
 /**
@@ -699,6 +718,11 @@ div.oauth-backend.twentyc>a.btn {
 }
 
 
+.fullctl-inner-tabs .nav .nav-link.active {
+  background-color: transparent;
+  color: var(--foreground);
+}
+
 /* loading spinner */
 
 
@@ -800,3 +824,9 @@ div.autocomplete-item .autocomplete-primary {
 }
 
 
+/**
+ * syntax hl
+*/
+.syntax-highlight-transparent-bg pre {
+  background-color: transparent !important;
+}

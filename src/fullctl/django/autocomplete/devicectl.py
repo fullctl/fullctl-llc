@@ -29,7 +29,11 @@ class devicectl_port(autocomplete.Select2QuerySetView):
 
         display_name = html.escape(display_name)
         virtual_port_name = html.escape(port.virtual_port_name)
-        device_name = html.escape(port.device_name)
+
+        try:
+            device_name = html.escape(port.device_name)
+        except AttributeError:
+            device_name = "No device connected"
 
         return {
             "primary": display_name,
