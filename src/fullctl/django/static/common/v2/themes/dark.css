@@ -822,3 +822,13 @@ div.autocomplete-item .autocomplete-primary {
 .syntax-highlight-transparent-bg pre {
   background-color: transparent !important;
 }
+
+/** DropdownBtn */
+.dropdown-btn summary::before {
+  background-color: var(--primary-btn-clr);
+}
+
+.dropdown-btn summary {
+  background-color: var(--primary-btn-bg);
+  border-left-color: var(--primary-btn-clr);
+}

@@ -1809,6 +1809,8 @@ div.notifications .badge.notification.bg-info {
   border-style: solid;
 }
 
+/** DropdownBtn */
+
 .dropdown-btn {
   display: inline-flex;
   position: relative;
@@ -1839,7 +1841,6 @@ div.notifications .badge.notification.bg-info {
   align-items: center;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-
 }
 
 .dropdown-btn summary::marker {
@@ -1858,12 +1859,10 @@ div.notifications .badge.notification.bg-info {
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-image: url(icons/ui-caret/down.svg);
   mask-image: url(icons/ui-caret/down.svg);
-  background-color: var(--primary-btn-clr);
 }
 
 .dropdown-btn summary {
-  background-color: var(--primary-btn-bg);
-  border-left: 1px solid var(--primary-btn-clr);
+  border-left: 1px solid;
   border-top-right-radius: var(--bs-border-radius);
   border-bottom-right-radius: var(--bs-border-radius);
 }
