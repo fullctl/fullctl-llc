@@ -1795,10 +1795,10 @@ twentyc.rest.List = twentyc.cls.extend(
       var row = this.find_row(id);
       if(row) {
         return this.get(id, this.payload()).then(function(response) {
-          
+
           // build new row
           var new_row = this.insert(response.first())
-          
+
           // find siblings surrounding current row, which we can then
           // use the insert the new row at the correct location
           //
