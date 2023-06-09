@@ -202,6 +202,15 @@ button:focus {
   max-height: 84px;
 }
 
+.loading-indicator-container.fixed {
+  height: 24px;
+  display: inline-block;
+  width: 24px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+
 .nowrap {
   white-space: nowrap;
 }
@@ -1886,4 +1895,26 @@ div.notifications .badge.notification.bg-info {
 
 .dropdown-btn.single-option details {
   display: none;
+}
+
+
+/* 
+ * badges
+ */
+
+.badge-btn .label {
+  vertical-align: super;
+  text-transform: uppercase;
+}
+
+.badge-btn .icon {
+  vertical-align: baseline;
+}
+
+button.badge-btn {
+  border: none;
+}
+
+button.badge-btn:disabled {
+  opacity: 0.5;
 }

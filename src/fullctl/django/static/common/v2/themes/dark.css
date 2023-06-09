@@ -128,8 +128,14 @@ input[type="checkbox"] {
   --bs-btn-active-border-color: var(--primary-btn-bg);
 }
 
+.bg-primary .icon,
 .btn.primary .icon {
   background-color: var(--primary-btn-clr);
+}
+
+.bg-primary {
+  background-color: var(--primary-btn-bg) !important;
+  color: var(--primary-btn-clr) !important;
 }
 
 .btn.secondary {
@@ -366,6 +372,10 @@ div.validation-error {
 .loading-indicator-container {
   background-color: var(--clr-bg-loading-indicator);
   border-color: var(--theme-secondary-border-color);
+}
+
+table td .loading-indicator-container {
+  background-color: transparent;
 }
 
 a[data-action].prefixctl,
@@ -831,4 +841,8 @@ div.autocomplete-item .autocomplete-primary {
 .dropdown-btn summary {
   background-color: var(--primary-btn-bg);
   border-left-color: var(--primary-btn-clr);
+}
+
+.legend {
+  color: var(--clr-primary-300);
 }
