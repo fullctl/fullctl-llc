@@ -610,11 +610,15 @@ fullctl.application.Tool = $tc.extend(
 
     apply_ordering: function() {
       //deprecated
+      console.warn("use of Tool.apply_ordering is deprecated")
+
       return;
     },
 
     initialize_sortable_headers: function() {
       //deprecated
+      console.warn("use of Tool.initialize_sortable_headers is deprecated")
+
       return;
     },
 
