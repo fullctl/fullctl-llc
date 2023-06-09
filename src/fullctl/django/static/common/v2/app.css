@@ -177,6 +177,11 @@ button:focus {
   outline: none;
 }
 
+/* to make loading shim cover entire area */
+.loading {
+  position: relative;
+}
+
 .loading-shim {
   position: absolute;
   top: 0px;

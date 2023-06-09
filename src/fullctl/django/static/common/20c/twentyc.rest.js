@@ -701,6 +701,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
 
     start_processing : function() {
       this.busy = true
+      this.element.addClass("loading")
       if(!this.loading_shim) {
         this.loading_shim = $('<div>').addClass("loading-shim")
         this.element.append(this.loading_shim);
@@ -726,6 +727,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
       this.busy = false
       if(this.loading_shim && !window.debug_loading_shim)
         this.loading_shim.hide();
+      this.element.removeClass("loading")
       //this.element.siblings(".loading-indicator-container").hide();
       $(this).trigger("ready");
     },
