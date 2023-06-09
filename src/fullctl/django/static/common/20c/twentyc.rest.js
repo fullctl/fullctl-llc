@@ -1421,12 +1421,14 @@ twentyc.rest.Button = twentyc.cls.extend(
  * @namespace twentyc.rest
  * @constructor
  * @param {jQuery result} jq jquery result holding the select element
+ * @param {string} [storage_id] localstorage id to use to store and reload
+ * selection from
  */
 
 twentyc.rest.Select = twentyc.cls.extend(
   "Select",
   {
-    Select : function(jq) {
+    Select : function(jq, storage_id) {
       this.load_action = jq.data("api-load")
       this.name_field = jq.data("name-field") || "name"
       this.id_field = jq.data("id-field") || "id"
@@ -1436,6 +1438,32 @@ twentyc.rest.Select = twentyc.cls.extend(
       this.null_option = jq.data("null-option")
       this.proxy_data = jq.data("proxy-data")
       this.Input(jq);
+
+      this.storage_id = storage_id;
+      if (storage_id) {
+        jq.on("change", function(ev) {
+          const selected_option = this.options[ this.selectedIndex ];
+          if (selected_option && localStorage.getItem(storage_id) != selected_option) {
+            localStorage.setItem(storage_id, selected_option.value);
+          }
+        })
+
+        $(this).one("load:after", function(ev) {
+          const selected_option = localStorage.getItem(storage_id);
+
+          if (!selected_option) {
+            return;
+          }
+
+          if (this.element.find('option[value="' + selected_option + '"]').length == 0) {
+            return;
+          }
+
+          this.element.val(selected_option);
+          this.element.trigger("change");
+        })
+      }
+
     },
 
     payload: function() {
