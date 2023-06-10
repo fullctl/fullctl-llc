@@ -1765,6 +1765,11 @@ div.autocomplete-item .autocomplete-extra {
   font-size: 11px;
 }
 
+div.autocomplete-controls {
+  font-size: 11px;
+  text-align: right;
+}
+
 .modal-control .select2-selection.select2-selection--single {
   height: 60px;
   padding: 5px;

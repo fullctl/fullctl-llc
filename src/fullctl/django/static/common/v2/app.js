@@ -1607,6 +1607,25 @@ fullctl.ext.select2 = {
 
   init_autocomplete: function(jq, parent, opt) {
 
+
+    // controls that allow removal of selected autocomplete element.
+
+    let controls = $('<div>').addClass('autocomplete-controls').append(
+      $('<a>').addClass('action').text('remove')
+    ).hide().click(() => {
+      jq.val(null).trigger("change");
+      controls.hide();
+    })
+
+    jq.on("change", function(e) {
+      if($(this).val()) {
+        controls.show();
+      } else {
+        controls.hide();
+      }
+    });
+
+
     jq.select2({
       dropdownParent : parent,
       ajax: {
@@ -1619,6 +1638,7 @@ fullctl.ext.select2 = {
             results: data.results
           }
         },
+      
       },
       width: '20em',
       placeholder: opt.placeholder,
@@ -1680,6 +1700,10 @@ fullctl.ext.select2 = {
       }
 
     }
+
+    // add autocomplete controls to bottom
+    jq.parent().append(controls);
+
   }
 }
 
