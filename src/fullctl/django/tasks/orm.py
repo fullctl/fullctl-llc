@@ -12,7 +12,7 @@ from fullctl.django.models import (
     TaskSchedule,
     WorkerUnqualified,
 )
-from fullctl.django.models.concrete.tasks import TaskClaim
+from fullctl.django.models.concrete.tasks import TaskClaim, TaskLimitError
 from fullctl.django.tasks import specify_task
 from fullctl.django.tasks.util import worker_id
 
@@ -105,5 +105,5 @@ def progress_schedules(**filters):
 
     try:
         schedule.spawn_tasks()
-    except TaskAlreadyStarted:
+    except (TaskAlreadyStarted, TaskLimitError):
         schedule.reschedule()
