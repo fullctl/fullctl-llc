@@ -21,8 +21,8 @@
         let bps_out_peak = 0;
 
         data.forEach(function(d) {
-            bps_in_peak = Math.max(bps_in_peak, d.bps_in);
-            bps_out_peak = Math.max(bps_out_peak, d.bps_out);
+            bps_in_peak = Math.max(bps_in_peak, d.bps_in_max);
+            bps_out_peak = Math.max(bps_out_peak, d.bps_out_max);
         });
 
         return {bps_in_peak, bps_out_peak};
@@ -76,10 +76,16 @@
             .y0(height)
             .y1(function(d) { return y(d.bps_in); });
 
+        // Update the area_in definition to fill all the way to the bottom of the graph
+        const area_in_updated = d3.area()
+            .x(function(d) { return x(d.timestamp * 1000); }) // Multiply by 1000 to convert unix timestamp to JavaScript timestamp
+            .y0(height)
+            .y1(function(d) { return y(Math.max(d.bps_in, 0)); });
+
         svg.append("path")
             .datum(data)
             .attr("fill", "#d1ff27")
-            .attr("d", area_in);
+            .attr("d", area_in_updated);
 
         // Add lines for bps_in and bps_out
         svg.append("path")
@@ -179,7 +185,7 @@
 
     fullctl.graphs.render_graph_from_file = function(path, titleLabel = "") {
         d3.json(path).then(function(data) {
-            fullctl.graphs.render_graph(data.data, titleLabel);
+            fullctl.graphs.render_graph(data.data[0].traffic, titleLabel);
         });
     }
 })();
