@@ -197,11 +197,15 @@ def update_rrd(file_path, log_line, last_update_time=None):
 
     # Check if the timestamp is newer than the most recent data in the RRD file
     if last_update_time is None or timestamp > last_update_time:
-        print(f"Updating RRD file with data from {timestamp}, avg_bytes_in={avg_bytes_in}, avg_bytes_out={avg_bytes_out}, max_bytes_in={max_bytes_in}, max_bytes_out={max_bytes_out}")
+        print(
+            f"Updating RRD file with data from {timestamp}, avg_bytes_in={avg_bytes_in}, avg_bytes_out={avg_bytes_out}, max_bytes_in={max_bytes_in}, max_bytes_out={max_bytes_out}"
+        )
         # Update RRD file with parsed data
         rrdtool.update(
             file_path,
             f"{timestamp}:{avg_bytes_in}:{avg_bytes_out}:{max_bytes_in}:{max_bytes_out}",
         )
     else:
-        print(f"Skipping RRD update for {timestamp} as it is older than the most recent data in the RRD file ({last_update_time})")
+        print(
+            f"Skipping RRD update for {timestamp} as it is older than the most recent data in the RRD file ({last_update_time})"
+        )
