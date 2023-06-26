@@ -294,6 +294,11 @@ fullctl.widget.StatusBadge = $tc.extend(
     },
 
     load : function() {
+      // stop refreshing if the element is no longer in the DOM
+      if (!document.body.contains(this.element[0])) {
+        this.refresh_timer.cancel();
+        return
+      }
       return this.get().then((response) => {
         response.rows((row) => {
           if(row.id == this.row_id) {
@@ -315,8 +320,8 @@ fullctl.widget.StatusBadge = $tc.extend(
       this.element.removeClass().addClass("status-badge "+value)
       this.element.empty().append($('<span>').text(value));
       if(this.refresh_values && $.inArray(value, this.refresh_values) == -1) {
-          this.element.append(this.spinner());
-          this.refresh();
+        this.element.append(this.spinner());
+        this.refresh();
       }
 
     }
