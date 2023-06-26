@@ -967,13 +967,11 @@ fullctl.application.Application = $tc.define(
     },
 
     sync : function() {
-      var i, app = this;
-      for(i in this.$t) {
+      for(let i in this.$t) {
         if(this.$t[i].active) {
-          this.$t[i].sync(app);
+          this.$t[i].sync();
         }
       }
-
     },
 
     /**
