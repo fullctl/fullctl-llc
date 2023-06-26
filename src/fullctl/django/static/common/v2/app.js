@@ -580,7 +580,11 @@ fullctl.application.Modal = $tc.extend(
       modal.changed = false;
 
       const form_inputs = this.jquery.find('form :input');
-      const change_setter = function() {
+      const change_setter = function(e, info) {
+        if (info === "on_load_change") {
+          return
+        }
+
         modal.changed = true;
         form_inputs.off('change', change_setter);
       }

@@ -1556,8 +1556,11 @@ twentyc.rest.Select = twentyc.cls.extend(
 
         if(select_this) {
           select.val(select_this);
-          if(select_this != old_val)
-            select.trigger("change", []);
+          if(select_this != old_val) {
+            // on_load_change is used to identify that this change event is
+            // being triggered by the load method, and not by the user
+            select.trigger("change", ["on_load_change"]);
+          }
         }
 
         $(this).trigger("load:after", [select, response.content.data, this]);
