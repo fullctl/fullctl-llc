@@ -75,17 +75,40 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // Set up domains for x and y scales
-        x.domain(d3.extent(data, function(d) { return d.timestamp * 1000; })); // Multiply by 1000 to convert unix timestamp to JavaScript timestamp
+        const extent = d3.extent(data, function(d) { return d.timestamp * 1000; }); // Multiply by 1000 to convert unix timestamp to JavaScript timestamp
+        x.domain(extent);        
         y.domain([0, d3.max(data, function(d) { return Math.max(d.bps_in, d.bps_out); }) * 1.1]); // Add 10% padding to the maximum value
+
+        // Calculate the difference in hours between the maximum and minimum dates
+        const diffHours = (extent[1] - extent[0]) / 1000 / 60 / 60;
+
+        // Set the number of ticks based on the date range
+        let ticks;
+        if (diffHours <= 1) {    
+            ticks = d3.timeMinute.every(5);
+        } else if (diffHours <= 12) {
+            ticks = d3.timeHour.every(2);
+        } else if (diffHours <= 24) {
+            ticks = d3.timeHour.every(5);
+        } else if (diffHours <= 10 * 24) {
+            ticks = d3.timeDay.every(1);
+        } else if (diffHours <= 90 * 24) {
+            ticks = d3.timeWeek.every(2);
+        } else if (diffHours <= 365 * 24) {
+            ticks = d3.timeMonth.every(2);
+        } else  {
+            ticks = d3.timeMonth.every(1);
+        }
 
         // Add x-axis to the graph
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x).ticks(ticks)); // Set the number of ticks on the x-axis
+
 
         // Add y-axis to the graph
         svg.append("g")
-            .call(d3.axisLeft(y).tickFormat(format_y_axis)); // Format y-axis using pretty_speed formatter
+            .call(d3.axisLeft(y).tickFormat(format_y_axis).ticks(8)); // Format y-axis using pretty_speed formatter
 
         // Add area for bps_in
         const area_in = d3.area()
