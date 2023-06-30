@@ -1784,15 +1784,22 @@ div.autocomplete-controls {
   line-height: initial;
 }
 
-.modal-control .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b,
-.modal-control .select2-container--default .select2-selection--single .select2-selection__arrow b {
-  left: 0%;
-  top: 77%;
-}
-
 .modal .controls input.select2-search__field {
   border: none;
   border-bottom: 1px solid transparent;
+}
+
+.select2-selection.select2-selection--single {
+  height: 42px;
+  padding-left: var(--size-100);
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  right: 4px;
+  top: initial;
 }
 
 /* table display */
