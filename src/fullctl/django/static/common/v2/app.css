@@ -1938,3 +1938,12 @@ button.badge-btn {
 button.badge-btn:disabled {
   opacity: 0.5;
 }
+
+/*
+ * graphs
+ */
+.graph-placeholder {
+  height: 256px;
+  display: block;
+  position: relative;
+}

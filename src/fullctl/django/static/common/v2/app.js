@@ -152,6 +152,20 @@ fullctl.formatters.pretty_speed = (value) => {
   return value
 }
 
+fullctl.formatters.pretty_speed_bits = (value) => {
+  if(value >= 1000000000000)
+    value = parseInt(value / 1000000000000)+"T";
+  else if(value >= 1000000000)
+    value = parseInt(value / 1000000000)+"G";
+  else if(value >= 1000000)
+    value = parseInt(value / 1000000)+"M";
+  else if(value >= 1000)
+    value = parseInt(value / 1000)+"K";
+  else
+    value = value+"";
+  return value
+}
+
 fullctl.formatters.monitor_status = (value) => {
   if(value == "ok") {
      return $('<span>').addClass('active').text('Active');

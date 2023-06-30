@@ -64,7 +64,9 @@ class TaskAdmin(BaseAdmin):
         "status",
         "op",
         "limit_id",
-        "param",
+        # Params can ge quite large at this point, maybe we
+        # hide it by default? Could do display up to a certain length
+        # "param",
         "time",
         "user",
         "org",

@@ -137,6 +137,7 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../devicectl/src:/srv/service/main
+      - ../../../devicectl/graphs:/srv/service/graphs
 
 
   pdbctl_web:
