@@ -329,7 +329,8 @@ class Request(HandleRefModel):
             # we will write the meta data from the response
 
             try:
-                req.response.write_meta_data(req)
+                if http_status in cls.valid_http_status:
+                    req.response.write_meta_data(req)
             except NoMetaClassDefined:
                 pass
 
