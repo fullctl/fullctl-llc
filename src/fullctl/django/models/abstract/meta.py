@@ -358,9 +358,9 @@ class Request(HandleRefModel):
         tdiff = time.time() - cached.updated.timestamp()
 
         if cached.http_status == 429:
-            if tdiff > 300:
-                # if the cached request is a 429 and it's older than 5 minutes
-                # we will ignore it and send a new request
+            if tdiff > 300 or tdiff > cls.cache_expiry(target):
+                # if the cached request is a 429 and it's older than 5 minutes or
+                # older than the normal cache expiry we will ignore it and send a new request
                 return None
 
         return cached
