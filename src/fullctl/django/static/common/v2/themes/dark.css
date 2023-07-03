@@ -16,6 +16,7 @@
   --clr-bg-200: rgba(246, 248, 250, 1);
   --clr-bg-210: hsl(210, 14%, 95%);
   --clr-bg-300: #E5E5E5;
+  --clr-bg-400: #b3b3b3;
   --clr-bg-700: rgba(62, 70, 79, 1);
   --clr-bg-800: rgba(44, 47, 58, 0.96);
   --clr-bg-850: hsl(227, 12%, 14%);
@@ -66,6 +67,8 @@
 
   --graph-placeholder-bg: rgba(0,0,0,0.5);
 
+  --select2-selected-bg: var(--clr-bg-700);
+
   color-scheme: dark;
 }
 
@@ -103,6 +106,8 @@
   --clr-bg-loading-indicator: #d5d5d5;
 
   --graph-placeholder-bg: rgba(0,0,0,0.2);
+
+  --select2-selected-bg: var(--clr-bg-400);
 
   color-scheme: light;
 }
@@ -622,6 +627,22 @@ span.select2-dropdown {
   box-shadow: 5px 5px #0000004d;
 }
 
+.select2-selection.select2-selection--single {
+  background-color: transparent;
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"] {
+  background: transparent;
+}
+
+.select2-results__option[aria-selected="true"] .autocomplete-item {
+  background-color: var(--select2-selected-bg);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  color: foreground;
+}
+
 div.controls label {
   color: var(--th-clr);
 }
@@ -838,10 +859,9 @@ footer .help-box {
 }
 
 
-div.autocomplete-item .autocomplete-primary {
+div.autocomplete-item {
   color: var(--foreground);
 }
-
 
 /**
  * syntax hl
