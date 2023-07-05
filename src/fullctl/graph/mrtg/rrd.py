@@ -137,7 +137,7 @@ def stream_log_lines_to_rrd(file_path, log_stream, last_update_time=None):
         update_rrd(file_path, log_line)
 
 
-def create_rrd_file(file_path, start_time):
+def create_rrd_file(file_path, start_time, heartbeat=90000):
     """
     Create an RRD file with the required data sources and archives.
 
@@ -157,6 +157,7 @@ def create_rrd_file(file_path, start_time):
         - MAX, XFF 0.5, 3 PDPs per CDP, 672 CDPs (7 days of data with 15-minute resolution).
         - MAX, XFF 0.5, 12 PDPs per CDP, 744 CDPs (31 days of data with 1-hour resolution).
         - MAX, XFF 0.5, 72 PDPs per CDP, 1460 CDPs (365 days of data with 6-hour resolution).
+        - MAX, XFF 0.5, 72 PDPs per CDP, 1460 CDPs (365 days of data with 6-hour resolution).
 
     :param file_path: Path to the RRD file.
     :param start_time: The start time of the RRD file.
@@ -167,18 +168,20 @@ def create_rrd_file(file_path, start_time):
         str(start_time - 1),  # Subtract 1 to ensure the first log line can be added
         "--step",
         "300",
-        "DS:bps_in:GAUGE:600:0:U",
-        "DS:bps_out:GAUGE:600:0:U",
-        "DS:bps_in_max:GAUGE:600:0:U",  # Add bps_in_max data source
-        "DS:bps_out_max:GAUGE:600:0:U",  # Add bps_out_max data source
+        f"DS:bps_in:GAUGE:{heartbeat}:0:U",
+        f"DS:bps_out:GAUGE:{heartbeat}:0:U",
+        f"DS:bps_in_max:GAUGE:{heartbeat}:0:U",  # Add bps_in_max data source
+        f"DS:bps_out_max:GAUGE:{heartbeat}:0:U",  # Add bps_out_max data source
         "RRA:AVERAGE:0.5:1:288",
         "RRA:AVERAGE:0.5:3:672",
         "RRA:AVERAGE:0.5:12:744",
         "RRA:AVERAGE:0.5:72:1460",
+        "RRA:AVERAGE:0.5:288:7300",  # 20 years of data with 1-day resolution
         "RRA:MAX:0.5:1:288",  # Add MAX Round Robin Archives
         "RRA:MAX:0.5:3:672",
         "RRA:MAX:0.5:12:744",
         "RRA:MAX:0.5:72:1460",
+        "RRA:MAX:0.5:288:7300",  # 20 years of data with 1-day resolution
     )
 
 
