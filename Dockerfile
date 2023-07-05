@@ -1,9 +1,10 @@
+ARG python_ver=3.11
 ARG base_repo=python
-ARG base_tag=3.11-alpine
+ARG base_tag=${python_ver}-alpine
 
-ARG virtual_env=/venv
 ARG install_to=/srv/service
-ARG poetry_pin="==1.4.1"
+ARG poetry_pin="==1.5.1"
+ARG virtual_env=/venv
 
 ARG build_deps=" \
     build-base \
@@ -43,7 +44,7 @@ RUN apk upgrade --no-cache --available \
     && apk --no-cache add $build_deps
 
 # Use Pip to install Poetry
-RUN python3 -m pip install --upgrade pip && pip install "poetry$poetry_pin"
+RUN python3 -m pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir "poetry$poetry_pin"
 
 # Create a VENV
 RUN python3 -m venv "$VIRTUAL_ENV"
@@ -54,5 +55,5 @@ WORKDIR /build
 COPY pyproject.toml poetry.lock ./
 
 # Need to upgrade pip and wheel within Poetry for all its installs
-RUN poetry run pip install --upgrade pip wheel
+RUN poetry run pip install --upgrade --no-cache-dir pip wheel
 RUN poetry install --no-root

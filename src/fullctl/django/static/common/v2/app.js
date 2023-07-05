@@ -1751,13 +1751,13 @@ fullctl.ext.select2 = {
         opt.initial((initial) => {
           let option = $(new Option(initial.primary, initial.id, true, true))
           option.data("selection_data", initial)
-          jq.append(option.get(0)).trigger("change")
+          jq.append(option.get(0)).trigger("change", ["on_load_change"]);
         })
       } else {
         let initial = opt.initial;
         let option = $(new Option(initial.primary, initial.id, true, true))
         option.data("selection_data", initial)
-        jq.append(option.get(0)).trigger("change")
+        jq.append(option.get(0)).trigger("change", ["on_load_change"]);
       }
 
     }
@@ -1776,7 +1776,7 @@ fullctl.ext.select2 = {
     let controls = $('<div>').addClass('autocomplete-controls').append(
       $('<a>').addClass('action').text('remove')
     ).hide().on("click", () => {
-      this.element.val(null).trigger("change");
+      this.element.val(null).trigger("change", ["on_load_change"]);
       controls.hide();
     });
 
