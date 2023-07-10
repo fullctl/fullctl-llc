@@ -661,6 +661,13 @@ div.toolbar-field {
   padding: 8px;
 }
 
+.infobar .toolbar-field {
+  border: 1px solid var(--clr-border-200);
+}
+
+.infobar .toolbar-field span.icon:not(.inactive) {
+  background-color: var(--clr-accent-400);
+}
 
 div.toolbar-field>span.value {
   font-size: 16px;
