@@ -7,9 +7,9 @@ from django.db import connection
 
 # from django.conf import settings
 from django.http import Http404, HttpResponse
-from django.utils.http import http_date
 from django.shortcuts import redirect, render
 from django.utils.html import escape
+from django.utils.http import http_date
 from django.utils.safestring import mark_safe
 
 from fullctl.django.decorators import require_auth
@@ -119,7 +119,6 @@ def handle_error_403(request, exception=None):
 
 
 def organization_file_download(request, org_tag, file_name):
-
     """
     Handles organization file downloads.
 

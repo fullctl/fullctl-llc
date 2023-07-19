@@ -1,11 +1,11 @@
 import reversion
 from django.conf.urls import url
-from django.urls import path, reverse
 from django.contrib import admin
-from django.http import HttpResponseForbidden, FileResponse
+from django.http import FileResponse, HttpResponseForbidden
 from django.shortcuts import redirect
-from django_handleref.admin import VersionAdmin
+from django.urls import path, reverse
 from django.utils.html import format_html
+from django_handleref.admin import VersionAdmin
 
 import fullctl.django.auditlog as auditlog
 from fullctl.django.models.concrete import (
@@ -56,27 +56,48 @@ class OrganizationAdmin(BaseAdmin):
     list_display = ("id", "name", "slug")
     inlines = (OrganizationUserInline,)
 
+
 @admin.register(OrganizationFile)
 class OrganizationFileAdmin(BaseAdmin):
-    list_display = ("id", "name", "org", "public", "created", "updated", "download_link")
+    list_display = (
+        "id",
+        "name",
+        "org",
+        "public",
+        "created",
+        "updated",
+        "download_link",
+    )
     search_fields = ("name", "org__name")
 
-
     def download_link(self, obj):
-        return format_html('<a href="{}">Download</a>', reverse('admin:download_file', args=[obj.pk]))
-    download_link.short_description = 'Download Link'
+        return format_html(
+            '<a href="{}">Download</a>', reverse("admin:download_file", args=[obj.pk])
+        )
+
+    download_link.short_description = "Download Link"
 
     def download_file(self, request, pk):
         file = self.get_object(request, pk)
-        response = FileResponse(file.content, as_attachment=True, filename=file.name, content_type=file.content_type)
+        response = FileResponse(
+            file.content,
+            as_attachment=True,
+            filename=file.name,
+            content_type=file.content_type,
+        )
         return response
 
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('<int:pk>/download/', self.admin_site.admin_view(self.download_file), name='download_file'),
+            path(
+                "<int:pk>/download/",
+                self.admin_site.admin_view(self.download_file),
+                name="download_file",
+            ),
         ]
         return custom_urls + urls
+
 
 @admin.register(Task)
 class TaskAdmin(BaseAdmin):
