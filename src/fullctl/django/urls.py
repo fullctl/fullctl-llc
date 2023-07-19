@@ -111,6 +111,11 @@ urlpatterns += [
             namespace="service_bridge_api",
         ),
     ),
+    path(
+        "<str:org_tag>/file/<str:file_name>/",
+        fullctl.django.views.organization_file_download,
+        name="organization-file-download",
+    ),
     path("logout/", fullctl.django.views.logout, name="logout"),
     path("login/", fullctl.django.views.login, name="login"),
     path(

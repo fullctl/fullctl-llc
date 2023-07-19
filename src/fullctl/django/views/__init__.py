@@ -7,11 +7,13 @@ from django.db import connection
 
 # from django.conf import settings
 from django.http import Http404, HttpResponse
+from django.utils.http import http_date
 from django.shortcuts import redirect, render
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 from fullctl.django.decorators import require_auth
+from fullctl.django.models.concrete.file import OrganizationFile
 
 
 @require_auth()
@@ -114,3 +116,32 @@ def handle_error_400(request, exception=None):
 
 def handle_error_403(request, exception=None):
     return handle_error(request, exception, 403)
+
+
+def organization_file_download(request, org_tag, file_name):
+
+    """
+    Handles organization file downloads.
+
+    This view is used to serve files that are stored in the database.
+
+    The file is served as an attachment, with the original filename.
+
+    If the file is not public, the user must have read access to the file
+    """
+
+    org_file = OrganizationFile.objects.get(name=file_name, org__slug=org_tag)
+
+    if not org_file.public and not request.perms.check(org_file, "r"):
+        return HttpResponse("", status=404)
+
+    response = HttpResponse(org_file.content, content_type=org_file.content_type)
+    response["Content-Disposition"] = f"attachment; filename={org_file.name}"
+
+    # Set the Cache-Control header to instruct the browser to cache the response for 1 hour
+    response["Cache-Control"] = "public, max-age=3600"
+
+    # Set the Last-Modified header to the last modification time of the file
+    response["Last-Modified"] = http_date(org_file.updated.timestamp())
+
+    return response
