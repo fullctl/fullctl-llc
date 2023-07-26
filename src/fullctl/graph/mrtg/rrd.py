@@ -290,10 +290,8 @@ def aggregate_rrd_files(rrd_files, output_file):
     aggregated_data = sorted(aggregated_data.values(), key=lambda x: x["timestamp"])
 
     # Create the output RRD file
-    if os.path.exists(output_file):
-        os.remove(output_file)
-
-    create_rrd_file(output_file, aggregated_data[0]["timestamp"] + 1)
+    if not os.path.exists(output_file):
+        create_rrd_file(output_file, aggregated_data[0]["timestamp"] + 1)
 
     # Fetch the most recent timestamp in the RRD file if not provided
     last_update_time = get_last_update_time(output_file)
