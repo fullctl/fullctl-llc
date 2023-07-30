@@ -430,7 +430,9 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_option("LEGAL_URL", "https://www.fullctl.com/legal")
 
         # Terms of Service URL
-        self.set_option("TERMS_OF_SERVICE_URL", "https://www.fullctl.com/legal#section=collapseToS")
+        self.set_option(
+            "TERMS_OF_SERVICE_URL", "https://www.fullctl.com/legal#section=collapseToS"
+        )
 
     # TODO: review implementation
     def set_languages_docs(self):
