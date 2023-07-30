@@ -175,6 +175,7 @@ a[data-action],
   cursor: pointer;
 }
 
+.input-container,
 [data-api-submit] {
   position: relative;
 }
