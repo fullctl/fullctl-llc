@@ -38,3 +38,13 @@ def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None)
         )
 
     return tasks
+
+
+def requeue(generic_task):
+    """
+    Method to re-queue a task. This will create a new task with the same arguments.
+    """
+    task = specify_task(generic_task)
+    param = task.param
+    new_task = task.__class__.create_task(*param["args"], **param["kwargs"], user=task.user, org=task.org)
+    return new_task
