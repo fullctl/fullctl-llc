@@ -49,11 +49,27 @@ class ServiceApplicationObject(AaactlEntity):
             self.org_namespace = self.grainy
         return self
 
-
 class ServiceApplication(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "service_application"
         data_object_cls = ServiceApplicationObject
+
+
+    def trial_available(self, org_slug, service_slug, object_id=None):
+
+        params = {
+            "org_slug": org_slug,
+            "service_slug": service_slug,
+            "object_id": object_id,
+        }
+
+        url = f"data/{self.ref_tag}/trial_available/"
+
+        data = self.get(url, params=params)
+
+        if data:
+            return data[0]["can_trial"]
+        return False
 
 
 class User(Aaactl):

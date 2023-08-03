@@ -105,3 +105,21 @@ def permissions(request):
     )
 
     return {"permissions": context}
+
+
+def trial_available(request):
+    """
+    Returns a boolean indicating whether or not there is a trial
+    available for the requesting organization at the service
+    """
+
+    service = ServiceApplication()
+
+    return {
+        "trial_available": service.trial_available(
+            {
+                "org_slug": request.org.slug,
+                "service_slug": settings.SERVICE_TAG,
+            }
+        )
+    }

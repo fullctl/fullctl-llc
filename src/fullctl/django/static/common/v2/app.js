@@ -897,7 +897,8 @@ fullctl.application.TrialButton = $tc.extend(
 
     payload : function() {
       return {
-        service_id : this.service_id
+        service_id : this.service_id,
+        component_object_id : fullctl.trial_object || null
       }
     }
   },

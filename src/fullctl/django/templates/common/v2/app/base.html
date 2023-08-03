@@ -41,6 +41,10 @@ fullctl.org = {
   name : "{{ request.org.name }}"
 }
 
+{% if trial_object and trial_available %}
+fullctl.trial_object = {{ trial_object.id }}
+{% endif %} 
+
 fullctl.service_info = {{ service_info.json|safe }};
 
 fullctl.aaactl_urls = {{ account_service.urls|safe }}
@@ -251,7 +255,7 @@ fullctl.permissions = {{ permissions|safe }}
 <div class="row">
   <div class="col-4"></div>
   <div class="col-4">
-    {% if service_info.org_can_trial and not service_info.org_has_access and permissions.billing %}
+    {% if trial_available and not service_info.org_has_access and permissions.billing %}
     <div class="alert alert-info center">
       <p>
       {% blocktrans trimmed with app_id=request.app_id app_slug=service_info.slug app_name=service_info.name org_name=request.org.display_name_verbose %}
@@ -270,7 +274,7 @@ fullctl.permissions = {{ permissions|safe }}
       </div>
     </div>
 
-    {% elif not service_info.org_can_trial and not service_info.org_has_access %}
+    {% elif not trial_available and not service_info.org_has_access %}
     <div class="alert alert-info center">
       <p>
       {% blocktrans trimmed with app_id=request.app_id app_slug=service_info.slug app_name=service_info.name org_name=request.org.display_name_verbose %}
@@ -305,6 +309,32 @@ You do not have the permissions to view the {{ app_id }} workspace for the {{ or
   <div class="col-4"></div>
 </div>
 <div style="display:none">
+{% elif trial_available %}
+
+<!-- org has access, but there is a trial available on an object basis (ix in ixctl for example )-->
+<div class="row">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <div class="alert alert-info center">
+      <p>
+      {% blocktrans trimmed with app_id=request.app_id app_slug=service_info.slug app_name=service_info.name org_name=request.org.display_name_verbose %}
+      Start your <b>{{ app_name }}</b> trial for {{ org_name }}
+      {% endblocktrans %}{% if trial_object %} / {{ trial_object }}{% endif %}
+      </p>
+      <div>
+        <button data-element="btn_start_trial" data-api-base="{% url "proxies-api-aaactl-start-trial" org_tag=request.org.slug %}" class="primary btn">
+          <div class="row align-items-center">
+            <div class="col label pe-0">{% trans "Start trial" %}</div>
+            <div class="col-auto">
+              <span class="icon icon-add"></span>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endif %}
 
 <!-- main app content -->
