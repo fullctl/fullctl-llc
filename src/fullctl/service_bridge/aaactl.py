@@ -49,14 +49,13 @@ class ServiceApplicationObject(AaactlEntity):
             self.org_namespace = self.grainy
         return self
 
+
 class ServiceApplication(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "service_application"
         data_object_cls = ServiceApplicationObject
 
-
     def trial_available(self, org_slug, service_slug, object_id=None):
-
         params = {
             "org_slug": org_slug,
             "service_slug": service_slug,
@@ -87,8 +86,9 @@ class OrganizationProduct(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "org_product"
 
-    def get_product_property(self, component, org, property_name, component_object_id=None):
-
+    def get_product_property(
+        self, component, org, property_name, component_object_id=None
+    ):
         filters = dict(component=component, org=org)
 
         if component_object_id:

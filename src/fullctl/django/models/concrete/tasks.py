@@ -479,6 +479,7 @@ class Task(HandleRefModel):
         # TODO this needs to capture output
         subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+
 class TaskClaim(HandleRefModel):
 
     """

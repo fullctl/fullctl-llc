@@ -46,5 +46,7 @@ def requeue(generic_task):
     """
     task = specify_task(generic_task)
     param = task.param
-    new_task = task.__class__.create_task(*param["args"], **param["kwargs"], user=task.user, org=task.org)
+    new_task = task.__class__.create_task(
+        *param["args"], **param["kwargs"], user=task.user, org=task.org
+    )
     return new_task

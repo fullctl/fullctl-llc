@@ -5,9 +5,8 @@ from django.http import FileResponse, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.urls import path, reverse
 from django.utils.html import format_html
-from django_handleref.admin import VersionAdmin
 from django.utils.translation import ngettext as _
-from fullctl.django.tasks import requeue as requeue_task
+from django_handleref.admin import VersionAdmin
 
 import fullctl.django.auditlog as auditlog
 from fullctl.django.models.concrete import (
@@ -23,6 +22,7 @@ from fullctl.django.models.concrete import (
     UserSettings,
 )
 from fullctl.django.models.concrete.service_bridge import ServiceBridgeAction
+from fullctl.django.tasks import requeue as requeue_task
 
 
 class BaseAdmin(VersionAdmin):
@@ -129,12 +129,19 @@ class TaskAdmin(BaseAdmin):
         """
         for task in queryset:
             requeue_task(task)
-        self.message_user(request, _(
-            '%d task was successfully re-queued.',
-            '%d tasks were successfully re-queued.',
-            len(queryset),
-        ) % len(queryset), messages.SUCCESS)
+        self.message_user(
+            request,
+            _(
+                "%d task was successfully re-queued.",
+                "%d tasks were successfully re-queued.",
+                len(queryset),
+            )
+            % len(queryset),
+            messages.SUCCESS,
+        )
+
     requeue_tasks.short_description = "Re-queue selected tasks"
+
 
 @admin.register(TaskSchedule)
 class TaskScheduleAdmin(BaseAdmin):
