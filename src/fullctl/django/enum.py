@@ -5,4 +5,5 @@ CONTACT_MESSAGE_TYPE = (
     ("support", _("Support")),
     ("feature-request", _("Feature Request")),
     ("demo-request", _("Demo Request")),
+    ("netdevops-primer", _("NetDevOps Primer")),
 )
