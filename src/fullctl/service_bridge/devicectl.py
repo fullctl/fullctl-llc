@@ -95,6 +95,20 @@ class Device(Devicectl):
             },
         )
 
+    def push_referee_report(self, device_id:int, report:str):
+        """
+        Pushes a referee report to the device in devicectl
+        """
+
+        print("Pushing referee report to device", device_id)
+
+        return self.post(
+            f"data/device/{device_id}/push_referee_report",
+            json={
+                "report": report,
+            },
+        )
+
 
 class Facility(Devicectl):
     class Meta(Devicectl.Meta):
