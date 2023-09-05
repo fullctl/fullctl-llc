@@ -667,5 +667,8 @@ class CallCommand(Task):
         """
 
         out = StringIO()
-        call_command(commit=True, *args, **kwargs, stdout=out)
+
+        commit = kwargs.get("commit", True)
+
+        call_command(commit=commit, *args, **kwargs, stdout=out)
         return f"{out.getvalue()}"
