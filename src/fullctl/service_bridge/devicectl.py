@@ -95,7 +95,7 @@ class Device(Devicectl):
             },
         )
 
-    def push_referee_report(self, device_id:int, report:str):
+    def push_referee_report(self, device_id: int, report: str):
         """
         Pushes a referee report to the device in devicectl
         """
