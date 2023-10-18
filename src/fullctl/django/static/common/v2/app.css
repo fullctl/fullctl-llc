@@ -1310,18 +1310,6 @@ td.inner-list-container {
 }
 
 
-div.inner-list-head {
-  margin-top: -1rem;
-  padding: 8px;
-}
-
-div.inner-list-head>div {
-  font-size: 15px;
-  letter-spacing: 3px;
-  line-height: 30px;
-  text-transform: uppercase;
-}
-
 div.inner-list>div {
   padding: 3px 0px;
 }
