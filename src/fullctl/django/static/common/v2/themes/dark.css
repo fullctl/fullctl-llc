@@ -125,6 +125,10 @@ input[type="checkbox"] {
   accent-color: var(--background);
 }
 
+option {
+  background-color: var(--th-bg);
+}
+
 .btn {
   --bs-btn-color: var(--foreground);
 }
