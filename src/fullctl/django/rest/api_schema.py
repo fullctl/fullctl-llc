@@ -246,7 +246,7 @@ class PeeringDBImportSchema(AutoSchema):
 
     def _get_responses(self, path, method):
         self.response_media_types = self.map_renderers(path, method)
-        serializer = ModelSerializer()
+        serializer = self.get_serializer(path, method)
         response_schema = self._map_serializer(serializer)
         status_code = "200"
 
