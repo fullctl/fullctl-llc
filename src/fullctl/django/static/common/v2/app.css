@@ -1522,6 +1522,10 @@ span.modal-control>img.caret {
   line-height: 25px !important;
 }
 
+.select2-dropdown {
+  border-radius: var(--size-100);
+}
+
 /*
  * status badge
  */

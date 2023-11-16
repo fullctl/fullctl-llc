@@ -623,13 +623,6 @@ div.modal-body div.border-top-seperator {
 span.select2-dropdown {
   border-color: var(--clr-border-400);
   background-color: var(--background);
-  box-shadow: 5px 5px #0000004d;
-}
-
-.modal span.select2-dropdown {
-  border-color: var(--clr-border-400);
-  background-color: var(--modal-bg);
-  box-shadow: 5px 5px #0000004d;
 }
 
 .select2-selection.select2-selection--single {
