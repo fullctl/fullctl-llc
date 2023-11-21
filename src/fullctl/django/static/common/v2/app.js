@@ -1880,6 +1880,31 @@ $.fn.grainy_toggle = function(namespace, level) {
   }
 };
 
+/**
+ * Convert a select element into a simple select2 element
+ *
+ * @param {jQuery} jq select element
+ * @param {Dict} [select2_options={}] options to pass in when initialising select2
+ * @class SimpleSelect2
+ * @namespace fullctl.ext
+ * @constructor
+ */
+fullctl.ext.SimpleSelect2 = $tc.extend(
+  "SimpleSelect2",
+  {
+    SimpleSelect2 : function(jq, select2_options) {
+      this.Select(jq);
+
+      const options = select2_options || {};
+      jq.select2(options);
+      $(this).on("load:after", (e, endpoint, data, response) => {
+        jq.trigger('change.select2');
+      });
+    }
+  },
+  twentyc.rest.Select
+);
+
 $(document).on('select2:open', () => {
   document.querySelector('.select2-search__field').focus();
 });
