@@ -152,14 +152,17 @@ fullctl.permissions = {{ permissions|safe }}
             data-element="select_org">
             <div class="list-body"></div>
             <div class="templates">
-              <a data-template="row" class="dropdown-item action">
-                <span class="icon icon-org">
-                </span>
-                <span data-field="name"></span>
+              <div data-template="row" class="dropdown-item">
+                <a class="col dropdown-item p-1">
+                  <span class="icon icon-org"></span>
+                  <span data-field="name"></span>
+                </a>
                 {% if permissions.update_instance and oauth_manages_org %}
-                <span class="action manage manage-org"><span class="icon icon-settings"></span></span>
+                <a class="action manage manage-org col-auto ms-2" href="{{ account_service.urls.manage_org }}">
+                  <span class="icon icon-settings"></span>
+                </a>
                 {% endif %}
-              </a>
+              </div>
             </div>
           </div>
           <div class="horizontal-line"></div>
@@ -167,7 +170,7 @@ fullctl.permissions = {{ permissions|safe }}
           <!-- other org related actions -->
 
           {% if permissions.update_instance and oauth_manages_org %}
-          <a class="dropdown-item" href="{{ account_service.urls.manage_org }}">
+          <a class="dropdown-item" data-element="manage_current_org" href="{{ account_service.urls.manage_org }}">
             <span class="icon icon-settings"></span>
             <span class="label">
               {% trans "Manage Organization" %}

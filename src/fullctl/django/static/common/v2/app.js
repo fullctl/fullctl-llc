@@ -762,29 +762,32 @@ fullctl.application.Header = $tc.extend(
     wire_elements : function() {
 
       this.widget('select_org', ($e) => {
-        var w = new twentyc.rest.List($e.select_org);
-        var org = $e.select_org.data('org')
+        const w = new twentyc.rest.List($e.select_org);
+        const org = $e.select_org.data('org');
         $(w).on("insert:after", (e, row, data) => {
+          row.find('.manage').attr(
+            "href", fullctl.aaactl_urls.manage_org.replace(/org_slug/g, data.slug)
+          );
           if(org == data.slug) {
             row.addClass('selected')
-            row.find('.manage').click(() => {
-              window.location = fullctl.aaactl_urls.manage_org;
-            });
           } else {
-            row.find('.manage').hide();
-            row.click(() => {
-              window.location.href = "/"+data.slug+"/";
-            })
+            row.find("a.dropdown-item").attr("href", '/'+data.slug);
           }
         });
-        w.load()
 
-        this.order_app_switcher();
-        this.wire_app_switcher();
-        this.wire_stop_impersonation();
+        w.load()
 
         return w;
       });
+
+      if (this.$e.manage_current_org) {
+        const href = this.$e.manage_current_org.attr("href");
+        this.$e.manage_current_org.attr("href", href.replace(/org_slug/g, fullctl.org.slug));
+      }
+
+      this.order_app_switcher();
+      this.wire_app_switcher();
+      this.wire_stop_impersonation();
     },
 
     /**
