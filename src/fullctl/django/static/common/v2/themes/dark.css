@@ -492,10 +492,6 @@ div.controls select.form-control {
   color: inherit;
 }
 
-div.controls select.form-control option {
-  color: var(--clr-primary-900);
-}
-
 div.controls textarea.form-control,
 div.controls textarea.form-control:is(:focus, :active){
   color: var(--foreground);
