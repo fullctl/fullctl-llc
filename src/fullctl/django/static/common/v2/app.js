@@ -961,18 +961,31 @@ fullctl.application.Application = $tc.define(
     },
 
     autoload_page : function() {
-      var hash = window.location.hash;
-      if(hash) {
-        hash = hash.substr(1);
-
-        parts = hash.split(";");
-        hash = parts[0];
-
-        this.autoload_args = parts;
-
-        if(this.get_page(hash)) {
-          this.page(hash);
+      let page = this.get_autoload_args().page;
+      if(page) {
+        if(this.get_page(page)) {
+          this.page(page);
         }
+      }
+    },
+
+    get_autoload_args : function() {
+      const hash = window.location.hash;
+      if (!hash) {
+        return {
+          page: null,
+          autoload_args: null
+        };
+      }
+
+      const autoload_args = hash.substr(1).split(";");
+      this.autoload_args = autoload_args;
+
+      const page = autoload_args[0];
+
+      return {
+        page,
+        autoload_args
       }
     },
 
@@ -984,6 +997,7 @@ fullctl.application.Application = $tc.define(
         }
         return value;
       }
+
       return null;
     },
 
