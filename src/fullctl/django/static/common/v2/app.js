@@ -960,6 +960,11 @@ fullctl.application.Application = $tc.define(
 
     },
 
+    /**
+     * sets bootstrap tab by matching with url hash to aria-controls
+     *
+     * @method autload_page
+     */
     autoload_page : function() {
       let page = this.get_autoload_args().page;
       if(page) {
@@ -969,6 +974,12 @@ fullctl.application.Application = $tc.define(
       }
     },
 
+    /**
+     * returns autoload parameters from the url hash and stores them in
+     * this.autoload_args
+     *
+     * @get_autload_args
+     */
     get_autoload_args : function() {
       const hash = window.location.hash;
       if (!hash) {
