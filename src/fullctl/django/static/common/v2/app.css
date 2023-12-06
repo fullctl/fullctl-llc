@@ -253,8 +253,9 @@ button:focus {
   padding: 12px 16px;
 }
 
-.small-info {
-  font-size: 12px;
+.small-info,
+.small-label {
+  font-size: var(--size-300) !important;
 }
 
 .m-info {
@@ -929,6 +930,11 @@ span.icon-triangle-fill-down {
   rotate: 180deg;
 }
 
+span.icon-warning {
+  -webkit-mask-image: url(icons/exclamation-triangle.svg);
+  mask-image: url(icons/exclamation-triangle.svg);
+}
+
 [data-true] {
   display: none;
 }
@@ -1450,6 +1456,11 @@ div.controls input[type="checkbox"]~label {
   font-size: 20px;
   letter-spacing: 0;
   line-height: 24px;
+}
+
+input[type="checkbox"].small {
+  height: var(--size-300);
+  width: var(--size-300);
 }
 
 span.modal-control {
