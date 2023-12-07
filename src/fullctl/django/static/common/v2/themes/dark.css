@@ -453,7 +453,7 @@ a.prefixctl,
  /**
   * lists
   */
-.list-table .btn{
+.list-table .btn:not(.no-hover){
   border-color: transparent;
   background: transparent;
 }

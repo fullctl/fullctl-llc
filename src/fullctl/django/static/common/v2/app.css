@@ -1058,7 +1058,7 @@ div.menu .button {
 /**
   * lists
   */
-.list-table .btn {
+.list-table .btn:not(.no-hover) {
   border-radius: 100vmax;
   display: inline-flex;
   border: 1px solid;
