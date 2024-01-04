@@ -155,7 +155,6 @@ class Organization(HandleRefModel):
 
     @classmethod
     def accessible_for_request(cls, request):
-
         """
         Return a list of organizations that are accessible by the
         authenticated request. (session or api key)
