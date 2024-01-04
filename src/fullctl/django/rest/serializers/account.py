@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 import fullctl.django.models as models
@@ -21,6 +22,11 @@ class Organization(ModelSerializer):
 
     def get_access_type(self, obj):
         user = self.context.get("user")
+
+        if not isinstance(user, get_user_model()):
+            # api key request
+            return "key"
+
         if user and not user.org_set.filter(org_id=obj.id).exists():
             return "customer"
         return "member"

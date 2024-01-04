@@ -154,6 +154,49 @@ class Organization(HandleRefModel):
         return list(set(related_orgs + permissioned_orgs))
 
     @classmethod
+    def accessible_for_request(cls, request):
+
+        """
+        Return a list of organizations that are accessible by the
+        authenticated request. (session or api key)
+
+        accessible here means they either have direct read permissions
+        to the organization
+
+        **Arguments**
+
+        - request (`Request`)
+
+        **Returns**
+
+        - `list`
+        """
+
+        if isinstance(request.user, get_user_model()):
+            return cls.accessible(request.user)
+
+        perms = auth.permissions(request.user)
+        perms.load()
+
+        permissioned_orgs = []
+        org_namespaces = perms.pset.expand("org.?", exact=True)
+
+        for ns in org_namespaces:
+            try:
+                int(ns[1])
+            except (ValueError, IndexError):
+                continue
+
+            try:
+                org = cls.objects.get(remote_id=ns[1])
+                permissioned_orgs.append(org)
+            except cls.DoesNotExist:
+                pass
+
+        print(permissioned_orgs)
+        return permissioned_orgs
+
+    @classmethod
     def sync(cls, orgs, user, backend):
         synced = []
         with reversion.create_revision():

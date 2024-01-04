@@ -145,7 +145,7 @@ class grainy_endpoint(base):
             # check if the request is permissioned to access
             # the fullctl service
 
-            if not request.perms.check(
+            if request.org.permission_id and not request.perms.check(
                 f"service.{settings.SERVICE_TAG}.{request.org.permission_id}",
                 "r",
                 ignore_grant_all=True,

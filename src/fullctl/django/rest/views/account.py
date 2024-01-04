@@ -21,14 +21,14 @@ class Organization(viewsets.GenericViewSet):
     serializer_class = Serializers.org
     queryset = models.Organization.objects.all()
 
+    @grainy_endpoint("org.?", enable_apply_perms=False)
     def list(self, request, *args, **kwargs):
         """
         List the organizations that the requesting user belongs
         to or has permissions to
         """
-
         serializer = Serializers.org(
-            instance=models.Organization.accessible(request.user),
+            instance=models.Organization.accessible_for_request(request),
             many=True,
             context={"user": request.user},
         )
