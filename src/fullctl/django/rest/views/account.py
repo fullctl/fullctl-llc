@@ -7,6 +7,7 @@ import fullctl.django.rest.throttle as throttle
 import fullctl.service_bridge.aaactl as aaactl
 from fullctl.django.rest.decorators import grainy_endpoint
 from fullctl.django.rest.route.account import route
+from fullctl.django.rest.serializers import EmptySerializer
 from fullctl.django.rest.serializers.account import Serializers
 from fullctl.django.util import verified_asns
 
@@ -50,7 +51,7 @@ class User(viewsets.GenericViewSet):
         serializer = Serializers.asn(verified_asns(request.perms), many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["POST"])
+    @action(detail=False, methods=["POST"], serializer_class=EmptySerializer)
     def stop_impersonation(self, request, *args, **kwargs):
         """
         Stop impersonating a user via the aaactl service bridge

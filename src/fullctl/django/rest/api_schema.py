@@ -24,6 +24,15 @@ class BaseSchema(AutoSchema):
     the fullctl API docs
     """
 
+    @property
+    def field_instance(self):
+        return {"type": "integer", "description": "Organization workspace instance id"}
+
+    def map_field(self, field):
+        if hasattr(self, f"field_{field.field_name}"):
+            return getattr(self, f"field_{field.field_name}")
+        return super().map_field(field)
+
     def get_operation_type(self, *args):
         """
         Determine if this is a list retrieval operation

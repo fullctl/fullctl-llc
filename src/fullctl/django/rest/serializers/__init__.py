@@ -40,6 +40,8 @@ class ModelSerializer(serializers.ModelSerializer):
             return obj.Grainy.namespace(obj)
         return None
 
+class EmptySerializer(serializers.Serializer):
+    pass
 
 class RequireContext:
     required_context = []
