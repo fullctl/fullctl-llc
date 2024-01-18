@@ -18,8 +18,8 @@ from fullctl.django.models.concrete import (
     Request,
     Response,
     Task,
-    TaskSchedule,
     TaskClaim,
+    TaskSchedule,
     UserSettings,
 )
 from fullctl.django.models.concrete.service_bridge import ServiceBridgeAction
@@ -101,9 +101,11 @@ class OrganizationFileAdmin(BaseAdmin):
         ]
         return custom_urls + urls
 
+
 class TaskClaimInline(BaseTabularAdmin):
     model = TaskClaim
     extra = 0
+
 
 @admin.register(Task)
 class TaskAdmin(BaseAdmin):
@@ -127,7 +129,7 @@ class TaskAdmin(BaseAdmin):
     list_filter = ("status", "op")
     actions = ["requeue_tasks"]
     # auto complete
-    raw_id_fields = ("parent","user","org")
+    raw_id_fields = ("parent", "user", "org")
     inlines = (TaskClaimInline,)
 
     def requeue_tasks(self, request, queryset):

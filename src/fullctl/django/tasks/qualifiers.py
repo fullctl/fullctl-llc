@@ -27,6 +27,7 @@ class Base:
     def ids(self, task):
         return {}
 
+
 class Dynamic(Base):
     def set(self, *args, **kwargs):
         raise NotImplementedError()

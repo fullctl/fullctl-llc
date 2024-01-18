@@ -55,16 +55,13 @@ def fetch_tasks(limit=1, **filters):
     # but we definitely dont want it to scan all pending tasks if there
     # is 1000s of them
     for task in qset[:25]:
-
         if task.op in skip_tasks:
-
             # task worker has been blocked from working on this
-            # task op based on certain task properties 
+            # task op based on certain task properties
 
             skip = False
 
             for qualifier, ids in skip_tasks[task.op].items():
-
                 # we check if the qualifier that blocked the worker
                 # earlier in the loop matches the current task
                 # if it does, we skip the task
@@ -72,7 +69,7 @@ def fetch_tasks(limit=1, **filters):
                 if qualifier.ids(task) == ids:
                     skip = True
                     break
-            
+
             if skip:
                 continue
 
@@ -88,14 +85,14 @@ def fetch_tasks(limit=1, **filters):
             # worker temporary or permanently unqualified for this task type
             # block it from fetching more tasks of this type for this
             # poll cycle.
-            # 
+            #
             # this is to prevent it from accidentally starting
             # a more recent task because the blocking task gets solved
             # before the loop is complete) - race condition?
-            
+
             if task.op not in skip_tasks:
                 skip_tasks[task.op] = {}
-            
+
             skip_tasks[task.op][exc.qualifier] = exc.qualifier.ids(task)
 
             continue
