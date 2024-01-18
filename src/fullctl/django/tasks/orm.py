@@ -45,11 +45,37 @@ def fetch_tasks(limit=1, **filters):
     # order_history by date of creation
     qset = qset.order_by("created")
 
+    skip_tasks = {}
+
     # no pending tasks for this task model
     if not qset.exists():
         return tasks
 
-    for task in qset:
+    # limit to scanning 25 oldest tasks at a time, may need to adust
+    # but we definitely dont want it to scan all pending tasks if there
+    # is 1000s of them
+    for task in qset[:25]:
+
+        if task.op in skip_tasks:
+
+            # task worker has been blocked from working on this
+            # task op based on certain task properties 
+
+            skip = False
+
+            for qualifier, ids in skip_tasks[task.op].items():
+
+                # we check if the qualifier that blocked the worker
+                # earlier in the loop matches the current task
+                # if it does, we skip the task
+
+                if qualifier.ids(task) == ids:
+                    skip = True
+                    break
+            
+            if skip:
+                continue
+
         if task.parent_id and task.parent.status != "completed":
             if task.parent.status in ["failed", "cancelled"]:
                 task.cancel(f"parent status: {task.parent.status}")
@@ -58,7 +84,20 @@ def fetch_tasks(limit=1, **filters):
             task = specify_task(task)
             task.qualifies
             tasks.append(task)
-        except WorkerUnqualified:
+        except WorkerUnqualified as exc:
+            # worker temporary or permanently unqualified for this task type
+            # block it from fetching more tasks of this type for this
+            # poll cycle.
+            # 
+            # this is to prevent it from accidentally starting
+            # a more recent task because the blocking task gets solved
+            # before the loop is complete) - race condition?
+            
+            if task.op not in skip_tasks:
+                skip_tasks[task.op] = {}
+            
+            skip_tasks[task.op][exc.qualifier] = exc.qualifier.ids(task)
+
             continue
 
         if len(tasks) == limit:

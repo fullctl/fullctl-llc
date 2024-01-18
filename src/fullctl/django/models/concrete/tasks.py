@@ -48,6 +48,7 @@ class WorkerUnqualified(IOError):
         super().__init__(
             f"Worker does not qualify to process this task: {task}, {qualifier}"
         )
+        self.qualifier = qualifier
 
 
 class TaskLimitError(IOError):

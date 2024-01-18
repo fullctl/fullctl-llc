@@ -24,6 +24,8 @@ class Base:
     def check(self, task):
         raise NotImplementedError()
 
+    def ids(self, task):
+        return {}
 
 class Dynamic(Base):
     def set(self, *args, **kwargs):
@@ -99,7 +101,7 @@ class ConcurrencyLimit(Base):
     def check(self, task):
         return (
             task.__class__.objects.filter(
-                status="pending", queue_id__isnull=False, op=task.op
+                status__in=["pending", "running"], queue_id__isnull=False, op=task.op
             ).count()
             < self.limit
         )
