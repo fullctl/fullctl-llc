@@ -148,11 +148,8 @@ class Command(CommandInterface):
                 return claim_task(task)
         except TaskClaimed:
             if not task.queue_id:
-                err = "Task has a claim, but no queue id - this should never happen"
-                task.status = "failed"
-                task.error = err
-                task.save()
-                self.log_error(err)
+                err = "Task has a claim, but no queue id - likely in the middle of being claimed by other worker"
+                self.log_debug(err)
             self.log_debug("Task already claimed, skipping")
 
     async def delegate_task(self, task):

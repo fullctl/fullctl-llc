@@ -2,7 +2,7 @@
 ORM based task delegation
 """
 
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.utils import timezone
 
 from fullctl.django.models import (
@@ -103,6 +103,7 @@ def fetch_tasks(limit=1, **filters):
     return tasks
 
 
+@transaction.atomic
 def claim_task(task):
     """
     Claims the specified task
