@@ -99,6 +99,7 @@ class DataViewSet(viewsets.ModelViewSet):
     join_xl = {}
     autocomplete = None
     allow_unfiltered = False
+    limit_results = -1
     allowed_http_methods = ["GET"]
     path_prefix = "/data"
 
@@ -134,6 +135,9 @@ class DataViewSet(viewsets.ModelViewSet):
             return BadRequest(_("Unfiltered listing not allowed for this endpoint"))
 
         qset, joins = self.join_relations(qset, request)
+
+        if self.limit_results > 0:
+            qset = qset[:self.limit_results]
 
         context = self.serializer_context(request, {"joins": joins})
 
