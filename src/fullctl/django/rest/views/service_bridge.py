@@ -99,9 +99,6 @@ class DataViewSet(viewsets.ModelViewSet):
     join_xl = {}
     autocomplete = None
     allow_unfiltered = False
-    # set to a positive number to limit the number of results returned from
-    # list, helps with dealing with timeouts
-    limit_results = -1
     allowed_http_methods = ["GET"]
     path_prefix = "/data"
 
@@ -138,8 +135,11 @@ class DataViewSet(viewsets.ModelViewSet):
 
         qset, joins = self.join_relations(qset, request)
 
-        if self.limit_results > 0:
-            qset = qset[: self.limit_results]
+        # set to a positive number to limit the number of results returned from
+        # list, helps with dealing with timeouts
+        limit = request.GET.get('limit', 0)
+        if limit > 0:
+            qset = qset[:limit]
 
         context = self.serializer_context(request, {"joins": joins})
 
