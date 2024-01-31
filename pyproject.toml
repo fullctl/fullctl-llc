@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "fullctl"
 repository = "https://github.com/fullctl/fullctl"
-version = "1.10.0-rc.4"
+version = "1.10.0-rc.5"
 description = "Core classes and functions for service applications"
 authors = ["FullCtl <code@fullctl.com>"]
 readme = "README.md"
@@ -28,7 +28,8 @@ python = "^3.9"
 django = ">=3.2"
 # >3.5.1 is not backwards compatible
 django-autocomplete-light = ">=3.9.7"
-django-crispy-forms = ">=2.1"
+# needs to allow 2.0 until django 4.2 fixes are complete
+django-crispy-forms = ">=2.0"
 django-grainy = ">=2"
 django-handleref = ">=2"
 django-inet = ">=1"
