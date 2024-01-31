@@ -4,6 +4,17 @@ from django.conf import settings
 from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import AuthFailed
 
+import warnings
+
+warnings.warn(
+    "These are deprecated in favor of fullctl.social.backends",
+    DeprecationWarning,
+)
+
+
+# this should be able to be replaced with but needs testing
+# from fullctl.social.backends import TwentycOAuth2
+
 
 class TwentycOAuth2(BaseOAuth2):
     name = "twentyc"
