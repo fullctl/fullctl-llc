@@ -358,11 +358,18 @@ class SettingsManager(confu.util.SettingsManager):
             "OAUTH_TWENTYC_PROFILE_URL", f"{AAACTL_URL}/account/auth/o/profile/"
         )
 
+        # we expose these for configuring so we're not tied to directly to social_auth
         self.set_option("OAUTH_TWENTYC_KEY", "")
         self.set_option("OAUTH_TWENTYC_SECRET", "")
 
+        # we set the social auth variables since we're using that backend
         self.set_option("SOCIAL_AUTH_TWENTYC_KEY", self.get("OAUTH_TWENTYC_KEY"))
         self.set_option("SOCIAL_AUTH_TWENTYC_SECRET", self.get("OAUTH_TWENTYC_SECRET"))
+
+        # set fullctl in addition to twentyc as we transition
+        self.set_option("SOCIAL_AUTH_FULLCTL_KEY", self.get("OAUTH_TWENTYC_KEY"))
+        self.set_option("SOCIAL_AUTH_FULLCTL_SECRET", self.get("OAUTH_TWENTYC_SECRET"))
+
         self.set_option("SOCIAL_AUTH_REDIRECT_IS_HTTPS", True)
 
     def set_twentyc_oauth(self, AAACTL_URL=None):
