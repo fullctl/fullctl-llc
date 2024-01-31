@@ -34,23 +34,6 @@ def read_file(name):
         return fh.read()
 
 
-_settings_manager = None
-
-
-def get_manager(scope=None):
-    """
-    Returns a singleton global settings manager.
-    """
-    global _settings_manager
-    if not scope:
-        scope = dict()
-
-    if _settings_manager is None:
-        _settings_manager = SettingsManager(scope)
-
-    return _settings_manager
-
-
 class exposed_list(str):
 
     """
