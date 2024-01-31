@@ -1,18 +1,30 @@
+"""
+Social Auth backends for aaaCtl OAuth2.
 
+Replaces the deprecated `fullctl.django.social.backends` module.
+"""
 import os
 from social_core.backends.oauth import BaseOAuth2
 from social_core.utils import append_slash
 from social_core.exceptions import AuthFailed
 from fullctl.service_bridge.client import url_join
-from urllib.parse import urljoin
-
-print("3 XXXXXXXXXXXXXXXXXXXXXXXXXXXX\nfullctl.social.backends.twentyc.py")
 
 
 class AaactlMixin:
-#    def api_url(self):
-#        """Returns the API URL, checks first for AAACTL_URL in env."""
-#        return append_slash(os.getenv("AAACTL_URL", self.setting("API_URL")))
+    """Mixin for AAACTL OAuth2 backends.
+
+    This mixin provides the API URL and OAuth2 URLs for the AAACTL service.
+
+    It replaces the static URLs below.
+
+    AUTHORIZATION_URL = f"{AAACTL_URL}/account/auth/o/authorize/"
+    ACCESS_TOKEN_URL = f"{AAACTL_URL}/account/auth/o/token/"
+    PROFILE_URL = f"{AAACTL_URL}/account/auth/o/profile/"
+    """
+
+    def api_url(self):
+        """Returns the API URL, checks first for AAACTL_URL in env."""
+        return append_slash(os.getenv("AAACTL_URL", self.setting("API_URL")))
 
     def authorization_url(self):
         return self._url("authorize/")
@@ -24,18 +36,11 @@ class AaactlMixin:
         return self._url("profile/")
 
     def _url(self, path):
-        base_url = append_slash(os.getenv("AAACTL_URL", "https://account.fullctl.io"))
-        return url_join(base_url, "account/auth/o/", path)
+        return url_join(self.api_url(), "account/auth/o/", path)
 
 
-class TwentycOAuth2(AaactlMixin, BaseOAuth2):
-    name = "twentyc"
-#    AUTHORIZATION_URL = f"{AAACTL_URL}/account/auth/o/authorize/"
-#    ACCESS_TOKEN_URL = f"{AAACTL_URL}/account/auth/o/token/"
-#    PROFILE_URL = f"{AAACTL_URL}/account/auth/o/profile/"
-    #    AUTHORIZATION_URL = "" # settings.OAUTH_TWENTYC_AUTHORIZE_URL
-    #    ACCESS_TOKEN_URL = "" # settings.OAUTH_TWENTYC_ACCESS_TOKEN_URL
-    #    PROFILE_URL = "" # settings.OAUTH_TWENTYC_PROFILE_URL
+class AaactlOAuth2(AaactlMixin, BaseOAuth2):
+    name = "aaactl"
 
     ACCESS_TOKEN_METHOD = "POST"
 
@@ -66,3 +71,17 @@ class TwentycOAuth2(AaactlMixin, BaseOAuth2):
         if "/profile/" in url:
             kwargs.update(params={"referer": "fullctl"})
         return super().request(url, method=method, *args, **kwargs)
+
+
+class FullCtlOAuth2(AaactlOAuth2):
+    """FullCtl OAuth2 backend.
+    name update for env variables, etc
+    """
+    name = "fullctl"
+
+
+class TwentycOAuth2(AaactlOAuth2):
+    """FullCtl OAuth2 backend.
+    name update for env variables, etc
+    """
+    name = "twentyc"
