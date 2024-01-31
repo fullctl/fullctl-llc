@@ -11,7 +11,8 @@ from fullctl.service_bridge.client import url_join
 
 
 class AaactlMixin:
-    """Mixin for AAACTL OAuth2 backends.
+    """
+    Mixin for AAACTL OAuth2 backends.
 
     This mixin provides the API URL and OAuth2 URLs for the AAACTL service.
 
@@ -51,6 +52,17 @@ class AaactlOAuth2(AaactlMixin, BaseOAuth2):
         """Return user details."""
         if response.get("verified_user") is not True:
             raise AuthFailed(self, "User is not verified")
+
+        limit_org = self.setting("LIMIT_ORGANIZATION")
+
+        if limit_org:
+            response_orgs = response.get("organizations")
+            if not response_orgs:
+                raise AuthFailed(self, "User does not meet aaactl requirements.")
+
+            if limit_org not in [org["slug"] for org in response_orgs]:
+                raise AuthFailed(self, "User does not meet aaactl requirements.")
+
 
         return {
             "username": response.get("user_name"),
