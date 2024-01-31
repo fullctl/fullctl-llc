@@ -635,8 +635,9 @@ div.modal-body div.border-top-seperator {
 }
 
 span.select2-dropdown {
-  border-color: var(--clr-border-400);
-  background-color: var(--background);
+  --body-bg: var(--background);
+  --body-fg: var(--foreground);
+  --border-color: var(--clr-border-400);
 }
 
 .select2-selection.select2-selection--single {
