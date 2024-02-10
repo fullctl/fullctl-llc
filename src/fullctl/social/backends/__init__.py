@@ -4,9 +4,11 @@ Social Auth backends for aaaCtl OAuth2.
 Replaces the deprecated `fullctl.django.social.backends` module.
 """
 import os
+
 from social_core.backends.oauth import BaseOAuth2
-from social_core.utils import append_slash
 from social_core.exceptions import AuthFailed
+from social_core.utils import append_slash
+
 from fullctl.service_bridge.client import url_join
 
 
@@ -63,7 +65,6 @@ class AaactlOAuth2(AaactlMixin, BaseOAuth2):
             if limit_org not in [org["slug"] for org in response_orgs]:
                 raise AuthFailed(self, "User does not meet aaactl requirements.")
 
-
         return {
             "username": response.get("user_name"),
             "email": response.get("email") or "",
@@ -89,6 +90,7 @@ class FullCtlOAuth2(AaactlOAuth2):
     """FullCtl OAuth2 backend.
     name update for env variables, etc
     """
+
     name = "fullctl"
 
 
@@ -96,4 +98,5 @@ class TwentycOAuth2(AaactlOAuth2):
     """FullCtl OAuth2 backend.
     name update for env variables, etc
     """
+
     name = "twentyc"

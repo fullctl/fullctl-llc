@@ -1,10 +1,10 @@
+import warnings
+
 from django.conf import settings
 
 # from six.moves.urllib_parse import unquote, urlencode
 from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import AuthFailed
-
-import warnings
 
 warnings.warn(
     "These are deprecated in favor of fullctl.social.backends",
