@@ -72,9 +72,6 @@ def account_service(request):
         break
 
     if local_auth:
-        print("*" * 80)
-        print("local auth")
-        print("*" * 80)
         context["service_info"] = {
             "name": settings.SERVICE_TAG,
             "slug": settings.SERVICE_TAG,
