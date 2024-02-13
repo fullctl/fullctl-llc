@@ -30,6 +30,8 @@ def account_service(request):
     else:
         org_slug = ""
 
+    local_auth = getattr(settings, "USE_LOCAL_PERMISSIONS", False)
+
     # TODO abstract so other auth services can be
     # defined
     context.update(
@@ -42,8 +44,7 @@ def account_service(request):
                 "manage_org": f"{settings.OAUTH_TWENTYC_URL}/account/?org=org_slug",
             },
         },
-        # TODO: deprecated
-        oauth_manages_org=True,
+        oauth_manages_org=not local_auth,
         service_logo_dark=f"{settings.SERVICE_TAG}/logo-darkbg.svg",
         service_logo_light=f"{settings.SERVICE_TAG}/logo-lightbg.svg",
         service_tag=settings.SERVICE_TAG,
@@ -69,6 +70,18 @@ def account_service(request):
 
         context.update(service_info=svc_app)
         break
+
+    if local_auth:
+        print("*" * 80)
+        print("local auth")
+        print("*" * 80)
+        context["service_info"] = {
+            "name": settings.SERVICE_TAG,
+            "slug": settings.SERVICE_TAG,
+            "description": "Local permissions",
+            "org_has_access": True,
+            "org_namespace": f"{settings.SERVICE_TAG}",
+        }
 
     return context
 
