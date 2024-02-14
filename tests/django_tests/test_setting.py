@@ -92,8 +92,8 @@ def test_SettingsManager_set_default_v1():
         "corsheaders",
     ]
     middleware = [
-        "corsheaders.middleware.CorsMiddleware",
         "django.middleware.security.SecurityMiddleware",
+        "corsheaders.middleware.CorsMiddleware",
         "whitenoise.middleware.WhiteNoiseMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.common.CommonMiddleware",
