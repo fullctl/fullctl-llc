@@ -83,11 +83,15 @@ class Command(CommandInterface):
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument("--workers", help="number of concurrent  workers", type=int)
+        parser.add_argument("-i", "--poll-interval", help="delay between polling for tasks (seconds)", type=int, default=3)
 
     def _run(self, *args, **kwargs):
         self.sleep_interval = 0.5
+        self.poll_interval = int(kwargs.get("poll_interval")) or 3
         self.all_workers_busy = False
         self.workers_num = int(kwargs.get("workers") or 1)
+
+        self.log_info(f"Starting task queue poller, {self.workers_num} workers, poll interval {self.poll_interval} seconds, sleep interval {self.sleep_interval} seconds")
 
         self.workers = [Worker() for i in range(0, self.workers_num)]
 
@@ -109,7 +113,7 @@ class Command(CommandInterface):
 
     async def _poll_tasks(self):
         while True:
-            await asyncio.sleep(self.sleep_interval)
+            await asyncio.sleep(self.poll_interval)
 
             if not self.worker_available:
                 if not self.all_workers_busy:
@@ -138,7 +142,7 @@ class Command(CommandInterface):
 
     async def _progress_schedules(self):
         while True:
-            await asyncio.sleep(self.sleep_interval)
+            await asyncio.sleep(self.poll_interval)
             await sync_to_async(progress_schedules)()
 
     def claim_task(self, task):

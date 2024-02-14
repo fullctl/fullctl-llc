@@ -2,6 +2,8 @@
 ORM based task delegation
 """
 
+import time
+
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
@@ -16,6 +18,22 @@ from fullctl.django.models.concrete.tasks import TaskClaim, TaskLimitError
 from fullctl.django.tasks import specify_task
 from fullctl.django.tasks.util import worker_id
 
+# (Task, timestamp)
+# tasks that are in the recheck stack are not
+# to be worked on until the timestamp has passed
+# this is to avoid excess re-checking of qualifiers
+RECHECK_STACK = []
+
+def clean_recheck_stack(now:float):
+    """
+    Cleans the recheck stack of tasks that need to be rechecked
+    """
+
+    global RECHECK_STACK
+
+    RECHECK_STACK = [
+        (task, ts) for task, ts in RECHECK_STACK if ts > now
+    ]
 
 def fetch_task(**filters):
     """
@@ -35,12 +53,18 @@ def fetch_tasks(limit=1, **filters):
     """
 
     tasks = []
+    now = time.time()
 
     # filter tasks waiting for execution
     qset = Task.objects.filter(status="pending", queue_id__isnull=True)
 
     if filters:
         qset = qset.filter(**filters)
+
+    clean_recheck_stack(now)
+
+    # exclude tasks that are in the recheck stack
+    qset = qset.exclude(id__in=[task.id for task, _ in RECHECK_STACK])
 
     # order_history by date of creation
     qset = qset.order_by("created")
@@ -94,6 +118,10 @@ def fetch_tasks(limit=1, **filters):
                 skip_tasks[task.op] = {}
 
             skip_tasks[task.op][exc.qualifier] = exc.qualifier.ids(task)
+
+            # if the qualifier has a recheck time, add it to the recheck stack
+            if exc.qualifier.recheck_time:
+                RECHECK_STACK.append((task, now + exc.qualifier.recheck_time))
 
             continue
 

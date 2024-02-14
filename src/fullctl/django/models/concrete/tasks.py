@@ -173,6 +173,12 @@ class Task(HandleRefModel):
         verbose_name = _("Task")
         verbose_name_plural = _("Tasks")
 
+        # set indexes
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["op"]),
+        ]
+
     class HandleRef:
         tag = "task"
 

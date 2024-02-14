@@ -21,6 +21,11 @@ class Base:
     Extend this
     """
 
+    # if the qualifier fails to qualify a task
+    # we will not reattempt qualifying the task 
+    # for this many seconds
+    recheck_time = 5
+
     def check(self, task):
         raise NotImplementedError()
 
