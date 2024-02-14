@@ -22,7 +22,7 @@ class Base:
     """
 
     # if the qualifier fails to qualify a task
-    # we will not reattempt qualifying the task 
+    # we will not reattempt qualifying the task
     # for this many seconds
     recheck_time = 5
 

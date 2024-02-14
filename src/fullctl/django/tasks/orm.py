@@ -24,16 +24,16 @@ from fullctl.django.tasks.util import worker_id
 # this is to avoid excess re-checking of qualifiers
 RECHECK_STACK = []
 
-def clean_recheck_stack(now:float):
+
+def clean_recheck_stack(now: float):
     """
     Cleans the recheck stack of tasks that need to be rechecked
     """
 
     global RECHECK_STACK
 
-    RECHECK_STACK = [
-        (task, ts) for task, ts in RECHECK_STACK if ts > now
-    ]
+    RECHECK_STACK = [(task, ts) for task, ts in RECHECK_STACK if ts > now]
+
 
 def fetch_task(**filters):
     """

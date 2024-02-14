@@ -83,7 +83,13 @@ class Command(CommandInterface):
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument("--workers", help="number of concurrent  workers", type=int)
-        parser.add_argument("-i", "--poll-interval", help="delay between polling for tasks (seconds)", type=int, default=3)
+        parser.add_argument(
+            "-i",
+            "--poll-interval",
+            help="delay between polling for tasks (seconds)",
+            type=int,
+            default=3,
+        )
 
     def _run(self, *args, **kwargs):
         self.sleep_interval = 0.5
@@ -91,7 +97,9 @@ class Command(CommandInterface):
         self.all_workers_busy = False
         self.workers_num = int(kwargs.get("workers") or 1)
 
-        self.log_info(f"Starting task queue poller, {self.workers_num} workers, poll interval {self.poll_interval} seconds, sleep interval {self.sleep_interval} seconds")
+        self.log_info(
+            f"Starting task queue poller, {self.workers_num} workers, poll interval {self.poll_interval} seconds, sleep interval {self.sleep_interval} seconds"
+        )
 
         self.workers = [Worker() for i in range(0, self.workers_num)]
 
