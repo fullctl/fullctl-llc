@@ -93,7 +93,7 @@ class Command(CommandInterface):
 
     def _run(self, *args, **kwargs):
         self.sleep_interval = 0.5
-        self.poll_interval = int(kwargs.get("poll_interval")) or 3
+        self.poll_interval = float(kwargs.get("poll_interval")) or 3
         self.all_workers_busy = False
         self.workers_num = int(kwargs.get("workers") or 1)
 
