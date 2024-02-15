@@ -35,6 +35,19 @@ class HandleRefModel(SoftDeleteHandleRefModel):
         return super().delete(hard=True)
 
 
+class SlugModel(HandleRefModel):
+    """
+    Adds a slug field to the model
+
+    Uniqueness should be handled on the extended model in combination
+    with the org instance.
+    """
+
+    slug = models.SlugField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
 class GeoModel(models.Model):
 
     """

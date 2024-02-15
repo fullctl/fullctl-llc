@@ -11,6 +11,30 @@ class CachedObjectMixin:
 
         return self._obj
 
+class SlugObjectMixin:
+
+    """
+    Assures that a views get_object() call only
+    queries the db once
+    """
+
+    slug_field = "slug"
+
+    def get_object(self):
+        """
+        pk could be either slug or id
+        """
+
+        lookup_value = self.kwargs.get(self.lookup_field)
+        org_tag = self.kwargs.get("org_tag")
+
+        if not lookup_value:
+            return None
+
+        if lookup_value.isdigit():
+            return self.queryset.get(instance__org__slug=org_tag, id=lookup_value)
+        else:
+            return self.queryset.get(instance__org__slug=org_tag, slug=lookup_value)
 
 class OrgQuerysetMixin:
     """
