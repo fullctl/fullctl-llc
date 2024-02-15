@@ -188,6 +188,7 @@ services:
     volumes:
       - ../../src/fullctl:/srv/service/main/fullctl
       - ../../../prefixctl/src:/srv/service/main:Z
+      - ../../../prefixctl-reputation/tests:/srv/service/main/tests/prefixctl_reputation_tests
       - ../../../prefixctl-reputation/src/prefixctl_reputation_check:/srv/service/venv/lib/python3.11/site-packages/prefixctl_reputation_check:Z
       - ../../../prefixctl-reputation/src/reputation_check:/srv/service/venv/lib/python3.11/site-packages/reputation_check:Z
       - ../../../prefixctl-meta/src/prefix_meta:/srv/service/venv/lib/python3.11/site-packages/prefix_meta:Z

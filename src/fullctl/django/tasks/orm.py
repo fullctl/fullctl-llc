@@ -4,9 +4,9 @@ ORM based task delegation
 
 import time
 
+from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.utils import timezone
-from django.conf import settings
 
 from fullctl.django.models import (
     Task,
@@ -26,6 +26,7 @@ from fullctl.django.tasks.util import worker_id
 RECHECK_STACK = []
 
 RECHECK_DECAY = {}
+
 
 def clean_recheck_stack(now: float):
     """
@@ -129,13 +130,14 @@ def fetch_tasks(limit=1, **filters):
 
             # if the qualifier has a recheck time, add it to the recheck stack
             if exc.qualifier.recheck_time:
-
                 if task.id in RECHECK_DECAY:
                     RECHECK_DECAY[task.id] += 1
                 else:
                     RECHECK_DECAY[task.id] = 1
 
-                recheck_time = min(exc.qualifier.recheck_time * RECHECK_DECAY[task.id], DECAY_MAX)
+                recheck_time = min(
+                    exc.qualifier.recheck_time * RECHECK_DECAY[task.id], DECAY_MAX
+                )
                 RECHECK_STACK.append((task, now + recheck_time))
 
             continue
