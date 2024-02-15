@@ -339,12 +339,12 @@ header .dropdown-item:hover,
 header .dropdown-item:focus,
 header .dropdown-menu {
   background-color: #0F1317;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   color: var(--theme-toolbar-color);
 }
 
 header .dropdown-item.selected:hover,
-header .dropdown-item.selected {
+header .dropdown-item.selected,
+.dropdown-item.selected .dropdown-item {
   background-color: #000;
 }
 
