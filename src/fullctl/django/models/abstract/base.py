@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from django_handleref.models import HandleRefModel as SoftDeleteHandleRefModel
+from django.core.exceptions import ValidationError
 
 __all__ = [
     "GeoModel",
@@ -47,6 +48,11 @@ class SlugModel(HandleRefModel):
 
     class Meta:
         abstract = True
+
+    # slug cannot be numeric
+    def clean(self):
+        if self.slug and self.slug.isdigit():
+            raise ValidationError(_("Slug cannot be numeric"))
 
 class GeoModel(models.Model):
 
