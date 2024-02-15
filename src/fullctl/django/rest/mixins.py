@@ -11,6 +11,7 @@ class CachedObjectMixin:
 
         return self._obj
 
+
 class SlugObjectMixin:
 
     """
@@ -35,6 +36,7 @@ class SlugObjectMixin:
             return self.queryset.get(instance__org__slug=org_tag, id=lookup_value)
         else:
             return self.queryset.get(instance__org__slug=org_tag, slug=lookup_value)
+
 
 class OrgQuerysetMixin:
     """

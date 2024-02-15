@@ -52,7 +52,6 @@ class SlugSerializerMixin:
     )
 
     def validate_slug(self, value):
-
         """
         slugs cannot be numeric
         """
@@ -61,6 +60,7 @@ class SlugSerializerMixin:
             raise serializers.ValidationError(_("Slugs cannot be numeric"))
 
         return value
+
 
 class RequireContext:
     required_context = []
