@@ -25,6 +25,9 @@ from fullctl.django.tasks.util import worker_id
 # this is to avoid excess re-checking of qualifiers
 RECHECK_STACK = []
 
+# the longer a task has been in the recheck stack
+# the longer the recheck time will be, up until a max
+# time specified in the TASK_RECHECK_DECAY_MAX setting
 RECHECK_DECAY = {}
 
 
