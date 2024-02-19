@@ -651,7 +651,7 @@ class Monitor(HandleRefModel):
     def delete(self, **kwargs):
         super().delete(**kwargs)
 
-        if self.task_schedule:
+        if self.task_schedule.id:
             self.task_schedule.delete()
 
 
