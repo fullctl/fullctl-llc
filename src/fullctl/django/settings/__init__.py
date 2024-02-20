@@ -197,6 +197,9 @@ class SettingsManager(confu.util.SettingsManager):
 
         self.set_option("TASK_RECHECK_DECAY_MAX", 3600)
 
+        self.set_option("MAX_PENDING_TASKS", 100)
+        self.set_option("TASK_MAX_AGE_THRESHOLD", 24)
+
         # eval from default.py file
         filename = os.path.join(os.path.dirname(__file__), "default.py")
         self.try_include(filename)

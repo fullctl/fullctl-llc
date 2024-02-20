@@ -9,11 +9,13 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.html import escape
 from django.utils.http import http_date
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 import fullctl.django.health_check
 from fullctl.django.decorators import require_auth
 from fullctl.django.models.concrete.file import OrganizationFile
+from fullctl.django.models.concrete.tasks import Task, TaskLimitError, TaskMaxAgeError
 
 
 @require_auth()
@@ -34,6 +36,25 @@ def diag(request):
         txt += f"{k}: {v}\n"
 
     return HttpResponse(mark_safe(f"<div><pre>Meta:\n{escape(txt)}</pre></div>"))
+
+
+def check_task_stack_queue():
+    """
+    Tests the task stack queue
+    """
+    pending_tasks = Task.objects.filter(status="pending")
+
+    # check if the number of pending tasks exceeds the max limit
+    if pending_tasks.count() > settings.MAX_PENDING_TASKS:
+        raise TaskLimitError()
+
+    # check if the age of the oldest pending task exceeds the limit
+    threshold_hours = settings.TASK_MAX_AGE_THRESHOLD
+    threshold_datetime = timezone.now() - timezone.timedelta(hours=threshold_hours)
+
+    old_pending_tasks = pending_tasks.filter(created__lt=threshold_datetime).exists()
+    if old_pending_tasks:
+        raise TaskMaxAgeError()
 
 
 def healthcheck(request):
