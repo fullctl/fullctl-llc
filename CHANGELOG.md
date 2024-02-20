@@ -2,6 +2,9 @@
 
 
 ## Unreleased
+
+
+## 1.11.0
 ### Added
 - task queue health checks
 ### Fixed

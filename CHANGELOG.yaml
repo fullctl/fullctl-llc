@@ -1,4 +1,11 @@
 Unreleased:
+  added: []
+  fixed: []
+  changed: []
+  deprecated: []
+  removed: []
+  security: []
+1.11.0:
   added:
   - task queue health checks
   fixed:
