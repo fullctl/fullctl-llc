@@ -39,7 +39,6 @@ The `client.py` module within the `fullctl` package provides a robust and flexib
 #### How to Use:
 
 To use the service bridge client, one would typically extend the `Bridge` class to create a service-specific client. For example, to create a client for a hypothetical service `Xyz`, one would:
-
 1. Define a subclass of `Bridge`, say `XyzBridge`.
 2. Possibly override `url_prefix`, `results_key`, and the inner `Meta` class attributes to suit the specifics of the `Xyz` service.
 3. Implement any additional methods if needed, or use the existing ones to interact with the `Xyz` service.
@@ -48,7 +47,6 @@ To use the service bridge client, one would typically extend the `Bridge` class 
 class XyzBridge(Bridge):
     url_prefix = "data"
     results_key = "results"
-
     class Meta:
         service = "xyz"
         ref_tag = "xyz"
@@ -76,7 +74,6 @@ This setup greatly facilitates the development of services integrating with Naut
 ### Nautobot Service Bridge Usage Example
 
 #### Authentication
-
 Interactions with the Nautobot service via the service bridge utilize an internal service API key for authentication. This key is typically set automatically through application environment settings, emphasizing the distinction from directly using Nautobot API tokens. This abstraction allows for flexible integration patterns.
 
 #### Retrieving a List of Devices
@@ -108,7 +105,6 @@ custom_api_key = 'your_custom_service_api_key_here'
 try:
     # Initialize the client with a custom API key, if needed
     device_client = Device(key=custom_api_key, org='your_org_here')
-
     # Retrieve the device object first
     device = device_client.object(device_id)
     # Update the device
