@@ -651,8 +651,11 @@ class Monitor(HandleRefModel):
     def delete(self, **kwargs):
         super().delete(**kwargs)
 
-        if self.task_schedule.id:
-            self.task_schedule.delete()
+        try:
+            if self.task_schedule.id:
+                self.task_schedule.delete()
+        except TaskSchedule.DoesNotExist:
+            pass
 
 
 @fullctl.django.tasks.register
