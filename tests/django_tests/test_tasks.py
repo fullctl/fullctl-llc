@@ -4,7 +4,11 @@ from django.utils import timezone
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
-from fullctl.django.models.concrete.tasks import TaskMaxAgeError, TaskLimitError, TaskClaimed
+from fullctl.django.models.concrete.tasks import (
+    TaskClaimed,
+    TaskLimitError,
+    TaskMaxAgeError,
+)
 from fullctl.django.views import check_task_stack_queue
 
 

@@ -7,9 +7,9 @@ from django.conf import settings
 # from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.html import escape
 from django.utils.http import http_date
-from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 import fullctl.django.health_check

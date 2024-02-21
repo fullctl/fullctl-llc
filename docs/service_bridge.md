@@ -30,6 +30,7 @@ The `client.py` module within the `fullctl` package provides a robust and flexib
 #### Key Components:
 
 - **Bridge Class:** Serves as the base class for creating service bridges. It handles the construction of HTTP requests, execution, and response parsing with features to support caching, authentication, and error handling. Key methods include `get`, `post`, `put`, `patch`, `delete`, for performing respective HTTP operations, and methods like `object`, `objects`, `create`, `destroy`, `update`, etc., for high-level operations on service entities.
+
 - **ServiceBridgeError and AuthError Classes:** Custom exceptions to handle service bridge related errors and authentication errors specifically.
 
 - **Utility Functions:** Includes `trim_endpoint` and `url_join` for manipulating URL strings to ensure correct endpoint formatting.
