@@ -15,8 +15,8 @@ class CachedObjectMixin:
 class SlugObjectMixin:
 
     """
-    Assures that a views get_object() call only
-    queries the db once
+    Assures that a views get_object() can do a lookup
+    via either the slug or the id
     """
 
     slug_field = "slug"
