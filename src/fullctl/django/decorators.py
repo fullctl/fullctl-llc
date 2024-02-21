@@ -4,6 +4,7 @@ import django.http
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.conf import settings
 
 import fullctl.django.context as context
 from fullctl.django.models import Instance, Organization
@@ -17,11 +18,19 @@ class require_auth:
 
     def __call__(self, fn):
         def wrapped(request, *args, **kwargs):
+            local_auth = getattr(settings, "USE_LOCAL_PERMISSIONS", False)
+
             if not request.user.is_authenticated:
-                return redirect(
-                    reverse("social:begin", args=("twentyc",))
-                    + f"?next={request.get_full_path()}"
-                )
+                if not local_auth:
+                    return redirect(
+                        reverse("social:begin", args=("twentyc",))
+                        + f"?next={request.get_full_path()}"
+                    )
+                else:
+                    # redirect to django-admin login
+                    return redirect(
+                        reverse("admin:login") + f"?next={request.get_full_path()}"
+                    )
 
             return fn(request, *args, **kwargs)
 
