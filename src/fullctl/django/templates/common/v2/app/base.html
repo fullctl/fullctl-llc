@@ -41,9 +41,14 @@ fullctl.org = {
 fullctl.trial_object = {{ trial_object.id }}
 {% endif %}
 
+{% if oauth_manages_org %}
 fullctl.service_info = {{ service_info.json|safe }};
+{% else %}
+fullctl.service_info = {{ service_info|safe }};
+{% endif %}
 
 fullctl.aaactl_urls = {{ account_service.urls|safe }}
+
 
 var True = true, False = false;
 
