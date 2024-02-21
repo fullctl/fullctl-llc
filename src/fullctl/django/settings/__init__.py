@@ -195,9 +195,13 @@ class SettingsManager(confu.util.SettingsManager):
             os.path.join(self.scope["BASE_DIR"], "main", f"django_{service_tag}"),
         )
 
+        # TASK_RECHECK_DECAY_MAX is the maximum time in seconds to wait before rechecking a task
         self.set_option("TASK_RECHECK_DECAY_MAX", 3600)
 
+        # MAX_PENDING_TASKS is the maximum number of tasks that can be pending at any time
         self.set_option("MAX_PENDING_TASKS", 100)
+
+        # TASK_MAX_AGE_THRESHOLD is the maximum hours a task can be pending before it is considered stale
         self.set_option("TASK_MAX_AGE_THRESHOLD", 24)
 
         # eval from default.py file

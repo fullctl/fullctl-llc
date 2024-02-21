@@ -42,7 +42,7 @@ def check_task_stack_queue():
     """
     Tests the task stack queue
     """
-    pending_tasks = Task.objects.filter(status="pending")
+    pending_tasks = Task.objects.filter(status="pending", queue_id__isnull=True)
 
     # check if the number of pending tasks exceeds the max limit
     if pending_tasks.count() > settings.MAX_PENDING_TASKS:
