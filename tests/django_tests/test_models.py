@@ -1,4 +1,8 @@
+import pytest
+from django.core.exceptions import ValidationError
+
 import fullctl.django.models as models
+import tests.django_tests.testapp.models as testapp_models
 
 
 def test_org_permission_id(db, dj_account_objects):
@@ -62,3 +66,11 @@ def test_orguser(db, dj_account_objects):
         org=dj_account_objects.org, user=dj_account_objects.user
     ).first()
     assert orguser.__str__() == "user_test <test@localhost>"
+
+
+def test_slug_model(db, dj_account_objects):
+    slug = testapp_models.ModelWithSlug(slug="slug1")
+    slug.clean()
+    with pytest.raises(ValidationError):
+        slug.slug = "123"
+        slug.clean()

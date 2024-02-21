@@ -257,4 +257,46 @@ class Migration(migrations.Migration):
                 ("handleref", django.db.models.manager.Manager()),
             ],
         ),
+        migrations.CreateModel(
+            name="ModelWithSlug",
+            fields=[
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "created",
+                    django_handleref.models.CreatedDateTimeField(
+                        auto_now_add=True, verbose_name="Created"
+                    ),
+                ),
+                (
+                    "updated",
+                    django_handleref.models.UpdatedDateTimeField(
+                        auto_now=True, verbose_name="Updated"
+                    ),
+                ),
+                ("version", models.IntegerField(default=0)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("ok", "Ok"),
+                            ("pending", "Pending"),
+                            ("deactivated", "Deactivated"),
+                            ("failed", "Failed"),
+                            ("expired", "Expired"),
+                        ],
+                        default="ok",
+                        max_length=12,
+                    ),
+                ),
+                ("slug", models.SlugField(max_length=255, null=True)),
+            ],
+            options={
+                "verbose_name": "Model with slug",
+                "verbose_name_plural": "Models with slug",
+                "db_table": "test_slug",
+            },
+            managers=[
+                ("handleref", django.db.models.manager.Manager()),
+            ],
+        ),
     ]
