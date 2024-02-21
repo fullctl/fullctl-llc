@@ -1,10 +1,10 @@
 from functools import wraps
 
 import django.http
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.conf import settings
 
 import fullctl.django.context as context
 from fullctl.django.models import Instance, Organization
