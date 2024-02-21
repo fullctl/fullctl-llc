@@ -1,7 +1,7 @@
 Unreleased:
   added:
   - slug model / serializer mixins
-  fixed: 
+  fixed:
   - auth redirect in standalone auth mode
   changed: []
   deprecated: []
