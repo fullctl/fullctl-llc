@@ -56,8 +56,6 @@ class SlugSerializerMixin:
         slugs cannot be numeric
         """
 
-        print("VALIDATING SLUG", value)
-
         if value and value.isdigit():
             raise serializers.ValidationError(_("Slugs cannot be numeric"))
 
