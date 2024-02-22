@@ -17,10 +17,9 @@ class register:
     """
     Registers a health check function.
 
-    The function must return a boolean value, True if the service is healthy,
-    False otherwise.
-
     The function will be called with no arguments.
+
+    It should raise an exception if the check fails.
     """
 
     def __init__(self, name):
