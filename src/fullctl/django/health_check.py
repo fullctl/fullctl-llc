@@ -44,24 +44,25 @@ def check_all() -> dict:
 
     return results
 
-
+@register("task_stack_queue")
 def health_check_task_stack_queue():
     """
     Tests the task stack queue
     """
     pending_tasks = Task.objects.filter(status="pending", queue_id__isnull=True)
 
-    # check if the number of pending tasks exceeds the max limit
-    if pending_tasks.count() > settings.MAX_PENDING_TASKS:
-        raise TaskLimitError()
+    if pending_tasks.exists():
+        # check if the number of pending tasks exceeds the max limit
+        if pending_tasks.count() > settings.MAX_PENDING_TASKS:
+            raise TaskLimitError()
 
-    # check if the age of the oldest pending task exceeds the limit
-    threshold_hours = settings.TASK_MAX_AGE_THRESHOLD
-    threshold_datetime = timezone.now() - timezone.timedelta(hours=threshold_hours)
+        # check if the age of the oldest pending task exceeds the limit
+        threshold_hours = settings.TASK_MAX_AGE_THRESHOLD
+        threshold_datetime = timezone.now() - timezone.timedelta(hours=threshold_hours)
 
-    old_pending_tasks = pending_tasks.filter(created__lt=threshold_datetime).exists()
-    if old_pending_tasks:
-        raise TaskMaxAgeError()
+        old_pending_tasks = pending_tasks.filter(created__lt=threshold_datetime).exists()
+        if old_pending_tasks:
+            raise TaskMaxAgeError()
 
 
 @register("db")
