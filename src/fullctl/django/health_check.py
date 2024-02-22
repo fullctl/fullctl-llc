@@ -47,5 +47,15 @@ def health_check_db():
     """
     Performs a simple database version query
     """
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT version()")
+    # postgresql
+    if connection.vendor == "postgresql":
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT version()")
+    # sqlite
+    elif connection.vendor == "sqlite":
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT sqlite_version()")
+    # fallback to default (postgresql, in case vendor naming changes in the future)
+    else:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT version()")
