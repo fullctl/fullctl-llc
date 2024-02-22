@@ -44,6 +44,7 @@ def check_all() -> dict:
 
     return results
 
+
 @register("task_stack_queue")
 def health_check_task_stack_queue():
     """
@@ -60,7 +61,9 @@ def health_check_task_stack_queue():
         threshold_hours = settings.TASK_MAX_AGE_THRESHOLD
         threshold_datetime = timezone.now() - timezone.timedelta(hours=threshold_hours)
 
-        old_pending_tasks = pending_tasks.filter(created__lt=threshold_datetime).exists()
+        old_pending_tasks = pending_tasks.filter(
+            created__lt=threshold_datetime
+        ).exists()
         if old_pending_tasks:
             raise TaskMaxAgeError()
 

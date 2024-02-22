@@ -1,12 +1,11 @@
 from unittest.mock import patch
 
 import pytest
-from django.test.client import Client
-
 from django.conf import settings
+from django.test.client import Client
 from django.utils import timezone
-import tests.django_tests.testapp.models as models
 
+import tests.django_tests.testapp.models as models
 
 
 def test_health_check(db):
