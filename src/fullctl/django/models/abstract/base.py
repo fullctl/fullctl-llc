@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
@@ -33,6 +34,25 @@ class HandleRefModel(SoftDeleteHandleRefModel):
 
     def delete(self):
         return super().delete(hard=True)
+
+
+class SlugModel(HandleRefModel):
+    """
+    Adds a slug field to the model
+
+    Uniqueness should be handled on the extended model in combination
+    with the org instance.
+    """
+
+    slug = models.SlugField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    # slug cannot be numeric
+    def clean(self):
+        if self.slug and self.slug.isdigit():
+            raise ValidationError(_("Slug cannot be numeric"))
 
 
 class GeoModel(models.Model):

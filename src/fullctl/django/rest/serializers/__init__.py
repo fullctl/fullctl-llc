@@ -45,6 +45,23 @@ class EmptySerializer(serializers.Serializer):
     pass
 
 
+class SlugSerializerMixin:
+    slug = serializers.SlugField(
+        max_length=255,
+        help_text=_("Unique identifier"),
+    )
+
+    def validate_slug(self, value):
+        """
+        slugs cannot be numeric
+        """
+
+        if value and value.isdigit():
+            raise serializers.ValidationError(_("Slugs cannot be numeric"))
+
+        return value
+
+
 class RequireContext:
     required_context = []
 

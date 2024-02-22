@@ -6,6 +6,7 @@ from django.db import models
 
 import fullctl.django.models.abstract.meta as meta
 from fullctl.django.models import Task
+from fullctl.django.models.abstract.base import SlugModel
 from fullctl.django.tasks import qualifiers, register
 
 
@@ -185,3 +186,16 @@ class Request(meta.Request):
         override this to handle converting a target to a requestable url
         """
         return target  # Simply return the target as the URL
+
+
+class ModelWithSlug(SlugModel):
+
+    """
+    A model with a slug
+    """
+
+    class Meta:
+        db_table = "test_slug"
+
+    class HandleRef:
+        tag = "slug"
