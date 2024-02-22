@@ -2,6 +2,10 @@
 
 
 ## Unreleased
+### Added
+- slug model / serializer mixins
+### Fixed
+- auth redirect in standalone auth mode
 
 
 ## 1.11.0
