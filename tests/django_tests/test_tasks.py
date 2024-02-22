@@ -4,12 +4,12 @@ from django.utils import timezone
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
+from fullctl.django.health_check import health_check_task_stack_queue
 from fullctl.django.models.concrete.tasks import (
     TaskClaimed,
     TaskLimitError,
     TaskMaxAgeError,
 )
-from fullctl.django.views import check_task_stack_queue
 
 
 @pytest.mark.django_db
@@ -133,7 +133,7 @@ def test_task_stack_queue_for_maximum_pending_tasks():
         models.TestTask.create_task(1, 2)
 
     with pytest.raises(TaskLimitError):
-        check_task_stack_queue()
+        health_check_task_stack_queue()
 
 
 @pytest.mark.django_db
@@ -147,4 +147,4 @@ def test_task_stack_queue_for_tasks_exceeding_maximum_age_threshold():
     task.save()
 
     with pytest.raises(TaskMaxAgeError):
-        check_task_stack_queue()
+        health_check_task_stack_queue()
