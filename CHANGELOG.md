@@ -4,8 +4,10 @@
 ## Unreleased
 ### Added
 - slug model / serializer mixins
+- extendible health check
 ### Fixed
 - auth redirect in standalone auth mode
+- fixes issue with meta data cache expiry if expiry was set to never and api throttling was encountered
 
 
 ## 1.11.0
