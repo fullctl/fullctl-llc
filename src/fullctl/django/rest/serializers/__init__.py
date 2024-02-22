@@ -49,6 +49,10 @@ class SlugSerializerMixin:
     slug = serializers.SlugField(
         max_length=255,
         help_text=_("Unique identifier"),
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        default=None,
     )
 
     def validate_slug(self, value):
@@ -58,6 +62,11 @@ class SlugSerializerMixin:
 
         if value and value.isdigit():
             raise serializers.ValidationError(_("Slugs cannot be numeric"))
+
+        # if the value is empty, we want to return None for it
+        # so it doesn't get saved as an empty string
+        if not value:
+            value = None
 
         return value
 
