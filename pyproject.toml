@@ -57,7 +57,7 @@ django-peeringdb = ">=3.2.0"
 whitenoise = ">=6"
 pyuwsgi = ">=2.0.19"
 
-confu = ">=1.5"
+confu = ">=1.9"
 grainy = ">=1.8.1"
 psycopg = {extras = ["binary"], version = ">=3.1.8"}
 # force update
