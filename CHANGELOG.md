@@ -4,6 +4,8 @@
 ## Unreleased
 ### Added
 - slug model / serializer mixins
+- no_button_center modal type
+- continue_center modal type
 ### Fixed
 - auth redirect in standalone auth mode
 
