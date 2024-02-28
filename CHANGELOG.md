@@ -5,6 +5,8 @@
 ### Added
 - slug model / serializer mixins
 - extendible health check
+- no_button_center modal type
+- continue_center modal type
 ### Fixed
 - auth redirect in standalone auth mode
 - fixes issue with meta data cache expiry if expiry was set to never and api throttling was encountered
