@@ -1,6 +1,7 @@
 Unreleased:
   added: []
-  fixed: []
+  fixed:
+  - select2 background color issue
   changed: []
   deprecated: []
   removed: []

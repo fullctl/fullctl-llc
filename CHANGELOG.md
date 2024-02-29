@@ -2,6 +2,8 @@
 
 
 ## Unreleased
+### Fixed
+- select2 background color issue
 
 
 ## 1.12.0
