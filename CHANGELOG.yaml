@@ -1,12 +1,21 @@
 Unreleased:
-  added:
-  - slug model / serializer mixins
+  added: []
   fixed:
-  - auth redirect in standalone auth mode
+  - select2 background color issue
   changed: []
   deprecated: []
   removed: []
   security: []
+1.12.0:
+  added:
+  - slug model / serializer mixins
+  - extendible health check
+  - no_button_center modal type
+  - continue_center modal type
+  fixed:
+  - auth redirect in standalone auth mode
+  - fixes issue with meta data cache expiry if expiry was set to never and api throttling
+    was encountered
 1.11.0:
   added:
   - adds django-cors-headers to the project and the django default settings

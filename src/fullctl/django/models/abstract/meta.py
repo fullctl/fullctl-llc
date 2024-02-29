@@ -357,8 +357,17 @@ class Request(HandleRefModel):
 
         tdiff = time.time() - cached.updated.timestamp()
 
+        # if the cached request is a 429 and it's older than 5 minutes we will ignore it and send a new request
+        throttled_cache_expiry = cls.config("throttled_cache_expiry", 300)
+
         if cached.http_status == 429:
-            if tdiff > 300 or tdiff > cls.cache_expiry(target):
+            cache_expiry = cls.cache_expiry(target)
+
+            # if cache expiry is None (never expire) set it to throttled_cache_expiry
+            if cache_expiry is None:
+                cache_expiry = throttled_cache_expiry
+
+            if tdiff > throttled_cache_expiry or tdiff > cache_expiry:
                 # if the cached request is a 429 and it's older than 5 minutes or
                 # older than the normal cache expiry we will ignore it and send a new request
                 return None

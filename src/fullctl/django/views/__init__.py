@@ -3,7 +3,6 @@ import re
 import sys
 
 from django.conf import settings
-from django.db import connection
 
 # from django.conf import settings
 from django.http import Http404, HttpResponse
@@ -12,6 +11,7 @@ from django.utils.html import escape
 from django.utils.http import http_date
 from django.utils.safestring import mark_safe
 
+import fullctl.django.health_check
 from fullctl.django.decorators import require_auth
 from fullctl.django.models.concrete.file import OrganizationFile
 
@@ -40,10 +40,7 @@ def healthcheck(request):
     """
     Performs a simple database version query
     """
-
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT version()")
-
+    fullctl.django.health_check.check_all()
     return HttpResponse("")
 
 
