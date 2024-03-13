@@ -1,8 +1,23 @@
 import pytest
+from django.utils import timezone
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
 from fullctl.django.models.concrete.tasks import TaskClaimed, TaskLimitError
+
+
+@pytest.mark.django_db
+def test_task_with_max_run_time():
+    task = models.TestTaskWithMaxRunTime.create_task(1, 2)
+
+    orm.work_task(task)
+
+    task.created = task.created - timezone.timedelta(hours=2)
+    task.save()
+
+    orm.tasks_max_time_reached(task)
+
+    assert orm.fetch_tasks()
 
 
 @pytest.mark.django_db

@@ -10,8 +10,8 @@ from fullctl.django.tasks.orm import (
     claim_task,
     fetch_task,
     progress_schedules,
+    tasks_max_time_reached,
 )
-
 
 class Worker:
 
@@ -138,6 +138,11 @@ class Command(CommandInterface):
             task = await sync_to_async(fetch_task)()
 
             if not task or task.queue_id:
+                continue
+
+            task_waiting = await sync_to_async(tasks_max_time_reached)(task)
+            if task_waiting:
+                self.log_info(f"Task {task} has been waiting for too long, requeueing")
                 continue
 
             self.log_info(f"New task {task}")

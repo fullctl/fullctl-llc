@@ -23,6 +23,22 @@ class TestTask(Task):
 
     def run(self, a, b, *args, **kwargs):
         return a + b
+    
+
+@register
+class TestTaskWithMaxRunTime(Task):
+    class Meta:
+        proxy = True
+
+    class HandleRef:
+        tag = "task_max_run_time_test"
+
+    class TaskMeta:
+        result_type = int
+        max_run_time = 1 # hours
+
+    def run(self, a, b, *args, **kwargs):
+        return a + b
 
 
 @register

@@ -271,6 +271,10 @@ class Task(HandleRefModel):
     @property
     def limit(self):
         return self.task_meta_property("limit")
+    
+    @property
+    def max_run_time(self):
+        return self.task_meta_property("max_run_time")
 
     @property
     def limit_action(self):
