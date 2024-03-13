@@ -6,6 +6,13 @@ and relationship management
 import json
 
 
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, DataObject):
+            return o.__dict__
+        return super().default(o)
+
+
 class DataObject:
 
     """
@@ -36,7 +43,7 @@ class DataObject:
 
     @property
     def json(self):
-        return json.dumps(self.__dict__)
+        return json.dumps(self.__dict__, cls=JSONEncoder)
 
     def __init__(self, **kwargs):
         for k, v in kwargs.items():

@@ -54,7 +54,11 @@ def account_service(request):
     if settings.OAUTH_TWENTYC_URL:
         context.update(
             service_applications=[
-                service_application.for_org(org)
+                # we call sanitize() to remove the `config` attribute
+                # as that may contain sensitive information
+                # that we don't necessarily want to expose to the template
+                # context
+                service_application.for_org(org).sanitize()
                 for service_application in ServiceApplication().objects(
                     group="fullctl", org=(org_slug or None)
                 )

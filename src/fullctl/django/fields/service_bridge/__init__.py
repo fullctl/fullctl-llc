@@ -82,17 +82,8 @@ class ReferencedObject:
     def load(self):
         if not self.bridge:
             return None
-
-        print("Loading", self.id, "from", self.bridge.__name__)
-        print("Checking for org federated services", self.services)
-        
-        ctx = service_bridge_context.get()
-        svc = ctx.get_service(self.bridge, *self.services)
-
-        print("Service", svc.name, svc.for_org(ctx.org).org_redirect)
-
         kwargs = {self.remote_lookup: self.id}
-        bridge = self.bridge(url=svc.org_redirect)
+        bridge = self.bridge()
         self.source = f"{bridge.ref_tag}.{self.id}@{bridge.host}"
         return bridge.first(**kwargs)
 

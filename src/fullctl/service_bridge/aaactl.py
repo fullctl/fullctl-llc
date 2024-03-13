@@ -49,6 +49,11 @@ class ServiceApplicationObject(AaactlEntity):
             self.org_namespace = self.grainy
         return self
 
+    def sanitize(self):
+        # config may contain sensitive information, so we remove it
+        delattr(self, "config")
+        return self
+
 
 class ServiceApplication(Aaactl):
     class Meta(Aaactl.Meta):

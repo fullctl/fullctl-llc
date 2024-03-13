@@ -14,7 +14,7 @@ class ServiceBridgeContextState:
 
     def load(self):
         self.services = []
-        for svc in ServiceApplication().objects():
+        for svc in ServiceApplication().objects(org=self.org_slug):
             self.services.append(svc)
 
     def get_service(self, *service_tags):
