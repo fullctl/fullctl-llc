@@ -16,7 +16,7 @@ class ServiceBridgeContextState:
 
     def load(self):
         self.services = []
-        for svc in ServiceApplication().objects(org=self.org_slug):
+        for svc in ServiceApplication().objects(group="fullctl", org=self.org_slug):
             self.services.append(svc)
 
     def get_service(self, *service_tags):
@@ -39,7 +39,7 @@ class ServiceBridgeContextState:
         Returns a service bridge instance from a module path
         according to the first service found in the context
 
-        pahts = [
+        paths = [
             "fullctl.service_bridge.nautobot.Device",
             "fullctl.service_bridge.netbox.Device",
         ]
