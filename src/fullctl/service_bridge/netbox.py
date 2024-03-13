@@ -41,7 +41,9 @@ class Netbox(Bridge):
             if svc.federated and not key:
                 key = getattr(svc.config, "API_TOKEN", None)
                 if not key:
-                    raise AttributeError("netbox API_TOKEN not set on federated service not")
+                    raise AttributeError(
+                        "netbox API_TOKEN not set on federated service not"
+                    )
 
         if not key:
             key = DEFAULT_NETBOX_TOKEN

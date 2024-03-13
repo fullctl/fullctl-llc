@@ -1,13 +1,12 @@
-from importlib import import_module
 from logging import getLogger
 
-from django.conf import settings
 from django.db.models import CharField, PositiveIntegerField
 
 from fullctl.django.fields import CastOnAssignDescriptor
 from fullctl.service_bridge.context import service_bridge_context
 
 log = getLogger("django")
+
 
 class ReferencedObject:
     @property
@@ -80,7 +79,13 @@ class ReferencedObjectFieldMixin:
     base_type = int
 
     def __init__(
-        self, bridge=None, remote_lookup="id", bridge_type=None, services=None, *args, **kwargs
+        self,
+        bridge=None,
+        remote_lookup="id",
+        bridge_type=None,
+        services=None,
+        *args,
+        **kwargs,
     ):
         if bridge and bridge_type:
             raise AttributeError("Cannot specify both bridge and bridge_type")

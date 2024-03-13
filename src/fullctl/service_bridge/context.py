@@ -2,10 +2,11 @@
 Context manager for a service bridge context owned by a specific organization
 """
 import dataclasses
-from importlib import import_module
 from contextvars import ContextVar
+from importlib import import_module
 
 from .aaactl import ServiceApplication
+
 
 @dataclasses.dataclass
 class ServiceBridgeContextState:
@@ -25,8 +26,8 @@ class ServiceBridgeContextState:
 
         return None
 
-    def get_service_config(self, service_tag:str, cfg_name:str, default=None):
-        
+    def get_service_config(self, service_tag: str, cfg_name: str, default=None):
+
         svc = self.get_service(service_tag)
         if svc:
             cfg = svc.config
@@ -67,21 +68,24 @@ class ServiceBridgeContextState:
 
         if bridge_classes:
             return bridge_classes[0]
-        
+
         return None
 
 
-service_bridge_context = ContextVar("service_bridge_context", default=ServiceBridgeContextState())
+service_bridge_context = ContextVar(
+    "service_bridge_context", default=ServiceBridgeContextState()
+)
+
 
 class ServiceBridgeContext:
     """
     Context manager for a service bridge context owned by a specific organization
     """
+
     def __init__(self, organization):
         print("ServiceBridgeContext initialized with", organization)
         self.state = ServiceBridgeContextState(
-            org_slug=organization.slug if organization else None,
-            org=organization
+            org_slug=organization.slug if organization else None, org=organization
         )
         self.state.load()
 
