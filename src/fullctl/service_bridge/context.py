@@ -83,7 +83,6 @@ class ServiceBridgeContext:
     """
 
     def __init__(self, organization):
-        print("ServiceBridgeContext initialized with", organization)
         self.state = ServiceBridgeContextState(
             org_slug=organization.slug if organization else None, org=organization
         )
@@ -91,7 +90,6 @@ class ServiceBridgeContext:
 
     def __enter__(self):
         self.token = service_bridge_context.set(self.state)
-        print("Service bridge context set", self.state.org_slug)
         return self.state
 
     def __exit__(self, *exc):

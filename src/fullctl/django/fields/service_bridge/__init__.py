@@ -89,8 +89,15 @@ class ReferencedObjectFieldMixin:
     ):
         if bridge and bridge_type:
             raise AttributeError("Cannot specify both bridge and bridge_type")
+        
+        if not services:
+            services = []
 
         def get_bridge():
+
+            if bridge:
+                return bridge()
+
             ctx = service_bridge_context.get()
             cls = ctx.get_best_bridge_cls(*services)
             return cls()
