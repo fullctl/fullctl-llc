@@ -34,7 +34,7 @@ class Devicectl(Bridge):
         kwargs.setdefault("cache_duration", 10)
         kwargs.setdefault("cache", CACHE)
 
-        super().__init__(settings.DEVICECTL_URL, key, org, **kwargs)
+        super().__init__(kwargs.get("url", settings.DEVICECTL_URL), key, org, **kwargs)
         self.url = url_join(self.url, "service-bridge/")
 
 

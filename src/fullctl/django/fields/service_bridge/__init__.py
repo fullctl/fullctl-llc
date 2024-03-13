@@ -5,10 +5,12 @@ from django.conf import settings
 from django.db.models import CharField, PositiveIntegerField
 
 from fullctl.django.fields import CastOnAssignDescriptor
+from fullctl.service_bridge.context import service_bridge_context
 
 log = getLogger("django")
 
 BRIDGE_MAP = {}
+BRIDGE_SERVICE_MAP = {}
 
 
 for name in dir(settings):
@@ -21,6 +23,8 @@ for name in dir(settings):
             continue
         bridge = getattr(import_module(".".join(path[:-1])), path[-1])
         BRIDGE_MAP[name] = bridge
+        # second to last is the service tag
+        BRIDGE_SERVICE_MAP[name] = path[-2]
 
 
 class ReferencedObject:
@@ -44,11 +48,12 @@ class ReferencedObject:
 
         return self.bridge().api_url(self.id)
 
-    def __init__(self, bridge, id, remote_lookup="id"):
+    def __init__(self, bridge, id, remote_lookup="id", services=None):
         self.bridge = bridge
         self.remote_lookup = remote_lookup
         self.id = id
         self.source = None
+        self.services = services
 
     def __repr__(self):
         return f"{self.bridge.__name__} {self.id}"
@@ -78,8 +83,16 @@ class ReferencedObject:
         if not self.bridge:
             return None
 
+        print("Loading", self.id, "from", self.bridge.__name__)
+        print("Checking for org federated services", self.services)
+        
+        ctx = service_bridge_context.get()
+        svc = ctx.get_service(self.bridge, *self.services)
+
+        print("Service", svc.name, svc.for_org(ctx.org).org_redirect)
+
         kwargs = {self.remote_lookup: self.id}
-        bridge = self.bridge()
+        bridge = self.bridge(url=svc.org_redirect)
         self.source = f"{bridge.ref_tag}.{self.id}@{bridge.host}"
         return bridge.first(**kwargs)
 
@@ -108,6 +121,7 @@ class ReferencedObjectFieldMixin:
                 )
 
         self.bridge_type = bridge_type
+        self.services = kwargs.get("services") or [BRIDGE_SERVICE_MAP[bridge_type]] if bridge_type in BRIDGE_SERVICE_MAP else []
         self.bridge = bridge
         self.remote_lookup = remote_lookup
 
@@ -130,7 +144,7 @@ class ReferencedObjectFieldMixin:
         if value is None:
             return None
 
-        return ReferencedObject(self.bridge, value, self.remote_lookup)
+        return ReferencedObject(self.bridge, value, self.remote_lookup, self.services)
 
     def to_python(self, value):
         if value is None:
@@ -139,7 +153,7 @@ class ReferencedObjectFieldMixin:
         if isinstance(value, ReferencedObject):
             return value
 
-        return ReferencedObject(self.bridge, value, self.remote_lookup)
+        return ReferencedObject(self.bridge, value, self.remote_lookup, self.services)
 
     def get_prep_value(self, value):
         if value is None:

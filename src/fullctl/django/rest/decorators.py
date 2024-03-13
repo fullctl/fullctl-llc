@@ -12,6 +12,7 @@ from fullctl.django.models import Instance, Organization
 from fullctl.django.rest.authentication import APIKey
 from fullctl.django.rest.core import HANDLEREF_FIELDS
 from fullctl.service_bridge.client import AaaCtl
+from fullctl.service_bridge.context import ServiceBridgeContext
 
 
 class base:
@@ -158,7 +159,8 @@ class grainy_endpoint(base):
                 else:
                     reversion.set_comment(f"{request.user}")
 
-                return fn(self, request, *args, **kwargs)
+                with ServiceBridgeContext(request.org):
+                    return fn(self, request, *args, **kwargs)
 
         inner.__name__ = fn.__name__
 
