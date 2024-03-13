@@ -9,24 +9,6 @@ from fullctl.service_bridge.context import service_bridge_context
 
 log = getLogger("django")
 
-BRIDGE_MAP = {}
-BRIDGE_SERVICE_MAP = {}
-
-
-for name in dir(settings):
-    if name.startswith("SERVICE_BRIDGE_REF_"):
-        path = getattr(settings, name).split(".")
-        name = name.split("SERVICE_BRIDGE_REF_")[1].lower()
-        print("loading", path, "for", name)
-        if not path or len(path) < 2:
-            BRIDGE_MAP[name] = None
-            continue
-        bridge = getattr(import_module(".".join(path[:-1])), path[-1])
-        BRIDGE_MAP[name] = bridge
-        # second to last is the service tag
-        BRIDGE_SERVICE_MAP[name] = path[-2]
-
-
 class ReferencedObject:
     @property
     def object(self):
@@ -98,22 +80,19 @@ class ReferencedObjectFieldMixin:
     base_type = int
 
     def __init__(
-        self, bridge=None, remote_lookup="id", bridge_type=None, *args, **kwargs
+        self, bridge=None, remote_lookup="id", bridge_type=None, services=None, *args, **kwargs
     ):
         if bridge and bridge_type:
             raise AttributeError("Cannot specify both bridge and bridge_type")
 
-        if bridge_type:
-            try:
-                bridge = BRIDGE_MAP[bridge_type]
-            except KeyError:
-                raise KeyError(
-                    f"settings.SERVICE_BRIDGE_REF_{bridge_type.upper} not set"
-                )
+        def get_bridge():
+            ctx = service_bridge_context.get()
+            cls = ctx.get_best_bridge_cls(*services)
+            return cls()
 
         self.bridge_type = bridge_type
-        self.services = kwargs.get("services") or [BRIDGE_SERVICE_MAP[bridge_type]] if bridge_type in BRIDGE_SERVICE_MAP else []
-        self.bridge = bridge
+        self.services = services
+        self.bridge = get_bridge
         self.remote_lookup = remote_lookup
 
         super().__init__(*args, **kwargs)

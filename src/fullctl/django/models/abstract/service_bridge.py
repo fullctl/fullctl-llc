@@ -36,7 +36,7 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         """
         if not self.reference or not self.reference.bridge:
             return None
-        return f"{self.reference.bridge.Meta.service}"
+        return f"{self.reference.bridge().Meta.service}"
 
     @property
     def reference_ux_url(self):
@@ -123,7 +123,7 @@ class ServiceBridgeReferenceModel(HandleRefModel):
         Reference field names will be the keys, fullctl field names will be the values
         """
         if not service_name:
-            service_name = self.reference.bridge.Meta.service
+            service_name = self.reference.bridge().Meta.service
         return getattr(self.ServiceBridge, f"map_{service_name}")
 
     def sync_from_reference(self, ref_obj=None, if_sot=False, save=False):
