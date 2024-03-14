@@ -17,7 +17,8 @@ from fullctl.django.models import (
     WorkerUnqualified,
 )
 from fullctl.django.models.concrete.tasks import TaskClaim, TaskLimitError
-from fullctl.django.tasks import specify_task,  requeue as requeue_task
+from fullctl.django.tasks import requeue as requeue_task
+from fullctl.django.tasks import specify_task
 from fullctl.django.tasks.util import worker_id
 
 # (Task, timestamp)
@@ -53,11 +54,12 @@ def fetch_task(**filters):
         return tasks[0]
     return None
 
+
 def tasks_max_time_reached(task):
 
     if not task.max_run_time:
         return False
-    
+
     time_delta = timedelta(hours=task.max_run_time)
     if (task.created + time_delta) < timezone.now():
         task.cancel("max run time reached")

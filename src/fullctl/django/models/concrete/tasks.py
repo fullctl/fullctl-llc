@@ -61,7 +61,9 @@ class TaskLimitError(IOError):
         if task is None:
             message = "Task limit exceeded"
         else:
-            message = f"Task limit exceeded for task with limit id: {task.generate_limit_id}"
+            message = (
+                f"Task limit exceeded for task with limit id: {task.generate_limit_id}"
+            )
 
         super().__init__(message)
 
@@ -277,7 +279,7 @@ class Task(HandleRefModel):
     @property
     def limit(self):
         return self.task_meta_property("limit")
-    
+
     @property
     def max_run_time(self):
         return self.task_meta_property("max_run_time")
@@ -584,7 +586,6 @@ class TaskSchedule(HandleRefModel):
         self.schedule = timezone.now() + datetime.timedelta(seconds=self.interval)
         self.save()
 
-    
     def are_limited_tasks_pending(self):
         """
         Checks if there are currently any pending limited tasks
@@ -604,7 +605,7 @@ class TaskSchedule(HandleRefModel):
             # task is higher than the limit we return True
             if tasks and (tasks.first().task_meta_property("limit") <= tasks.count()):
                 return True
-            
+
         return False
 
     def spawn_tasks(self):

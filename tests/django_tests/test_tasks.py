@@ -3,7 +3,11 @@ from django.utils import timezone
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
-from fullctl.django.models.concrete.tasks import TaskClaimed, TaskLimitError, TaskSchedule
+from fullctl.django.models.concrete.tasks import (
+    TaskClaimed,
+    TaskLimitError,
+    TaskSchedule,
+)
 
 
 @pytest.mark.django_db
@@ -163,9 +167,7 @@ def test_schedule_limited_task_manually(dj_account_objects):
             "tasks": [
                 {
                     "op": "task_limited_2",
-                    "param": {
-                        "args": ["test"]
-                    },
+                    "param": {"args": ["test"]},
                 }
             ],
         },
@@ -174,5 +176,5 @@ def test_schedule_limited_task_manually(dj_account_objects):
         interval=3600,
         schedule=timezone.now(),
     )
-    
+
     task_schedule.spawn_tasks()

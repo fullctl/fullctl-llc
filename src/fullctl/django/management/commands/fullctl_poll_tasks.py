@@ -13,6 +13,7 @@ from fullctl.django.tasks.orm import (
     tasks_max_time_reached,
 )
 
+
 class Worker:
 
     """
