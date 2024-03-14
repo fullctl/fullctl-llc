@@ -130,3 +130,23 @@ def test_task_limits_with_id():
     orm.work_task(task_b)
     task_a = models.LimitedTaskWithLimitId.create_task("test")
     task_b = models.LimitedTaskWithLimitId.create_task("other")
+
+
+@pytest.mark.django_db
+def test_task_limit_error_returns_message_without_limit_id_provided():
+    models.LimitedTask.create_task("test")
+
+    with pytest.raises(TaskLimitError) as exc_info:
+        models.LimitedTask.create_task("test")
+
+    assert "Task limit exceeded" == str(exc_info.value)
+
+
+@pytest.mark.django_db
+def test_task_limit_error_returns_message_with_limit_id_provided():
+    task = models.LimitedTaskWithLimitId.create_task("test")
+
+    with pytest.raises(TaskLimitError) as exc_info:
+        raise TaskLimitError(task)
+
+    assert "Task limit exceeded for task with limit id: test" == str(exc_info.value)

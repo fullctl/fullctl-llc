@@ -57,7 +57,13 @@ class TaskLimitError(IOError):
     instances of a task
     """
 
-    pass
+    def __init__(self, task=None):
+        if task is None:
+            message = "Task limit exceeded"
+        else:
+            message = f"Task limit exceeded for task with limit id: {task.generate_limit_id}"
+
+        super().__init__(message)
 
 
 class TaskAlreadyStarted(IOError):
