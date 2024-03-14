@@ -104,8 +104,8 @@ class ReferencedObjectFieldMixin:
 
         self.bridge_type = bridge_type
         self.services = services
-        self.bridge = bridge
-        self.get_bridge = get_bridge
+        self.bridge_cls = bridge
+        self.bridge = get_bridge
         self.remote_lookup = remote_lookup
 
         super().__init__(*args, **kwargs)
@@ -116,7 +116,7 @@ class ReferencedObjectFieldMixin:
         if self.bridge_type:
             kwargs["bridge_type"] = self.bridge_type
         else:
-            kwargs["bridge"] = self.bridge
+            kwargs["bridge"] = self.bridge_cls
 
         kwargs["services"] = self.services
 
@@ -129,9 +129,7 @@ class ReferencedObjectFieldMixin:
         if value is None:
             return None
 
-        return ReferencedObject(
-            self.get_bridge, value, self.remote_lookup, self.services
-        )
+        return ReferencedObject(self.bridge, value, self.remote_lookup, self.services)
 
     def to_python(self, value):
         if value is None:
@@ -140,9 +138,7 @@ class ReferencedObjectFieldMixin:
         if isinstance(value, ReferencedObject):
             return value
 
-        return ReferencedObject(
-            self.get_bridge, value, self.remote_lookup, self.services
-        )
+        return ReferencedObject(self.bridge, value, self.remote_lookup, self.services)
 
     def get_prep_value(self, value):
         if value is None:
