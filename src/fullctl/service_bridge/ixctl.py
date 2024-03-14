@@ -50,6 +50,19 @@ class InternetExchange(Ixctl):
         data_object_cls = InternetExchangeObject
 
 
+class InternetExhangePrefixObject(IxctlEntity):
+    description = "Ixctl Exchange Prefix"
+    relationships = {
+        "ix": {"bridge": InternetExchange, "filter": ("ix", "ix_id")},
+    }
+
+
+class InternetExchangePrefix(Ixctl):
+    class Meta(Ixctl.Meta):
+        ref_tag = "prefix"
+        data_object_cls = InternetExhangePrefixObject
+
+
 class InternetExchangeMemberObject(IxctlEntity):
     description = "Ixctl Exchange Member"
     relationships = {

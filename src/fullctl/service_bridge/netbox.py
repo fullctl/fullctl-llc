@@ -107,6 +107,26 @@ class IPAddress(Netbox):
         data_object_cls = IPAddressObject
 
 
+class VLANObject(NetboxObject):
+    description = "Netbox VLAN"
+
+
+class VLAN(Netbox):
+    class Meta(Netbox.Meta):
+        ref_tag = "ipam/vlans"
+        data_object_cls = VLANObject
+
+
+class PrefixObject(NetboxObject):
+    description = "Netbox Prefix"
+
+
+class Prefix(Netbox):
+    class Meta(Netbox.Meta):
+        ref_tag = "ipam/prefixes"
+        data_object_cls = PrefixObject
+
+
 class SiteObject(NetboxObject):
     description = "Netbox Site"
 
