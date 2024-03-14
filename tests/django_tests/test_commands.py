@@ -41,3 +41,67 @@ def test_fullctl_work_task_fail(db, dj_account_objects):
     task = specify_task(Task.objects.get(id=1))
 
     assert task.status == "failed"
+
+
+def test_fullctl_prune_completed_tasks(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+    task.status = "completed"
+    task.save()
+
+    management.call_command("fullctl_manage_tasks", "0")
+
+    assert Task.objects.count() == 0
+    assert Task.objects.filter(id=task.id).count() == 0
+
+
+def test_fullctl_prune_failed_tasks(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+    task.status = "failed"
+    task.save()
+
+    management.call_command("fullctl_manage_tasks", "0")
+
+    assert Task.objects.count() == 0
+    assert Task.objects.filter(id=task.id).count() == 0
+
+
+def test_fullctl_prune_cancelled_tasks(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+    task.status = "cancelled"
+    task.save()
+
+    management.call_command("fullctl_manage_tasks", "0")
+
+    assert Task.objects.count() == 0
+    assert Task.objects.filter(id=task.id).count() == 0
+
+
+def test_fullctl_doesnt_prune_pending_tasks(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+
+    management.call_command("fullctl_manage_tasks", "0")
+
+    assert Task.objects.count() == 1
+    assert Task.objects.filter(id=task.id).count() == 1
+
+
+def test_fullctl_doesnt_prune_running_tasks(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+    task.status = "running"
+    task.save()
+
+    management.call_command("fullctl_manage_tasks", "0")
+
+    assert Task.objects.count() == 1
+    assert Task.objects.filter(id=task.id).count() == 1
+
+
+def test_fullctl_doesnt_prune_young_tasks(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+    task.status = "completed"
+    task.save()
+
+    management.call_command("fullctl_manage_tasks", "5")
+
+    assert Task.objects.count() == 1
+    assert Task.objects.filter(id=task.id).count() == 1
