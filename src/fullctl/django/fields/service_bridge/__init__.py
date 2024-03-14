@@ -89,7 +89,7 @@ class ReferencedObjectFieldMixin:
     ):
         if bridge and bridge_type:
             raise AttributeError("Cannot specify both bridge and bridge_type")
-        
+
         if not services:
             services = []
 
