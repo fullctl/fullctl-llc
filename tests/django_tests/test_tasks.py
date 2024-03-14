@@ -3,7 +3,7 @@ from django.utils import timezone
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
-from fullctl.django.models.concrete.tasks import TaskClaimed, TaskLimitError
+from fullctl.django.models.concrete.tasks import TaskClaimed, TaskLimitError, TaskSchedule
 
 
 @pytest.mark.django_db
@@ -150,3 +150,29 @@ def test_task_limit_error_returns_message_with_limit_id_provided():
         raise TaskLimitError(task)
 
     assert "Task limit exceeded for task with limit id: test" == str(exc_info.value)
+
+
+@pytest.mark.django_db
+def test_schedule_limited_task_manually(dj_account_objects):
+    org = dj_account_objects.org
+    models.LimitedTaskWithLimitId.create_task("test")
+
+    task_schedule = TaskSchedule.objects.create(
+        org=org,
+        task_config={
+            "tasks": [
+                {
+                    "op": "task_limited_2",
+                    "param": {
+                        "args": ["test"]
+                    },
+                }
+            ],
+        },
+        description="test",
+        repeat=True,
+        interval=3600,
+        schedule=timezone.now(),
+    )
+    
+    task_schedule.spawn_tasks()
