@@ -14,7 +14,7 @@ class BadRequest(Response):
     def __init__(
         self,
         data: dict,
-        error_map: dict[str : Union[str, Callable]] = None,
+        error_map: dict[str, Union[str, Callable]] = None,
         *args,
         **kwargs,
     ):
