@@ -1,4 +1,4 @@
-from typing import Union, Callable
+from typing import Callable, Union
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
@@ -11,11 +11,17 @@ HANDLEREF_FIELDS = ["id", "status", "created", "updated"]
 
 
 class BadRequest(Response):
-    def __init__(self, data:dict, error_map:dict[str:Union[str,Callable]]=None, *args, **kwargs):
+    def __init__(
+        self,
+        data: dict,
+        error_map: dict[str : Union[str, Callable]] = None,
+        *args,
+        **kwargs,
+    ):
 
         if error_map:
             # if error_map is specified its expected to be a `dict`
-            # mapping `code` to replacement messages that are either 
+            # mapping `code` to replacement messages that are either
             # `str` or `callable` that takes the error as an argument
             #
             # check data for `non_field_errors` and replace as needed
@@ -30,10 +36,11 @@ class BadRequest(Response):
                     else:
                         error = replacement
                 new_errors.append(error)
-            
+
             data["non_field_errors"] = new_errors
 
         super().__init__(data, status=400, *args, **kwargs)
+
 
 def exception_handler(exc, context):
     """
