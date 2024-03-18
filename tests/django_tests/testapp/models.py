@@ -35,7 +35,7 @@ class TestTaskWithMaxRunTime(Task):
 
     class TaskMeta:
         result_type = int
-        max_run_time = 1  # hours
+        max_run_time = 3600  # seconds
 
     def run(self, a, b, *args, **kwargs):
         return a + b

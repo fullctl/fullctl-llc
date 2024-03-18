@@ -141,10 +141,8 @@ class Command(CommandInterface):
             if not task or task.queue_id:
                 continue
 
-            task_waiting = await sync_to_async(tasks_max_time_reached)(task)
-            if task_waiting:
-                self.log_info(f"Task {task} has been waiting for too long, requeueing")
-                continue
+            # check on stuck tasks and perform requeuing on those that have max times reached
+            await sync_to_async(tasks_max_time_reached)
 
             self.log_info(f"New task {task}")
 

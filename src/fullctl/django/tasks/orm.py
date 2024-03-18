@@ -55,18 +55,25 @@ def fetch_task(**filters):
     return None
 
 
-def tasks_max_time_reached(task):
+def tasks_max_time_reached():
 
-    if not task.max_run_time:
-        return False
+    running_tasks = Task.objects.filter(
+        status__in=["running", "pending"],
+        queue_id__isnull=False
+    )
 
-    time_delta = timedelta(hours=task.max_run_time)
-    if (task.created + time_delta) < timezone.now():
-        task.cancel("max run time reached")
-        requeue_task(task)
-        return True
+    if not running_tasks.exists():
+        return
 
-    return False
+    for generic_task in running_tasks:
+        task = specify_task(generic_task)
+        if not task.max_run_time:
+            continue
+
+        time_delta = timedelta(seconds=task.max_run_time)
+        if (task.created + time_delta) < timezone.now():
+            task.cancel("max run time reached")
+            requeue_task(task)
 
 
 def fetch_tasks(limit=1, **filters):

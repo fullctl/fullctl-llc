@@ -14,12 +14,12 @@ from fullctl.django.models.concrete.tasks import (
 def test_task_with_max_run_time():
     task = models.TestTaskWithMaxRunTime.create_task(1, 2)
 
-    orm.work_task(task)
+    orm.claim_task(task)
 
-    task.created = task.created - timezone.timedelta(hours=2)
+    task.created = task.created - timezone.timedelta(seconds=7200)
     task.save()
 
-    orm.tasks_max_time_reached(task)
+    orm.tasks_max_time_reached()
 
     assert orm.fetch_tasks()
 
