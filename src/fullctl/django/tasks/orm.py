@@ -58,8 +58,7 @@ def fetch_task(**filters):
 def tasks_max_time_reached():
 
     running_tasks = Task.objects.filter(
-        status__in=["running", "pending"],
-        queue_id__isnull=False
+        status__in=["running", "pending"], queue_id__isnull=False
     )
 
     if not running_tasks.exists():

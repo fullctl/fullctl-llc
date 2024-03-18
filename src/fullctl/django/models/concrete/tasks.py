@@ -592,7 +592,6 @@ class TaskSchedule(HandleRefModel):
         """
         from fullctl.django.tasks.orm import specify_task
 
-
         task_configs = self.task_config.get("tasks", [])
 
         for task_config in task_configs:
