@@ -590,6 +590,8 @@ class TaskSchedule(HandleRefModel):
         """
         Checks if there are currently any pending limited tasks
         """
+        from fullctl.django.tasks.orm import specify_task
+
 
         task_configs = self.task_config.get("tasks", [])
 
@@ -601,9 +603,10 @@ class TaskSchedule(HandleRefModel):
                 op=op, limit_id=limit_id, status__in=["pending", "running"]
             )
 
+            task = specify_task(tasks.first())
             # if the count of currently pending / running instances of this
             # task is higher than the limit we return True
-            if tasks and (tasks.first().task_meta_property("limit") <= tasks.count()):
+            if tasks and (task.task_meta_property("limit") <= tasks.count()):
                 return True
 
         return False

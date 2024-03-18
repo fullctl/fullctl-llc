@@ -177,4 +177,5 @@ def test_schedule_limited_task_manually(dj_account_objects):
         schedule=timezone.now(),
     )
 
+    # This will not raise a TaskLimitError
     task_schedule.spawn_tasks()
