@@ -82,6 +82,7 @@ urlpatterns += [
     path("_diag", fullctl.django.views.diag),
     path("health/", fullctl.django.views.healthcheck),
     path("authcheck/", fullctl.django.views.authcheck),
+    path("tasks_queue/", fullctl.django.views.tasks_queue_status, name="tasks-queue"),
     path("apidocs/schema.json", api_schema, name="api_schema"),
     path(
         "api/account/",
