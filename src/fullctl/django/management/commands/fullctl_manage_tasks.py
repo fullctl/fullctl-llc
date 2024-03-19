@@ -1,7 +1,7 @@
 from datetime import timedelta
 
+from django.core.management.base import BaseCommand, CommandParser
 from django.utils import timezone
-from django.core.management.base import CommandParser, BaseCommand
 
 from fullctl.django.models import Task
 

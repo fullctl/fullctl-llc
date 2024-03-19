@@ -3,6 +3,7 @@ import re
 import sys
 
 from django.conf import settings
+from django.contrib.auth.decorators import user_passes_test
 
 # from django.conf import settings
 from django.http import Http404, HttpResponse
@@ -10,7 +11,6 @@ from django.shortcuts import redirect, render
 from django.utils.html import escape
 from django.utils.http import http_date
 from django.utils.safestring import mark_safe
-from django.contrib.auth.decorators import user_passes_test
 
 import fullctl.django.health_check
 from fullctl.django.decorators import require_auth
@@ -148,30 +148,29 @@ def organization_file_download(request, org_tag, file_name):
 @user_passes_test(lambda u: u.is_superuser)
 def tasks_queue_status(request):
     # number of pending tasks
-    pending_task = Task.objects.filter(
-        status="pending",
-        queue_id__isnull=False
-    ).count()
+    pending_task = Task.objects.filter(status="pending", queue_id__isnull=False).count()
 
     # oldest pending task
-    oldest_task = Task.objects.filter(
-        status="pending",
-        queue_id__isnull=False
-    ).order_by("created").first()
+    oldest_task = (
+        Task.objects.filter(status="pending", queue_id__isnull=False)
+        .order_by("created")
+        .first()
+    )
 
     # newest pending task
-    newest_task = Task.objects.filter(
-        status="pending",
-        queue_id__isnull=False
-    ).order_by("-created").first()
+    newest_task = (
+        Task.objects.filter(status="pending", queue_id__isnull=False)
+        .order_by("-created")
+        .first()
+    )
 
     # last completed task
-    last_completed_task = Task.objects.filter(
-        status="completed").order_by("-created").first()
+    last_completed_task = (
+        Task.objects.filter(status="completed").order_by("-created").first()
+    )
 
     # last 5 failed tasks
-    failed_tasks = Task.objects.filter(
-        status="failed").order_by("-created")[:5]
+    failed_tasks = Task.objects.filter(status="failed").order_by("-created")[:5]
 
     tasks = {
         "pending_task": pending_task,
