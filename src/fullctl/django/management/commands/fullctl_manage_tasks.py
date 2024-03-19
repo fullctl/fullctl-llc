@@ -1,30 +1,32 @@
 from datetime import timedelta
 
 from django.utils import timezone
+from django.core.management.base import CommandParser, BaseCommand
 
-from fullctl.django.management.commands.base import CommandInterface
 from fullctl.django.models import Task
 
 
-class Command(CommandInterface):
+class Command(BaseCommand):
     help = "Remove all tasks with status 'completed', 'failed' or 'cancelled'"
 
     always_commit = True
 
-    def add_arguments(self, parser):
-        super().add_arguments(parser)
-        parser.add_argument(
+    def add_arguments(self, parser: CommandParser):
+        subparsers = parser.add_subparsers(dest="subcommand")
+        prune_parser = subparsers.add_parser("prune")
+        prune_parser.add_argument(
             "age", default="30", help="Number of days to consider for pruning"
         )
 
-    def run(self, *args, **kwargs):
-        age = int(kwargs.get("age"))
+    def handle(self, *args, **options):
+        if options["subcommand"] == "prune":
+            self.prune_tasks(options["age"])
 
-        self.log_info(f"Pruning tasks older than {age} days")
-
+    def prune_tasks(self, age: int):
+        age = int(age)
+        self.stdout.write(f"Pruning tasks older than {age} days")
         Task.objects.filter(
             status__in=["completed", "failed", "cancelled"],
             updated__lt=timezone.now() - timedelta(days=age),
         ).delete()
-
-        self.log_info("Pruning complete")
+        self.stdout.write("Pruning complete")
