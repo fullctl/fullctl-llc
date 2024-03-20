@@ -44,7 +44,7 @@ class SlugModel(HandleRefModel):
     with the org instance.
     """
 
-    slug = models.SlugField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(max_length=255, null=True, blank=True, default=None)
 
     class Meta:
         abstract = True
