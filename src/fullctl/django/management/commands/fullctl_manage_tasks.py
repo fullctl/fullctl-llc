@@ -12,6 +12,7 @@ class Command(BaseCommand):
     always_commit = True
 
     def add_arguments(self, parser: CommandParser):
+        """Add arguments to the command."""
         subparsers = parser.add_subparsers(dest="subcommand")
         prune_parser = subparsers.add_parser("prune")
         prune_parser.add_argument(
@@ -19,10 +20,12 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        """Handle the command."""
         if options["subcommand"] == "prune":
             self.prune_tasks(options["age"])
 
     def prune_tasks(self, age: int):
+        """Prune tasks older than a certain age."""
         age = int(age)
         self.stdout.write(f"Pruning tasks older than {age} days")
         Task.objects.filter(
