@@ -1,5 +1,6 @@
 Unreleased:
-  added: []
+  added:
+  - task queue health checks
   fixed:
   - select2 background color issue
   changed: []
