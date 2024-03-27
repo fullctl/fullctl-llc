@@ -12,5 +12,7 @@ def route(viewset):
     path_prefix = getattr(viewset, "path_prefix", "")
     prefix = f"service-bridge{path_prefix}/{ref_tag}"
 
-    router.register(prefix, viewset, basename=f"service-bridge-{ref_tag}")
+    basename = prefix.replace("/", "-")
+
+    router.register(prefix, viewset, basename=basename)
     return viewset
