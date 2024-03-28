@@ -667,17 +667,6 @@ django = ">=1.8"
 netaddr = "*"
 six = "*"
 
-[[package]]
-name = "django-peeringdb"
-version = "3.4.0"
-description = "PeeringDB Django models"
-optional = false
-python-versions = "<4.0,>=3.8"
-files = [
-    {file = "django_peeringdb-3.4.0-py3-none-any.whl", hash = "sha256:5b08810a2674ce7f13882ec1f89e060a84d8a6e96f541237f867f2d994fc5310"},
-    {file = "django_peeringdb-3.4.0.tar.gz", hash = "sha256:7cc060ade1cb55b85b0b4ea19afb910ad0a9511f0c495517be8dec9e0cb6ae84"},
-]
-
 [package.dependencies]
 asgiref = ">=3"
 django_countries = ">1"

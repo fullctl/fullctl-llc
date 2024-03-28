@@ -50,9 +50,6 @@ setuptools = "*"
 # only needed for ixctl now, compare vs django-inet?
 django-netfields = "<2"
 
-# needed for verified asns
-django-peeringdb = ">=3.2.0"
-
 # prod serving
 whitenoise = ">=6"
 pyuwsgi = ">=2.0.19"
