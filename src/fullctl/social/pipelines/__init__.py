@@ -10,11 +10,6 @@ def sync_organizations(backend, details, response, uid, user, *args, **kwargs):
 
 from django.contrib.auth.models import Group
 
-def _log(msg):
-    print()
-    print(f"fullctl.social.pipelines: {msg}")
-    print()
-
 def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     """
     Handles group assignment based on role(s) in organization.
@@ -27,8 +22,6 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     social = kwargs.get("social") or backend.strategy.storage.user.get_social_auth(
         backend.name, uid
     )
-
-    _log(f"social: {social}")
     
     if not social:
         return
@@ -36,21 +29,15 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     # limit org must be set
     limit_org = backend.setting("LIMIT_ORGANIZATION")
 
-    _log(f"limit_org: {limit_org}")
-
     if not limit_org:
         return
 
     orgs = social.extra_data.get("organizations", [])
 
-    _log(f"orgs: {orgs}")
-
     if not orgs:
         return
 
     org = next((org for org in orgs if org["slug"] == limit_org), None)
-
-    _log(f"org: {org}")
 
     # if org not found, return
     if not org:
@@ -61,8 +48,6 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     # then add user to group
 
     roles = org.get("roles")
-
-    _log(f"roles: {roles}")
 
     if not roles:
         return
@@ -75,13 +60,10 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
 
         group, _ = Group.objects.get_or_create(name=group_name)
         
-        _log(f"group: {group}")
-        
         # only add user if they are not already in the group
 
         if group not in user.groups.all():
 
-            _log(f"adding user to group: {group}")
             group.user_set.add(user)
 
     # remove user from groups they are not in anymore
@@ -90,15 +72,12 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
         
         group_name = role
 
-        _log(f"checking group for removal: {group_name}")
-
         try:
             group = Group.objects.get(name=group_name)
         except Group.DoesNotExist:
             continue
 
         if group.name not in roles:
-            _log(f"removing user from group: {group}")
             group.user_set.remove(user)
 
     # finally check org.is_admin and toggle user.is_staff and
