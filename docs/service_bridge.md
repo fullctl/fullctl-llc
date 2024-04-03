@@ -48,6 +48,7 @@ To use the service bridge client, one would typically extend the `Bridge` class 
 class XyzBridge(Bridge):
     url_prefix = "data"
     results_key = "results"
+
     class Meta:
         service = "xyz"
         ref_tag = "xyz"
@@ -107,6 +108,7 @@ custom_api_key = 'your_custom_service_api_key_here'
 try:
     # Initialize the client with a custom API key, if needed
     device_client = Device(key=custom_api_key, org='your_org_here')
+
     # Retrieve the device object first
     device = device_client.object(device_id)
     # Update the device
