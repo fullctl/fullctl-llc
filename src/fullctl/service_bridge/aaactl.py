@@ -132,3 +132,22 @@ class ContactMessage(Aaactl):
 class OauthAccessToken(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "oauth_access_token"
+
+
+class OrganizationWhiteLabelingObject(AaactlEntity):
+    description = "Aaactl OrganizationWhiteLabeling"
+
+    def for_org(self, org):
+        if org:
+            self.org_redirect = self.service_url.format(org=org)
+            self.org_namespace = f"{self.grainy}.{org.permission_id}"
+        else:
+            self.org_redirect = self.api_url
+            self.org_namespace = self.grainy
+        return self
+
+
+class OrganizationWhiteLabeling(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "org_whitelabeling"
+        data_object_cls = OrganizationWhiteLabelingObject
