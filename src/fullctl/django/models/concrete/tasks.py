@@ -69,15 +69,6 @@ class TaskAlreadyStarted(IOError):
     pass
 
 
-class TaskMaxAgeError(IOError):
-    """
-    Raised when a pending task is older than the
-    specified threshold
-    """
-
-    pass
-
-
 class ParentTaskNotFinished(IOError):
     """
     Raised when trying to work a child task
