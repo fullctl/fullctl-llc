@@ -24,7 +24,6 @@ def host_url():
 
 def verified_asns(perms):
 
-
     verified_asns = []
     for verified_asn in perms.pset.expand("verified.asn.?", explicit=True, exact=True):
         asn = verified_asn.keys[-1]
