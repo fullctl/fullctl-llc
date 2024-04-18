@@ -1476,19 +1476,17 @@ fullctl.application.Searchbar = $tc.define(
       const searchbar = this;
       filter_input.on("keyup", function(event) {
         if (event.key === "Enter") {
+          searchbar.clear_filter_function();
           if ($(this).val() != "") {
             searchbar.search($(this).val())
-          } else {
-            searchbar.clear_search();
           }
         }
       });
 
       search_btn.on("click", () => {
+        this.clear_filter_function();
         if (filter_input.val() != "") {
           this.search(filter_input.val())
-        } else {
-          this.clear_search();
         }
       });
 
@@ -1497,8 +1495,8 @@ fullctl.application.Searchbar = $tc.define(
       });
     },
 
-    search : function(prefix) {
-      this.filter_function(prefix);
+    search : function(search_term) {
+      this.filter_function(search_term);
       this.show_clear_button();
     },
 

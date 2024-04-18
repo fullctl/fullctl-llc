@@ -1140,6 +1140,7 @@ div.list-th {
   line-height: var(--size-500);
 }
 
+.loading-container,
 .tool {
   position: relative;
 }
