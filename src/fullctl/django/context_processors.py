@@ -49,28 +49,27 @@ def account_service(request):
 
         if not org_whitelabel:
             if BRANDING_ORG:
-                org_whitelabel = OrganizationWhiteLabeling.objects.filter(org=BRANDING_ORG).first()
+                org_whitelabel = OrganizationWhiteLabeling.objects.filter(
+                    org=BRANDING_ORG
+                ).first()
                 if org_whitelabel:
                     organization = Organization.objects.get(slug=BRANDING_ORG)
-                    css_dict = json.loads(org_whitelabel.css) if org_whitelabel.css else {}
+                    css_dict = (
+                        json.loads(org_whitelabel.css) if org_whitelabel.css else {}
+                    )
             elif HTTP_HOST:
-                org_whitelabel = OrganizationWhiteLabeling.objects.filter(http_host=HTTP_HOST).first()
+                org_whitelabel = OrganizationWhiteLabeling.objects.filter(
+                    http_host=HTTP_HOST
+                ).first()
                 if org_whitelabel:
                     organization = Organization.objects.get(slug=org_slug)
-                    css_dict = json.loads(org_whitelabel.css) if org_whitelabel.css else {}
-
-            if org_whitelabel and organization:
-                context["org_whitelabel"] = {
-                    "name": organization.name,
-                    "html_footer": org_whitelabel.html_footer,
-                    "css": css_dict,
-                    "dark_logo_url": org_whitelabel.dark_logo_url,
-                    "light_logo_url": org_whitelabel.light_logo_url,
-                    "custom_org": custom_org,
-                    "show_logo": org_whitelabel.show_logo,
-                }
+                    css_dict = (
+                        json.loads(org_whitelabel.css) if org_whitelabel.css else {}
+                    )
         else:
             css_dict = json.loads(org_whitelabel.css) if org_whitelabel.css else {}
+
+        if org_whitelabel and organization:
             context["org_whitelabel"] = {
                 "name": organization.name,
                 "html_footer": org_whitelabel.html_footer,
