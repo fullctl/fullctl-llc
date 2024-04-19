@@ -1,10 +1,12 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model, logout
 from django.http import Http404
 
 import fullctl.service_bridge.aaactl as aaactl
-from fullctl.django.auth import permissions
+from fullctl.django.auth import Permissions, RemotePermissions, permissions
 from fullctl.django.context import current_request
 from fullctl.django.models import Organization
+from fullctl.django.rest.authentication import APIKey, key_from_request
 
 
 class CurrentRequestContext:
@@ -137,3 +139,36 @@ class TokenValidationMiddleware:
 
         response = self.get_response(request)
         return response
+
+
+class AutocompleteRequestPermsMiddleware:
+
+    """
+    Middleware that attached perms to the request object
+    if the request is for an autocomplete path
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        # only do this for the autocomplete path
+        # other paths should use the drf to do the needful
+        path = request.path
+        if not path.startswith("/autocomplete/"):
+            return
+
+        if getattr(settings, "USE_LOCAL_PERMISSIONS", False):
+            permissions_cls = Permissions
+        else:
+            permissions_cls = RemotePermissions
+
+        key = key_from_request(request)
+
+        if key:
+            request.api_key = key
+            request.perms = permissions_cls(APIKey(key))
