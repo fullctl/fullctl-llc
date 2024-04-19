@@ -38,8 +38,8 @@ def account_service(request):
         org_slug = ""
 
     local_auth = getattr(settings, "USE_LOCAL_PERMISSIONS", False)
-    BRANDING_ORG = settings.BRANDING_ORG
-    HTTP_HOST = request.get_host()
+    branding_org = getattr(settings, "BRANDING_ORG", None)
+    http_host = request.get_host()
 
     try:
         # TODO: Look into appreach to return org specific whitelabel or default whitelabel
@@ -48,18 +48,18 @@ def account_service(request):
         custom_org = True
 
         if not org_whitelabel:
-            if BRANDING_ORG:
+            if branding_org:
                 org_whitelabel = OrganizationWhiteLabeling.objects.filter(
-                    org=BRANDING_ORG
+                    org=branding_org
                 ).first()
                 if org_whitelabel:
-                    organization = Organization.objects.get(slug=BRANDING_ORG)
+                    organization = Organization.objects.get(slug=branding_org)
                     css_dict = (
                         json.loads(org_whitelabel.css) if org_whitelabel.css else {}
                     )
-            elif HTTP_HOST:
+            elif http_host:
                 org_whitelabel = OrganizationWhiteLabeling.objects.filter(
-                    http_host=HTTP_HOST
+                    http_host=http_host
                 ).first()
                 if org_whitelabel:
                     organization = Organization.objects.get(slug=org_slug)
@@ -80,7 +80,7 @@ def account_service(request):
                 "show_logo": org_whitelabel.show_logo,
             }
 
-        if not org_whitelabel and not BRANDING_ORG and not HTTP_HOST:
+        if not org_whitelabel and not branding_org and not http_host:
             context["org_whitelabel"] = DEFAULT_FULLCTL_BRANDING
 
     except Exception as e:
