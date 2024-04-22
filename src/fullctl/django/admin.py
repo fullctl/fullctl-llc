@@ -124,6 +124,7 @@ class TaskAdmin(BaseAdmin):
         "org",
         "created",
         "updated",
+        "requeued",
     )
     list_filter = ("status", "op")
     actions = ["requeue_tasks"]
@@ -153,7 +154,7 @@ class TaskAdmin(BaseAdmin):
 
 @admin.register(TaskSchedule)
 class TaskScheduleAdmin(BaseAdmin):
-    readonly_fields = BaseAdmin.readonly_fields + ("tasks",)
+    readonly_fields = BaseAdmin.readonly_fields + ("recent_tasks",)
     list_display = (
         "id",
         "description",
@@ -166,6 +167,11 @@ class TaskScheduleAdmin(BaseAdmin):
         "updated",
         "schedule",
     )
+    exclude = ("tasks",)
+
+    def recent_tasks(self, obj):
+        tasks = obj.tasks.all()[:5]
+        return f"{tasks}"
 
 
 @admin.register(AuditLog)
