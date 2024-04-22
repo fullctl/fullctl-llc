@@ -223,6 +223,7 @@ class SettingsManager(confu.util.SettingsManager):
         MIDDLEWARE = self.get("MIDDLEWARE")
 
         MIDDLEWARE += [
+            "fullctl.django.middleware.AutocompleteRequestPermsMiddleware",
             "django_structlog.middlewares.RequestMiddleware",
         ]
 
