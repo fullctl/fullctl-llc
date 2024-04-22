@@ -167,9 +167,10 @@ class TaskScheduleAdmin(BaseAdmin):
         "updated",
         "schedule",
     )
+    exclude = ("tasks",)
 
     def recent_tasks(self, obj):
-        tasks = obj.tasks[:5]
+        tasks = obj.tasks.all()[:5]
         return f"{tasks}"
 
 
