@@ -137,3 +137,13 @@ class ContactMessage(Aaactl):
 class OauthAccessToken(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "oauth_access_token"
+
+
+class OrganizationWhiteLabelingObject(AaactlEntity):
+    description = "Aaactl OrganizationWhiteLabeling"
+
+
+class OrganizationWhiteLabeling(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "org_whitelabeling"
+        data_object_cls = OrganizationWhiteLabelingObject

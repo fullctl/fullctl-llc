@@ -1,6 +1,6 @@
 {% extends "common/v2/base.html" %}
 {% load static i18n fullctl_util %}
-{% block "title" %}fullctl / {{ service_name }}{% endblock %}
+{% block "title" %}{{org_whitelabel.name}} / {{ service_tag }}{% endblock %}
 
 {% block "js" %}
 {{ block.super }}
@@ -53,6 +53,23 @@ fullctl.aaactl_urls = {{ account_service.urls|safe }}
 var True = true, False = false;
 
 fullctl.permissions = {{ permissions|safe }}
+
+const root = document.documentElement;
+const primaryColorValue = "{{ org_whitelabel.css.primary_color }}"
+if (primaryColorValue) {
+  root.style.setProperty('--clr-accent-400', primaryColorValue);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var appLogo = document.querySelector(".app-logo");
+    if (appLogo) {
+        logo_width = "{{ org_whitelabel.css.logo_width }}"
+        if (logo_width) {
+          appLogo.setAttribute("width", logo_width);
+        }
+    }
+});
+
 </script>
 
 {% block "header" %}
@@ -85,17 +102,25 @@ fullctl.permissions = {{ permissions|safe }}
       {% block "header_left" %}
       <div class="app-switcher" data-element="app_switcher">
         <div class="selected {{ request.app_id }} d-flex align-items-center">
-          <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ service_tag }}">
+          {% if org_whitelabel.dark_logo_url %}
+          <img class="app-logo" src="{{ service_logo_dark }}" alt="{{ logo_alt_text }}">
+          {% else %}
+          <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ logo_alt_text }}">
+          {% endif %}
         <span class="icon {{ request.app_id }} icon-caret-y ms-4"></span>
         <div class="others" style="display:none">
           {% for service_app in service_applications %}
           {%   if service_app.slug != service_tag %}
           {%     with "common/logos/"|add:service_app.slug|add:"-dark.svg" as other_app_logo %}
             <a class="list-item" {% if not service_app.always_show_dashboard %}data-grainy-remove="{{ service_app.grainy }}.{{ request.org.remote_id}}"{% endif %} href="{{ service_app.org_redirect }}" data-slug="{{ service_app.slug }}">
-              {% if not service_app.logo %}
-                <img class="app-logo" src="{% static other_app_logo %}" alt="{{ service_app.slug }}">
+              {% if org_whitelabel.show_logo %}
+                {% if not service_app.logo %}
+                  <img class="app-logo" src="{% static other_app_logo %}" alt="{{ service_app.name }}">
+                {% else %}
+                  <img class="app-logo" src="{{ service_app.logo }}" alt="{{ service_app.slug }}">
+                {% endif %}
               {% else %}
-                <img class="app-logo" src="{{ service_app.logo }}" alt="{{ service_app.slug }}">
+                  <span class="text-item">{{ service_app.name }}</span>
               {% endif %}
                 <span class="icon-arrow | icon icon-lg"></span>
             </a>

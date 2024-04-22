@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 
 from fullctl.django.context import current_request
@@ -6,6 +8,17 @@ if "django_peeringdb" in settings.INSTALLED_APPS:
     import django_peeringdb.models.concrete as pdb_models
 else:
     pdb_models = None
+
+
+DEFAULT_FULLCTL_BRANDING = {
+    "name": "FullCtl",
+    "html_footer": f"Copyright © 2014 - {datetime.now().year} FullCtl, LLC",
+    "css": {"primary_color": "#D1FF27"},
+    "dark_logo_url": None,
+    "light_logo_url": None,
+    "custom_org": False,
+    "show_logo": True,
+}
 
 
 def host_url():
