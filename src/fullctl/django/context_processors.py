@@ -7,7 +7,7 @@ from django.conf import settings
 from fullctl.django.auth import RemotePermissionsError
 from fullctl.django.models.concrete.account import Organization
 from fullctl.django.util import DEFAULT_FULLCTL_BRANDING
-from fullctl.service_bridge.aaactl import OrganizationWhiteLabeling, ServiceApplication
+from fullctl.service_bridge.aaactl import OrganizationBranding, ServiceApplication
 
 log = structlog.get_logger("django")
 
@@ -30,7 +30,7 @@ def conf(request):
 def account_service(request):
     context = {}
     org = getattr(request, "org", None)
-    context["org_whitelabel"] = {}
+    context["org_branding"] = {}
 
     if org:
         org_slug = org.slug
@@ -38,46 +38,67 @@ def account_service(request):
         org_slug = ""
 
     local_auth = getattr(settings, "USE_LOCAL_PERMISSIONS", False)
+    branding_org = getattr(settings, "BRANDING_ORG", None)
+    http_host = request.get_host()
 
     try:
-        # TODO: Look into appreach to return org specific whitelabel or default whitelabel
-        org_whitelabel = OrganizationWhiteLabeling().first(org=org_slug)
+        # TODO: Look into appreach to return org specific branding or default org_branding
+        org_branding = OrganizationBranding().first(org=org_slug)
         organization = Organization.objects.get(slug=org_slug)
         custom_org = True
 
-        if not org_whitelabel:
-            context["org_whitelabel"] = DEFAULT_FULLCTL_BRANDING
+        if not org_branding:
+            if branding_org:
+                org_branding = OrganizationBranding.objects.filter(
+                    org=branding_org
+                ).first()
+                if org_branding:
+                    organization = Organization.objects.get(slug=branding_org)
+                    css_dict = json.loads(org_branding.css) if org_branding.css else {}
+            elif http_host:
+                org_branding = OrganizationBranding.objects.filter(
+                    http_host=http_host
+                ).first()
+                if org_branding:
+                    organization = Organization.objects.get(slug=org_slug)
+                    css_dict = json.loads(org_branding.css) if org_branding.css else {}
         else:
-            css_dict = json.loads(org_whitelabel.css)
-            context["org_whitelabel"] = {
-                "name": organization.name,
-                "html_footer": org_whitelabel.html_footer,
-                "css": css_dict,
-                "dark_logo_url": org_whitelabel.dark_logo_url,
-                "light_logo_url": org_whitelabel.light_logo_url,
-                "custom_org": custom_org,
-                "show_logo": org_whitelabel.show_logo,
-            }
-    except Exception as e:
-        log.error(f"Error fetching org whitelabel: {e}")
-        context["org_whitelabel"] = DEFAULT_FULLCTL_BRANDING
+            css_dict = json.loads(org_branding.css) if org_branding.css else {}
 
-    if not context["org_whitelabel"].get("dark_logo_url", None):
+        if org_branding and organization:
+            context["org_branding"] = {
+                "name": organization.name,
+                "html_footer": org_branding.html_footer,
+                "css": css_dict,
+                "dark_logo_url": org_branding.dark_logo_url,
+                "light_logo_url": org_branding.light_logo_url,
+                "custom_org": custom_org,
+                "show_logo": org_branding.show_logo,
+            }
+
+        if not org_branding and not branding_org and not http_host:
+            context["org_branding"] = DEFAULT_FULLCTL_BRANDING
+
+    except Exception as e:
+        log.error(f"Error fetching org org_branding: {e}")
+        context["org_branding"] = DEFAULT_FULLCTL_BRANDING
+
+    if not context["org_branding"].get("dark_logo_url", None):
         service_logo_dark = f"{settings.SERVICE_TAG}/logo-darkbg.svg"
     else:
-        service_logo_dark = context["org_whitelabel"].get("dark_logo_url")
+        service_logo_dark = context["org_branding"].get("dark_logo_url")
 
-    if not context["org_whitelabel"].get("light_logo_url", None):
+    if not context["org_branding"].get("light_logo_url", None):
         service_logo_light = f"{settings.SERVICE_TAG}/logo-lightbg.svg"
     else:
-        service_logo_light = context["org_whitelabel"].get("light_logo_url")
+        service_logo_light = context["org_branding"].get("light_logo_url")
 
-    if not context["org_whitelabel"].get("name", None):
+    if not context["org_branding"].get("name", None):
         logo_alt_text = settings.SERVICE_TAG
         service_name = settings.SERVICE_TAG.replace("ctl", "")
     else:
-        logo_alt_text = context["org_whitelabel"].get("name")
-        service_name = context["org_whitelabel"].get("name")
+        logo_alt_text = context["org_branding"].get("name")
+        service_name = context["org_branding"].get("name")
 
     service_tag = settings.SERVICE_TAG
 
@@ -127,8 +148,8 @@ def account_service(request):
 
     if local_auth:
         context["service_info"] = {
-            "name": f"{settings.SERVICE_TAG} {context['org_whitelabel']['name']}"
-            if context["org_whitelabel"].get("name", None)
+            "name": f"{settings.SERVICE_TAG} {context['org_branding']['name']}"
+            if context["org_branding"].get("name", None)
             else settings.SERVICE_TAG,
             "slug": settings.SERVICE_TAG,
             "description": "Local permissions",
