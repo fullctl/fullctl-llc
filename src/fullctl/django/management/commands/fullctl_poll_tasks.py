@@ -10,6 +10,7 @@ from fullctl.django.tasks.orm import (
     claim_task,
     fetch_task,
     progress_schedules,
+    tasks_max_time_reached,
 )
 
 
@@ -132,6 +133,9 @@ class Command(CommandInterface):
                 if self.all_workers_busy:
                     self.log_info("Worker available")
                 self.all_workers_busy = False
+
+            # check on stuck tasks and perform requeuing on those that have max times reached
+            await sync_to_async(tasks_max_time_reached)()
 
             # django call needs to be wrapped in sync_to_async
 
