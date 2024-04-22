@@ -1,0 +1,60 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Tasks Queue status{% endblock %}
+
+{% block content %}
+<h1>Task Queue Status</h1>
+    <h2>No. of Pending Tasks</h2>
+    <table border="1">
+        <tr>
+            <td><b>NO OF PENDING TASKS: </b> {{ tasks.pending_task }}</td>
+        </tr>
+    </table>
+
+    <h2>Oldest Task</h2>
+    <table border="1">
+        <tr>
+            <td><b>ID: </b>{{ tasks.oldest_task.id }}</td>
+            <td><b>OP: </b>{{ tasks.oldest_task.op }}</td>
+            <td><b>ORG: </b>{{ tasks.oldest_task.org }}</td>
+            <td><b>LIMIT_ID: </b>{{ tasks.oldest_task.limit_id }}</td>
+            <td><a href="/admin/django_fullctl/task/{{ tasks.oldest_task.id }}/change/">View Task</a></td>
+        </tr>
+    </table>
+
+    <h2>Newest Task</h2>
+    <table border="1">
+        <tr>
+            <td><b>ID: </b>{{ tasks.newest_task.id }}</td>
+            <td><b>OP: </b>{{ tasks.newest_task.op }}</td>
+            <td><b>ORG: </b>{{ tasks.newest_task.org }}</td>
+            <td><b>LIMIT_ID: </b>{{ tasks.newest_task.limit_id }}</td>
+            <td><a href="/admin/django_fullctl/task/{{ tasks.newest_task.id }}/change/">View Task</a></td>
+        </tr>
+    </table>
+
+    <h2>Last Completed Task</h2>
+    <table border="1">
+        <tr>
+            <td><b>ID: </b>{{ tasks.last_completed_task.id }}</td>
+            <td><b>OP: </b>{{ tasks.last_completed_task.op }}</td>
+            <td><b>ORG: </b>{{ tasks.last_completed_task.org }}</td>
+            <td><b>LIMIT_ID: </b>{{ tasks.last_completed_task.limit_id }}</td>
+            <td><a href="/admin/django_fullctl/task/{{ tasks.last_completed_task.id }}/change/">View Task</a></td>
+
+        </tr>
+    </table>
+
+    <h2>Failed Tasks</h2>
+    <table border="1">
+        {% for task in tasks.failed_tasks %}
+        <tr>
+            <td><b>CREATED: </b>{{ task.created }}</td>
+            <td><b>ID: </b>{{ task.id }}</td>
+            <td><b>OP: </b>{{ task.op }}</td>
+            <td><b>ORG: </b>{{ task.org }}</td>
+            <td><b>LIMIT_ID: </b>{{ task.limit_id }}</td>
+            <td><a href="/admin/django_fullctl/task/{{ task.id}}/change/">View Task</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
