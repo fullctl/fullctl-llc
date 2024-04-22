@@ -207,6 +207,18 @@ class SettingsManager(confu.util.SettingsManager):
         # TASK_DEFAULT_MAX_AGE (seconds) is the default maximum age for a task - default is 6 hours
         self.set_option("TASK_DEFAULT_MAX_AGE", 3600 * 6)
 
+        # TASK_DEFAULT_PRUNE_AGE (days) is the default age at which a task is pruned when the `fullctl_manage_tasks prune`
+        # command is run - default is 30 days
+        self.set_option("TASK_DEFAULT_PRUNE_AGE", 30.0)
+
+        # TASK_DEFAULT_PRUNE_EXCLUDE (list of task op types that should never be pruned)
+        self.set_option("TASK_DEFAULT_PRUNE_EXCLUDE", [])
+
+        # TASK_DEFAULT_PRUNE_STATUS (list of task statuses that should be pruned)
+        self.set_option(
+            "TASK_DEFAULT_PRUNE_STATUS", ["completed", "failed", "cancelled"]
+        )
+
         # eval from default.py file
         filename = os.path.join(os.path.dirname(__file__), "default.py")
         self.try_include(filename)

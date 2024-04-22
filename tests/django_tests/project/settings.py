@@ -184,3 +184,6 @@ DOCS_URL = "test://docs"
 LEGAL_URL = "test://legal"
 TERMS_OF_SERVICE_URL = "test://terms-of-service"
 TASK_DEFAULT_MAX_AGE = 3600 * 6
+TASK_DEFAULT_PRUNE_AGE = 30.0
+TASK_DEFAULT_PRUNE_EXCLUDE = []
+TASK_DEFAULT_PRUNE_STATUS = ["completed", "failed", "cancelled"]

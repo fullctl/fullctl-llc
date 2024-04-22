@@ -154,7 +154,7 @@ class TaskAdmin(BaseAdmin):
 
 @admin.register(TaskSchedule)
 class TaskScheduleAdmin(BaseAdmin):
-    readonly_fields = BaseAdmin.readonly_fields + ("tasks",)
+    readonly_fields = BaseAdmin.readonly_fields + ("recent_tasks",)
     list_display = (
         "id",
         "description",
@@ -167,6 +167,10 @@ class TaskScheduleAdmin(BaseAdmin):
         "updated",
         "schedule",
     )
+
+    def recent_tasks(self, obj):
+        tasks = obj.tasks[:5]
+        return f"{tasks}"
 
 
 @admin.register(AuditLog)
