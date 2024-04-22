@@ -9,6 +9,8 @@ from fullctl.django.auth import RemotePermissionsError
 # Settings fixture allows for safe manipulations of settings inside test
 def test_account_service(db, dj_account_objects, settings):
     request = HttpRequest()
+    request.META['SERVER_NAME'] = 'dev'
+    request.META['SERVER_PORT'] = '8080'
     request.org = dj_account_objects.org
 
     expected = {
@@ -27,6 +29,8 @@ def test_account_service(db, dj_account_objects, settings):
 
 def test_account_service_no_org(db, dj_account_objects, settings):
     request = HttpRequest()
+    request.META['SERVER_NAME'] = 'dev'
+    request.META['SERVER_PORT'] = '8080'
 
     expected = {
         "urls": {
