@@ -157,6 +157,8 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_bool("EMAIL_USE_TLS", True)
         self.set_option("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
 
+        self.set_list("CORS_ALLOWED_ORIGINS", [], envvar_element_type=str)
+
         # Application definition
 
         INSTALLED_APPS = [
