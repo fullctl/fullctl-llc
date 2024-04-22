@@ -134,15 +134,15 @@ class Command(CommandInterface):
                     self.log_info("Worker available")
                 self.all_workers_busy = False
 
+            # check on stuck tasks and perform requeuing on those that have max times reached
+            await sync_to_async(tasks_max_time_reached)()
+
             # django call needs to be wrapped in sync_to_async
 
             task = await sync_to_async(fetch_task)()
 
             if not task or task.queue_id:
                 continue
-
-            # check on stuck tasks and perform requeuing on those that have max times reached
-            await sync_to_async(tasks_max_time_reached)
 
             self.log_info(f"New task {task}")
 

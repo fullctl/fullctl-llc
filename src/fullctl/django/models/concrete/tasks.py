@@ -7,6 +7,7 @@ import traceback
 from io import StringIO
 
 from asgiref.sync import sync_to_async
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
@@ -167,6 +168,11 @@ class Task(HandleRefModel):
         related_name="children",
     )
 
+    requeued = models.BooleanField(
+        default=False,
+        help_text="task was requeued",
+    )
+
     # ownership
 
     user = models.ForeignKey(
@@ -205,6 +211,7 @@ class Task(HandleRefModel):
         timeout = kwargs.pop("timeout", None)
         user = kwargs.pop("user", None)
         org = kwargs.pop("org", None)
+        requeued = kwargs.pop("requeued", False)
 
         op = cls.HandleRef.tag
 
@@ -221,6 +228,7 @@ class Task(HandleRefModel):
             timeout=timeout,
             user=user,
             org=org,
+            requeued=requeued,
         )
         task.limit_id = task.generate_limit_id
 
@@ -291,7 +299,11 @@ class Task(HandleRefModel):
 
     @property
     def max_run_time(self):
-        return self.task_meta_property("max_run_time")
+        # check if task param kwargs has a max_run_time
+        if "max_run_time" in self.param["kwargs"]:
+            return self.param["kwargs"]["max_run_time"]
+
+        return self.task_meta_property("max_run_time", settings.TASK_DEFAULT_MAX_AGE)
 
     @property
     def limit_action(self):

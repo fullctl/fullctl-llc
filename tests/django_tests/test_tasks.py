@@ -8,8 +8,8 @@ from fullctl.django.health_check import health_check_task_stack_queue
 from fullctl.django.models.concrete.tasks import (
     TaskClaimed,
     TaskLimitError,
-    TaskSchedule,
     TaskMaxAgeError,
+    TaskSchedule,
 )
 
 
@@ -25,6 +25,7 @@ def test_task_with_max_run_time():
     orm.tasks_max_time_reached()
 
     assert orm.fetch_tasks()
+
 
 @pytest.mark.django_db
 def test_fetch_tasks():
@@ -181,6 +182,7 @@ def test_schedule_limited_task_manually(dj_account_objects):
 
     # This will not raise a TaskLimitError
     task_schedule.spawn_tasks()
+
 
 @pytest.mark.django_db
 def test_task_stack_queue_for_maximum_pending_tasks():

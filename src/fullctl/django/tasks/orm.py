@@ -98,8 +98,10 @@ def fetch_tasks(limit=1, **filters):
     # exclude tasks that are in the recheck stack
     qset = qset.exclude(id__in=[task.id for task, _ in RECHECK_STACK])
 
-    # order_history by date of creation
-    qset = qset.order_by("created")
+    # order_history by date of -requeued and date of creation
+    # requeued tasks are higher priority since they were meant
+    # to be worked on earlier
+    qset = qset.order_by("-requeued", "created")
 
     skip_tasks = {}
 

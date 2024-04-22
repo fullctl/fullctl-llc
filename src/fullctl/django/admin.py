@@ -124,6 +124,7 @@ class TaskAdmin(BaseAdmin):
         "org",
         "created",
         "updated",
+        "requeued",
     )
     list_filter = ("status", "op")
     actions = ["requeue_tasks"]

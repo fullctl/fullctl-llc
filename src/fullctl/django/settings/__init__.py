@@ -204,6 +204,9 @@ class SettingsManager(confu.util.SettingsManager):
         # TASK_MAX_AGE_THRESHOLD is the maximum hours a task can be pending before it is considered stale
         self.set_option("TASK_MAX_AGE_THRESHOLD", 24)
 
+        # TASK_DEFAULT_MAX_AGE (seconds) is the default maximum age for a task - default is 6 hours
+        self.set_option("TASK_DEFAULT_MAX_AGE", 3600 * 6)
+
         # eval from default.py file
         filename = os.path.join(os.path.dirname(__file__), "default.py")
         self.try_include(filename)
