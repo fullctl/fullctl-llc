@@ -1,12 +1,15 @@
 import pytest
+from django.conf import settings
 from django.utils import timezone
 
 import fullctl.django.tasks.orm as orm
 import tests.django_tests.testapp.models as models
+from fullctl.django.health_check import health_check_task_stack_queue
 from fullctl.django.models.concrete.tasks import (
     TaskClaimed,
     TaskLimitError,
     TaskSchedule,
+    TaskMaxAgeError,
 )
 
 
@@ -22,7 +25,6 @@ def test_task_with_max_run_time():
     orm.tasks_max_time_reached()
 
     assert orm.fetch_tasks()
-
 
 @pytest.mark.django_db
 def test_fetch_tasks():
@@ -179,3 +181,28 @@ def test_schedule_limited_task_manually(dj_account_objects):
 
     # This will not raise a TaskLimitError
     task_schedule.spawn_tasks()
+
+@pytest.mark.django_db
+def test_task_stack_queue_for_maximum_pending_tasks():
+    settings.MAX_PENDING_TASKS = 10
+    settings.TASK_MAX_AGE_THRESHOLD = 24
+
+    for _ in range(11):
+        models.TestTask.create_task(1, 2)
+
+    with pytest.raises(TaskLimitError):
+        health_check_task_stack_queue()
+
+
+@pytest.mark.django_db
+def test_task_stack_queue_for_tasks_exceeding_maximum_age_threshold():
+    settings.MAX_PENDING_TASKS = 10
+    settings.TASK_MAX_AGE_THRESHOLD = 1
+
+    task = models.TestTask.create_task(1, 2)
+
+    task.created = task.created - timezone.timedelta(hours=2)
+    task.save()
+
+    with pytest.raises(TaskMaxAgeError):
+        health_check_task_stack_queue()
