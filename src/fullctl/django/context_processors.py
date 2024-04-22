@@ -54,18 +54,14 @@ def account_service(request):
                 ).first()
                 if org_branding:
                     organization = Organization.objects.get(slug=branding_org)
-                    css_dict = (
-                        json.loads(org_branding.css) if org_branding.css else {}
-                    )
+                    css_dict = json.loads(org_branding.css) if org_branding.css else {}
             elif http_host:
                 org_branding = OrganizationBranding.objects.filter(
                     http_host=http_host
                 ).first()
                 if org_branding:
                     organization = Organization.objects.get(slug=org_slug)
-                    css_dict = (
-                        json.loads(org_branding.css) if org_branding.css else {}
-                    )
+                    css_dict = json.loads(org_branding.css) if org_branding.css else {}
         else:
             css_dict = json.loads(org_branding.css) if org_branding.css else {}
 
