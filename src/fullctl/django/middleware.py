@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model, logout
 from django.http import Http404
 
 import fullctl.service_bridge.aaactl as aaactl
-from fullctl.django.auth import Permissions, RemotePermissions, permissions
+from fullctl.django.auth import RemotePermissions, permissions
 from fullctl.django.context import current_request
 from fullctl.django.models import Organization
 from fullctl.django.rest.authentication import APIKey, key_from_request
