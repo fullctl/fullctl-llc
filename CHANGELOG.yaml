@@ -5,7 +5,8 @@ Unreleased:
   - select2 background color issue
   changed: []
   deprecated: []
-  removed: []
+  removed:
+  - fullctl_sync_peeringdb (moved to pdbctl as pdbctl_sync_peeringdb)
   security: []
 1.12.0:
   added:

@@ -6,6 +6,8 @@
 - task queue health checks
 ### Fixed
 - select2 background color issue
+### Removed
+- fullctl_sync_peeringdb (moved to pdbctl as pdbctl_sync_peeringdb)
 
 
 ## 1.12.0
