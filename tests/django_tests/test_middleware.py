@@ -8,13 +8,18 @@ def get_response_empty(request):
     return HttpResponse()
 
 
+def dummy_view(request, *args, **kwargs):
+    pass  # This is a dummy view function for testing
+
+
 class AutocompleteRequestPermsMiddlewareTest(SimpleTestCase):
     rf = RequestFactory()
 
     def test_non_autocomplete_path(self):
         request = self.rf.get("/path/", HTTP_AUTHORIZATION="Bearer test")
-        r = AutocompleteRequestPermsMiddleware(get_response_empty).process_view(request)
-        # asert an attribute error using pytest
+        AutocompleteRequestPermsMiddleware(get_response_empty).process_view(
+            request, dummy_view, (), {}
+        )
         with self.assertRaises(AttributeError):
-            r.api_key
-        self.assertEqual(r.perms, None)
+            request.api_key
+        self.assertEqual(request.perms, None)
