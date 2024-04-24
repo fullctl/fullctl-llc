@@ -163,9 +163,9 @@ class AutocompleteRequestPermsMiddleware:
             return
 
         if getattr(settings, "USE_LOCAL_PERMISSIONS", False):
-            permissions_cls = Permissions
-        else:
-            permissions_cls = RemotePermissions
+            return
+
+        permissions_cls = RemotePermissions
 
         key = key_from_request(request)
 
