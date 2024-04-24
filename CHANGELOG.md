@@ -3,7 +3,8 @@
 
 ## Unreleased
 ### Added
-- task queue health checks
+- task queue health checks and display
+- task queue auto requeue stuck tasks
 ### Fixed
 - select2 background color issue
 ### Removed
