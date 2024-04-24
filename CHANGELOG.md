@@ -8,6 +8,7 @@
 ### Fixed
 - select2 background color issue
 ### Removed
+- py3.8 support
 - fullctl_sync_peeringdb (moved to pdbctl as pdbctl_sync_peeringdb)
 
 
