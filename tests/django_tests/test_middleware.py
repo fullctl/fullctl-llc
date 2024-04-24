@@ -13,7 +13,7 @@ class AutocompleteRequestPermsMiddlewareTest(SimpleTestCase):
 
     def test_non_autocomplete_path(self):
         request = self.rf.get("/path/", HTTP_AUTHORIZATION="Bearer test")
-        r = AutocompleteRequestPermsMiddleware(get_response_empty).process_request(
+        r = AutocompleteRequestPermsMiddleware(get_response_empty).process_view(
             request
         )
         # asert an attribute error using pytest
