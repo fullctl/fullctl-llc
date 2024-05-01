@@ -617,7 +617,11 @@ class TaskSchedule(HandleRefModel):
 
         for task_config in task_configs:
             op = task_config.get("op")
-            limit_id = task_config.get("param").get("args")[0]
+            #TODO: can we really safely assume that the first arg is the limit_id?
+            try:
+                limit_id = task_config.get("param").get("args")[0]
+            except IndexError:
+                continue
 
             tasks = Task.objects.filter(
                 op=op, limit_id=limit_id, status__in=["pending", "running"]
