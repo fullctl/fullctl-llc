@@ -617,7 +617,7 @@ class TaskSchedule(HandleRefModel):
 
         for task_config in task_configs:
             op = task_config.get("op")
-            #TODO: can we really safely assume that the first arg is the limit_id?
+            # TODO: can we really safely assume that the first arg is the limit_id?
             try:
                 limit_id = task_config.get("param").get("args")[0]
             except IndexError:
