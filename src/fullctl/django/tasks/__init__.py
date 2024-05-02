@@ -12,11 +12,12 @@ def register(cls):
 
 
 def specify_task(task):
-    if task.op in TASK_MODELS:
-        return TASK_MODELS[task.op].objects.get(id=task.id)
-
-    log.error("Task Op not regsitered with TASK_MODELS", task=task.op)
-    return task
+    try:
+        task_model = TASK_MODELS[task.op]
+    except KeyError:
+        log.error("Task operation not found", task_op=task.op)
+        raise
+    return task_model.objects.get(id=task.id)
 
 
 def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None):
