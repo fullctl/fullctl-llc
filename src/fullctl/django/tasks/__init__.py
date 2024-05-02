@@ -1,3 +1,8 @@
+import structlog
+
+log = structlog.get_logger("django")
+
+
 TASK_MODELS = {}
 
 
@@ -7,7 +12,11 @@ def register(cls):
 
 
 def specify_task(task):
-    return TASK_MODELS[task.op].objects.get(id=task.id)
+    if task.op in TASK_MODELS:
+        return TASK_MODELS[task.op].objects.get(id=task.id)
+
+    log.error("Task Op not regsitered with TASK_MODELS", task=task.op)
+    return task
 
 
 def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None):
