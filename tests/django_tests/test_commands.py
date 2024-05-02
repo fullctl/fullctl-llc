@@ -14,6 +14,12 @@ def test_fullctl_poll_tasks(db, dj_account_objects):
     with pytest.raises(SystemExit):
         management.call_command("fullctl_poll_tasks", "--help")
 
+def test_unresolved_task(db, dj_account_objects):
+    task = models.UnregisteredTestTask.create_task()
+
+    with pytest.raises(KeyError):
+        task = specify_task(task)
+
 
 def test_fullctl_promote_user(db, dj_account_objects_c):
     management.call_command("fullctl_promote_user", "user_test_c", "--commit")
