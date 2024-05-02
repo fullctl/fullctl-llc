@@ -1,11 +1,14 @@
 Unreleased:
   added:
-  - task queue health checks
+  - task queue health checks and display
+  - task queue auto requeue stuck tasks
   fixed:
   - select2 background color issue
   changed: []
   deprecated: []
-  removed: []
+  removed:
+  - py3.8 support
+  - fullctl_sync_peeringdb (moved to pdbctl as pdbctl_sync_peeringdb)
   security: []
 1.12.0:
   added:

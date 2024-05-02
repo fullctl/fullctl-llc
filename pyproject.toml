@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "fullctl"
 repository = "https://github.com/fullctl/fullctl"
-version = "1.13.0-rc.8"
+version = "1.13.0-rc.10"
 description = "Core classes and functions for service applications"
 authors = ["FullCtl <code@fullctl.com>"]
 readme = "README.md"
@@ -50,9 +50,6 @@ setuptools = "*"
 # only needed for ixctl now, compare vs django-inet?
 django-netfields = "<2"
 
-# needed for verified asns
-django-peeringdb = ">=3.2.0"
-
 # prod serving
 whitenoise = ">=6"
 pyuwsgi = ">=2.0.19"
@@ -63,6 +60,7 @@ psycopg = {extras = ["binary"], version = ">=3.1.8"}
 # force update
 pyyaml = ">=5"
 munge = ">=1.3.0"
+django-countries = ">=7.6"
 
 [tool.poetry.dev-dependencies]
 # tests

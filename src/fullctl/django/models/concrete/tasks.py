@@ -617,13 +617,21 @@ class TaskSchedule(HandleRefModel):
 
         for task_config in task_configs:
             op = task_config.get("op")
-            limit_id = task_config.get("param").get("args")[0]
+            # TODO: can we really safely assume that the first arg is the limit_id?
+            try:
+                limit_id = task_config.get("param").get("args")[0]
+            except IndexError:
+                continue
 
             tasks = Task.objects.filter(
                 op=op, limit_id=limit_id, status__in=["pending", "running"]
             )
 
-            task = specify_task(tasks.first())
+            task_object = tasks.first()
+            if not task_object:
+                continue
+
+            task = specify_task(task_object)
             # if the count of currently pending / running instances of this
             # task is higher than the limit we return True
             if tasks and (task.task_meta_property("limit") <= tasks.count()):
