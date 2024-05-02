@@ -23,7 +23,7 @@ class TestTask(Task):
 
     def run(self, a, b, *args, **kwargs):
         return a + b
-    
+
 
 class UnregisteredTestTask(Task):
     class Meta:
