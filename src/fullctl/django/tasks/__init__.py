@@ -14,10 +14,9 @@ def register(cls):
 def specify_task(task):
     try:
         task_model = TASK_MODELS[task.op]
+        return task_model.objects.get(id=task.id)
     except KeyError:
         log.error("Task operation not found", task_op=task.op)
-        raise
-    return task_model.objects.get(id=task.id)
 
 
 def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None):

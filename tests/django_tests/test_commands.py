@@ -17,9 +17,9 @@ def test_fullctl_poll_tasks(db, dj_account_objects):
 
 def test_unresolved_task(db, dj_account_objects):
     task = models.UnregisteredTestTask.create_task()
-
-    with pytest.raises(KeyError):
-        task = specify_task(task)
+    # No error is raised here, but the task is not resolved
+    task = specify_task(task)
+    assert task is None
 
 
 def test_fullctl_promote_user(db, dj_account_objects_c):
