@@ -1951,3 +1951,19 @@ button.badge-btn:disabled {
   display: block;
   position: relative;
 }
+
+.shaded-box {
+  background-color: black; /* Semi-transparent black background */
+  padding: 20px; /* Add some padding */
+  border-radius: 10px; /* Rounded corners */
+  color: #fff; /* Text color */
+  z-index: 9999; /* Ensure the box appears above other elements */
+}
+
+/* Style for the content inside the shaded box */
+.shaded-box-content {
+  /* Add styles for the content inside the shaded box */
+  /* Example styles: */
+  font-size: 18px;
+  text-align: center;
+}
