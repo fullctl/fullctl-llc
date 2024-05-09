@@ -1,8 +1,9 @@
 import asyncio
 import uuid
-import structlog
-import reversion
+
 import psycopg
+import reversion
+import structlog
 from asgiref.sync import sync_to_async
 
 from fullctl.django.management.commands.base import CommandInterface
@@ -173,7 +174,7 @@ class Command(CommandInterface):
                 await sync_to_async(progress_schedules)()
             except Exception as exc:
                 log.exception("Error progressing schedules", exc=exc)
-            
+
     def claim_task(self, task):
         try:
             with reversion.create_revision():
