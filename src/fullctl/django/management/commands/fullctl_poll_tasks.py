@@ -1,7 +1,8 @@
 import asyncio
 import uuid
-
+import structlog
 import reversion
+import psycopg
 from asgiref.sync import sync_to_async
 
 from fullctl.django.management.commands.base import CommandInterface
@@ -12,6 +13,8 @@ from fullctl.django.tasks.orm import (
     progress_schedules,
     tasks_max_time_reached,
 )
+
+log = structlog.get_logger("django")
 
 
 class Worker:
@@ -115,48 +118,62 @@ class Command(CommandInterface):
 
     async def _process_workers(self):
         while True:
-            await asyncio.sleep(self.sleep_interval)
+            try:
+                await asyncio.sleep(self.sleep_interval)
 
-            for worker in self.workers:
-                await worker.work()
+                for worker in self.workers:
+                    await worker.work()
+            except Exception as exc:
+                log.exception("Error processing workers", exc=exc)
 
     async def _poll_tasks(self):
         while True:
-            await asyncio.sleep(self.poll_interval)
+            task = None
+            try:
+                await asyncio.sleep(self.poll_interval)
 
-            if not self.worker_available:
-                if not self.all_workers_busy:
-                    self.log_info("All workers busy")
-                    self.all_workers_busy = True
-                continue
-            else:
-                if self.all_workers_busy:
-                    self.log_info("Worker available")
-                self.all_workers_busy = False
+                if not self.worker_available:
+                    if not self.all_workers_busy:
+                        self.log_info("All workers busy")
+                        self.all_workers_busy = True
+                    continue
+                else:
+                    if self.all_workers_busy:
+                        self.log_info("Worker available")
+                    self.all_workers_busy = False
 
-            # check on stuck tasks and perform requeuing on those that have max times reached
-            await sync_to_async(tasks_max_time_reached)()
+                # check on stuck tasks and perform requeuing on those that have max times reached
+                await sync_to_async(tasks_max_time_reached)()
 
-            # django call needs to be wrapped in sync_to_async
+                # django call needs to be wrapped in sync_to_async
 
-            task = await sync_to_async(fetch_task)()
+                task = await sync_to_async(fetch_task)()
 
-            if not task or task.queue_id:
-                continue
+                if not task or task.queue_id:
+                    continue
 
-            self.log_info(f"New task {task}")
+                self.log_info(f"New task {task}")
 
-            # django call needs to be wrapped in sync_to_async
+                # django call needs to be wrapped in sync_to_async
 
-            await sync_to_async(self.claim_task)(task)
+                await sync_to_async(self.claim_task)(task)
 
-            await self.delegate_task(task)
+                await self.delegate_task(task)
+            except psycopg.OperationalError as exc:
+                log.exception("Error polling tasks (db error)", exc=exc)
+                await asyncio.sleep(3)
+            except Exception as exc:
+                log.exception("Error polling tasks", exc=exc)
+                await self.handle_task_setup_error(exc, task)
 
     async def _progress_schedules(self):
         while True:
-            await asyncio.sleep(self.poll_interval)
-            await sync_to_async(progress_schedules)()
-
+            try:
+                await asyncio.sleep(self.poll_interval)
+                await sync_to_async(progress_schedules)()
+            except Exception as exc:
+                log.exception("Error progressing schedules", exc=exc)
+            
     def claim_task(self, task):
         try:
             with reversion.create_revision():

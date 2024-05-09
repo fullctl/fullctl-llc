@@ -64,6 +64,7 @@ class CommandInterface(BaseCommand):
 
     @auditlog()
     def handle(self, auditlog=None, *args, **kwargs):
+        self.error = None
         self.auditlog_context = auditlog
         self.output = []
         self.queue = kwargs.get("queue")
@@ -136,6 +137,7 @@ class CommandInterface(BaseCommand):
     def log_error(self, msg):
         self.log.error(msg)
         self.auditlog_context.append_data(error=f"{msg}")
+        self.error = msg
 
     def run(self, *args, **kwargs):
         raise NotImplementedError()
