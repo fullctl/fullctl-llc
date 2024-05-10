@@ -33,6 +33,10 @@ def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None)
         op = task_config.get("op")
 
         model = TASK_MODELS.get(op)
+        if not model:
+            log.error("Task operation not found", task_op=op)
+            continue
+
         param = task_config.get("param", {})
         args = param.get("args", [])
         kwargs = param.get("kwargs", {})

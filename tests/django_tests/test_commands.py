@@ -4,10 +4,13 @@ from unittest.mock import patch
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import management
+from django.utils import timezone
+
 
 import tests.django_tests.testapp.models as models
 from fullctl.django.models import Task
 from fullctl.django.tasks.orm import specify_task
+from fullctl.django.models.concrete.tasks import TaskSchedule
 
 
 def test_fullctl_poll_tasks(db, dj_account_objects):
@@ -20,6 +23,30 @@ def test_unresolved_task(db, dj_account_objects):
     # No error is raised here, but the task is not resolved
     task = specify_task(task)
     assert task is None
+
+
+def test_task_op_that_doesnt_exist(db, dj_account_objects):
+    org = dj_account_objects.org
+    task_schedule = TaskSchedule.objects.create(
+        org=org,
+        task_config={
+            "tasks": [
+                {
+                    "op": "unregistered_task_testt",
+                    "param": {
+                        "args": [],
+                    }
+                }
+            ],
+        },
+        description="test",
+        repeat=True,
+        interval=3600,
+        schedule=timezone.now(),
+    )
+
+    task_schedule.spawn_tasks()
+    assert Task.objects.count() == 0
 
 
 def test_fullctl_promote_user(db, dj_account_objects_c):
