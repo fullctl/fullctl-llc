@@ -5,6 +5,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.core import management
 from django.utils import timezone
+from unittest.mock import patch
 
 
 import tests.django_tests.testapp.models as models
@@ -24,8 +25,8 @@ def test_unresolved_task(db, dj_account_objects):
     task = specify_task(task)
     assert task is None
 
-
-def test_task_op_that_doesnt_exist(db, dj_account_objects):
+@patch("fullctl.django.tasks.log")
+def test_task_op_that_doesnt_exist(mock_logging, db, dj_account_objects):
     org = dj_account_objects.org
     task_schedule = TaskSchedule.objects.create(
         org=org,
@@ -45,8 +46,10 @@ def test_task_op_that_doesnt_exist(db, dj_account_objects):
         schedule=timezone.now(),
     )
 
-    task_schedule.spawn_tasks()
+    tasks = task_schedule.spawn_tasks()
     assert Task.objects.count() == 0
+    assert tasks == []
+    mock_logging.error.assert_called_once_with('Task operation not found', task_op='unregistered_task_testt')
 
 
 def test_fullctl_promote_user(db, dj_account_objects_c):
