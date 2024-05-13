@@ -4,6 +4,7 @@ Unreleased:
   - task queue auto requeue stuck tasks
   fixed:
   - select2 background color issue
+  - task workers will now recover from hard failures
   changed: []
   deprecated: []
   removed:

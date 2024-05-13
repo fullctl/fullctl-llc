@@ -7,6 +7,7 @@
 - task queue auto requeue stuck tasks
 ### Fixed
 - select2 background color issue
+- task workers will now recover from hard failures
 ### Removed
 - py3.8 support
 - fullctl_sync_peeringdb (moved to pdbctl as pdbctl_sync_peeringdb)
