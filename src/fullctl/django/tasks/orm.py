@@ -55,6 +55,18 @@ def fetch_task(**filters):
     return None
 
 
+def set_task_as_failed(generic_task, error_message=None, requeue=False):
+    """
+    Set task to failed with error information and re-queue
+    """
+
+    generic_task.status = "failed"
+    generic_task.error = error_message
+    generic_task.save()
+    if requeue:
+        requeue_task(generic_task)
+
+
 def tasks_max_time_reached():
     """
     Requeues tasks that have reached their max run time

@@ -1,3 +1,6 @@
+# import magicmock
+from unittest.mock import patch
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import management
@@ -28,6 +31,34 @@ def test_fullctl_work_task(db, dj_account_objects):
 
     assert task.status == "completed"
     assert int(task.output) == 3
+
+
+@patch("fullctl.django.management.commands.fullctl_work_task.Command.run")
+def test_fullctl_work_task_error_handling_in_run(mock_run, db, dj_account_objects):
+    # test error handling of errors in `run` call
+    task = models.TestTask.create_task(1, 2)
+    mock_run.side_effect = Exception("Test exception")
+
+    management.call_command("fullctl_work_task", "1")
+    task = specify_task(Task.objects.get(id=1))
+
+    assert task.status == "failed"
+    assert "Test exception" in task.error
+
+
+@patch("fullctl.django.management.commands.base.CommandInterface.handle")
+def test_fullctl_work_task_error_handling_in_handle(
+    mock_handle, db, dj_account_objects
+):
+    # test error handling of errors in `handle` call
+    task = models.TestTask.create_task(1, 2)
+    mock_handle.side_effect = Exception("Test exception")
+
+    management.call_command("fullctl_work_task", "1")
+    task = specify_task(Task.objects.get(id=1))
+
+    assert task.status == "failed"
+    assert "Test exception" in task.error
 
 
 def test_fullctl_work_task_fail(db, dj_account_objects):
