@@ -1,17 +1,14 @@
-# import magicmock
 from unittest.mock import patch
 
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import management
 from django.utils import timezone
-from unittest.mock import patch
-
 
 import tests.django_tests.testapp.models as models
 from fullctl.django.models import Task
-from fullctl.django.tasks.orm import specify_task
 from fullctl.django.models.concrete.tasks import TaskSchedule
+from fullctl.django.tasks.orm import specify_task
 
 
 def test_fullctl_poll_tasks(db, dj_account_objects):
@@ -25,6 +22,7 @@ def test_unresolved_task(db, dj_account_objects):
     task = specify_task(task)
     assert task is None
 
+
 @patch("fullctl.django.tasks.log")
 def test_task_op_that_doesnt_exist(mock_logging, db, dj_account_objects):
     org = dj_account_objects.org
@@ -36,7 +34,7 @@ def test_task_op_that_doesnt_exist(mock_logging, db, dj_account_objects):
                     "op": "unregistered_task_testt",
                     "param": {
                         "args": [],
-                    }
+                    },
                 }
             ],
         },
@@ -49,7 +47,9 @@ def test_task_op_that_doesnt_exist(mock_logging, db, dj_account_objects):
     tasks = task_schedule.spawn_tasks()
     assert Task.objects.count() == 0
     assert tasks == []
-    mock_logging.error.assert_called_once_with('Task operation not found', task_op='unregistered_task_testt')
+    mock_logging.error.assert_called_once_with(
+        "Task operation not found", task_op="unregistered_task_testt"
+    )
 
 
 def test_fullctl_promote_user(db, dj_account_objects_c):
