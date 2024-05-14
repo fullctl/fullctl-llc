@@ -1,4 +1,3 @@
-
 """
 def sync_organizations(backend, details, response, uid, user, *args, **kwargs):
     social = kwargs.get("social") or backend.strategy.storage.user.get_social_auth(
@@ -9,6 +8,7 @@ def sync_organizations(backend, details, response, uid, user, *args, **kwargs):
 """
 
 from django.contrib.auth.models import Group
+
 
 def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     """
@@ -22,7 +22,7 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     social = kwargs.get("social") or backend.strategy.storage.user.get_social_auth(
         backend.name, uid
     )
-    
+
     if not social:
         return
 
@@ -51,7 +51,7 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
 
     if not roles:
         return
-    
+
     # add user to group
 
     for role in roles:
@@ -59,7 +59,7 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
         group_name = role
 
         group, _ = Group.objects.get_or_create(name=group_name)
-        
+
         # only add user if they are not already in the group
 
         if group not in user.groups.all():
@@ -69,7 +69,7 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     # remove user from groups they are not in anymore
 
     for role in org.get("all_roles", []):
-        
+
         group_name = role
 
         try:
@@ -89,5 +89,5 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
     else:
         user.is_staff = False
         user.is_superuser = False
-    
+
     user.save()
