@@ -1,3 +1,8 @@
+import structlog
+
+log = structlog.get_logger("django")
+
+
 TASK_MODELS = {}
 
 
@@ -7,7 +12,11 @@ def register(cls):
 
 
 def specify_task(task):
-    return TASK_MODELS[task.op].objects.get(id=task.id)
+    try:
+        task_model = TASK_MODELS[task.op]
+        return task_model.objects.get(id=task.id)
+    except KeyError:
+        log.error("Task operation not found", task_op=task.op)
 
 
 def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None):
@@ -24,6 +33,10 @@ def create_tasks_from_json(config, parent=None, user=None, org=None, tasks=None)
         op = task_config.get("op")
 
         model = TASK_MODELS.get(op)
+        if not model:
+            log.error("Task operation not found", task_op=op)
+            continue
+
         param = task_config.get("param", {})
         args = param.get("args", [])
         kwargs = param.get("kwargs", {})

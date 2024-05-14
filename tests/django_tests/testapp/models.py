@@ -25,6 +25,20 @@ class TestTask(Task):
         return a + b
 
 
+class UnregisteredTestTask(Task):
+    class Meta:
+        proxy = True
+
+    class HandleRef:
+        tag = "unregistered_task_test"
+
+    class TaskMeta:
+        result_type = int
+
+    def run(self, a, b, *args, **kwargs):
+        return a + b
+
+
 @register
 class TestTaskWithMaxRunTime(Task):
     class Meta:
