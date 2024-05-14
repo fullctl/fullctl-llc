@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 import structlog
@@ -54,16 +53,16 @@ def account_service(request):
                 ).first()
                 if org_branding:
                     organization = Organization.objects.get(slug=branding_org)
-                    css_dict = json.loads(org_branding.css) if org_branding.css else {}
+                    css_dict = org_branding.css
             elif http_host:
                 org_branding = OrganizationBranding.objects.filter(
                     http_host=http_host
                 ).first()
                 if org_branding:
                     organization = Organization.objects.get(slug=org_slug)
-                    css_dict = json.loads(org_branding.css) if org_branding.css else {}
+                    css_dict = org_branding.css
         else:
-            css_dict = json.loads(org_branding.css) if org_branding.css else {}
+            css_dict = org_branding.css
 
         if org_branding and organization:
             context["org_branding"] = {
