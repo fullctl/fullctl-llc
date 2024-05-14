@@ -7,6 +7,7 @@ import traceback
 from io import StringIO
 
 from asgiref.sync import sync_to_async
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
@@ -57,7 +58,15 @@ class TaskLimitError(IOError):
     instances of a task
     """
 
-    pass
+    def __init__(self, task=None):
+        if task is None:
+            message = "Task limit exceeded"
+        else:
+            message = (
+                f"Task limit exceeded for task with limit id: {task.generate_limit_id}"
+            )
+
+        super().__init__(message)
 
 
 class TaskAlreadyStarted(IOError):
@@ -159,6 +168,11 @@ class Task(HandleRefModel):
         related_name="children",
     )
 
+    requeued = models.BooleanField(
+        default=False,
+        help_text="task was requeued",
+    )
+
     # ownership
 
     user = models.ForeignKey(
@@ -197,6 +211,7 @@ class Task(HandleRefModel):
         timeout = kwargs.pop("timeout", None)
         user = kwargs.pop("user", None)
         org = kwargs.pop("org", None)
+        requeued = kwargs.pop("requeued", False)
 
         op = cls.HandleRef.tag
 
@@ -213,6 +228,7 @@ class Task(HandleRefModel):
             timeout=timeout,
             user=user,
             org=org,
+            requeued=requeued,
         )
         task.limit_id = task.generate_limit_id
 
@@ -280,6 +296,14 @@ class Task(HandleRefModel):
     @property
     def limit(self):
         return self.task_meta_property("limit")
+
+    @property
+    def max_run_time(self):
+        # check if task param kwargs has a max_run_time
+        if "max_run_time" in self.param["kwargs"]:
+            return self.param["kwargs"]["max_run_time"]
+
+        return self.task_meta_property("max_run_time", settings.TASK_DEFAULT_MAX_AGE)
 
     @property
     def limit_action(self):
@@ -583,8 +607,43 @@ class TaskSchedule(HandleRefModel):
         self.schedule = timezone.now() + datetime.timedelta(seconds=self.interval)
         self.save()
 
+    def are_limited_tasks_pending(self):
+        """
+        Checks if there are currently any pending limited tasks
+        """
+        from fullctl.django.tasks.orm import specify_task
+
+        task_configs = self.task_config.get("tasks", [])
+
+        for task_config in task_configs:
+            op = task_config.get("op")
+            # TODO: can we really safely assume that the first arg is the limit_id?
+            try:
+                limit_id = task_config.get("param").get("args")[0]
+            except IndexError:
+                continue
+
+            tasks = Task.objects.filter(
+                op=op, limit_id=limit_id, status__in=["pending", "running"]
+            )
+
+            task_object = tasks.first()
+            if not task_object:
+                continue
+
+            task = specify_task(task_object)
+            # if the count of currently pending / running instances of this
+            # task is higher than the limit we return True
+            if tasks and (task.task_meta_property("limit") <= tasks.count()):
+                return True
+
+        return False
+
     def spawn_tasks(self):
         # first check that there isnt currently a task pending on the schedule already
+
+        if self.are_limited_tasks_pending():
+            return []
 
         for task in self.tasks.all():
             if task.status in ["pending", "running"]:

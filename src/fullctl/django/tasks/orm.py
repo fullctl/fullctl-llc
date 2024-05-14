@@ -3,6 +3,7 @@ ORM based task delegation
 """
 
 import time
+from datetime import timedelta
 
 from django.conf import settings
 from django.db import IntegrityError, transaction
@@ -16,6 +17,7 @@ from fullctl.django.models import (
     WorkerUnqualified,
 )
 from fullctl.django.models.concrete.tasks import TaskClaim, TaskLimitError
+from fullctl.django.tasks import requeue as requeue_task
 from fullctl.django.tasks import specify_task
 from fullctl.django.tasks.util import worker_id
 
@@ -53,6 +55,40 @@ def fetch_task(**filters):
     return None
 
 
+def set_task_as_failed(generic_task, error_message=None, requeue=False):
+    """
+    Set task to failed with error information and re-queue
+    """
+
+    generic_task.status = "failed"
+    generic_task.error = error_message
+    generic_task.save()
+    if requeue:
+        requeue_task(generic_task)
+
+
+def tasks_max_time_reached():
+    """
+    Requeues tasks that have reached their max run time
+    """
+    running_tasks = Task.objects.filter(
+        status__in=["running", "pending"], queue_id__isnull=False
+    )
+
+    if not running_tasks.exists():
+        return
+
+    for generic_task in running_tasks:
+        task = specify_task(generic_task)
+        if not task.max_run_time:
+            continue
+
+        time_delta = timedelta(seconds=task.max_run_time)
+        if (task.created + time_delta) < timezone.now():
+            task.cancel("max run time reached")
+            requeue_task(task)
+
+
 def fetch_tasks(limit=1, **filters):
     """
     fetches pending tasks ready to be worked on
@@ -74,8 +110,10 @@ def fetch_tasks(limit=1, **filters):
     # exclude tasks that are in the recheck stack
     qset = qset.exclude(id__in=[task.id for task, _ in RECHECK_STACK])
 
-    # order_history by date of creation
-    qset = qset.order_by("created")
+    # order_history by date of -requeued and date of creation
+    # requeued tasks are higher priority since they were meant
+    # to be worked on earlier
+    qset = qset.order_by("-requeued", "created")
 
     skip_tasks = {}
 
@@ -171,7 +209,6 @@ def work_task(task):
     """
     processes the specified task
     """
-
     task._run()
 
 

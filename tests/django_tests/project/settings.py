@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_peeringdb",
     "django_grainy",
     "reversion",
     "rest_framework",
@@ -183,3 +182,7 @@ POST_FEATURE_REQUEST_URL = "test://new-feature"
 DOCS_URL = "test://docs"
 LEGAL_URL = "test://legal"
 TERMS_OF_SERVICE_URL = "test://terms-of-service"
+TASK_DEFAULT_MAX_AGE = 3600 * 6
+TASK_DEFAULT_PRUNE_AGE = 30.0
+TASK_DEFAULT_PRUNE_EXCLUDE = []
+TASK_DEFAULT_PRUNE_STATUS = ["completed", "failed", "cancelled"]

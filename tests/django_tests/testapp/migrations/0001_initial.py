@@ -160,6 +160,19 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name="TestTaskWithMaxRunTime",
+            fields=[],
+            options={
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
+            },
+            bases=("django_fullctl.task",),
+            managers=[
+                ("handleref", django.db.models.manager.Manager()),
+            ],
+        ),
+        migrations.CreateModel(
             name="Response",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
