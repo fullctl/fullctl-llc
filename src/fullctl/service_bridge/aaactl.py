@@ -137,3 +137,13 @@ class ContactMessage(Aaactl):
 class OauthAccessToken(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "oauth_access_token"
+
+
+class OrganizationBrandingObject(AaactlEntity):
+    description = "Aaactl OrganizationBranding"
+
+
+class OrganizationBranding(Aaactl):
+    class Meta(Aaactl.Meta):
+        ref_tag = "org_branding"
+        data_object_cls = OrganizationBrandingObject
