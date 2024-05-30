@@ -2,7 +2,7 @@ from datetime import datetime
 
 import structlog
 from django.conf import settings
-
+from django.http import HttpRequest
 from fullctl.django.auth import RemotePermissionsError
 from fullctl.django.models.concrete.account import Organization
 from fullctl.django.util import DEFAULT_FULLCTL_BRANDING
@@ -25,6 +25,30 @@ def conf(request):
         "current_year": datetime.now().year,
     }
 
+
+def request_can_see_service(request: HttpRequest, service_slug: str) -> bool:
+    """
+    Check if the requesting user has access to the service
+    """
+
+    if service_slug == "aaactl":
+        # everyone has access to aaactl
+        return True
+
+    if service_slug == settings.SERVICE_TAG:
+        # the user is requesting access to the service information
+        # for the service that is currently being rendered
+        return True
+
+    org = getattr(request, "org", None)
+    perms = getattr(request, "perms", None)
+
+    if not org or not perms:
+        # no organization or permissions object has been established
+        # assume the user does not have access to the service
+        return False
+
+    return perms.check(f"service.{service_slug}.{org.permission_id}", "r")
 
 def account_service(request):
     context = {}
@@ -132,6 +156,8 @@ def account_service(request):
                 for service_application in ServiceApplication().objects(
                     group="fullctl", org=(org_slug or None)
                 )
+                # only show services that the user has access to
+                if request_can_see_service(request, service_application.slug)
             ],
         )
 
