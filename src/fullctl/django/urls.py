@@ -68,6 +68,17 @@ if getattr(settings, "DEVICECTL_URL", None):
     ]
 
 
+if getattr(settings, "PREFIXCTL_URL", None):
+    import fullctl.django.autocomplete.prefixctl
+
+    urlpatterns += [
+        path(
+            "autocomplete/prefix/prefix_set",
+            fullctl.django.autocomplete.prefixctl.prefixctl_prefix_set.as_view(),
+            name="prefix set autocomplete",
+        ),
+    ]
+
 if settings.DEBUG:
     # support version ignorant serving of static files
     urlpatterns += [
