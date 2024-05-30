@@ -74,7 +74,7 @@ services:
   ixctl_worker:
     build:
       context: ../../../ixctl
-      dockerfile: Ctl/docker/Dockerfile.rsconfgen
+      dockerfile: Ctl/docker/Dockerfile.tasks
     # command: fullctl_poll_tasks
     command: runserver
     env_file:
@@ -190,7 +190,7 @@ services:
       - ../../../prefixctl/src:/srv/service/main:Z
       - ../../../prefixctl-reputation/src/prefixctl_reputation_check:/srv/service/venv/lib/python3.11/site-packages/prefixctl_reputation_check:Z
       - ../../../prefixctl-reputation/src/reputation_check:/srv/service/venv/lib/python3.11/site-packages/reputation_check:Z
-      - ../../../prefixctl-meta/src/prefix_meta:/srv/service/venv/lib/python3.11/site-packages/prefix_meta:Z
+      #- ../../../prefixctl-meta/src/prefix_meta:/srv/service/venv/lib/python3.11/site-packages/prefix_meta:Z
       - ../../../ripestat-data-parser/ripestat:/srv/service/venv/lib/python3.11/site-packages/ripestat:Z
       - ../../../prefix-meta-sorbs/src/prefix_meta_sorbs:/srv/service/venv/lib/python3.11/site-packages/prefix_meta_sorbs:Z
       - ../../../prefix-meta-arin/src/prefix_meta_arin:/srv/service/venv/lib/python3.11/site-packages/prefix_meta_arin:Z
@@ -223,7 +223,7 @@ services:
       - ../../../prefixctl/src:/srv/service/main:Z
       - ../../../prefixctl-reputation/src/prefixctl_reputation_check:/srv/service/venv/lib/python3.11/site-packages/prefixctl_reputation_check:Z
       - ../../../prefixctl-reputation/src/reputation_check:/srv/service/venv/lib/python3.11/site-packages/reputation_check:Z
-      - ../../../prefixctl-meta/src/prefix_meta:/srv/service/venv/lib/python3.11/site-packages/prefix_meta:Z
+      #- ../../../prefixctl-meta/src/prefix_meta:/srv/service/venv/lib/python3.11/site-packages/prefix_meta:Z
       - ../../../ripestat-data-parser/ripestat:/srv/service/venv/lib/python3.11/site-packages/ripestat:Z
       - ../../../prefix-meta-sorbs/src/prefix_meta_sorbs:/srv/service/venv/lib/python3.11/site-packages/prefix_meta_sorbs:Z
       - ../../../prefix-meta-arin/src/prefix_meta_arin:/srv/service/venv/lib/python3.11/site-packages/prefix_meta_arin:Z
