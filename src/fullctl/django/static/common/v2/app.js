@@ -1936,3 +1936,48 @@ $(document).on('select2:open', () => {
 });
 
 })(jQuery, twentyc.cls);
+
+function parseBoolean(str) {
+  if(str.toLowerCase() === 'false') {
+    return false
+  } else if (str.toLowerCase() === 'true') {
+    return true
+  } else {
+    return
+  }
+}
+
+function applyColorBranding(primaryColorValue, setHeaderColor, buttonTextColor, defaultDataTheme){
+  const root = $(':root');
+
+  if (primaryColorValue) {
+      root.css('--clr-accent-400', primaryColorValue);
+      if (parseBoolean(setHeaderColor)) {
+          root.css('--header-bg', primaryColorValue);
+      }
+  }
+
+  if (buttonTextColor) {
+      root.css('--primary-btn-clr', buttonTextColor);
+  }
+
+  if (defaultDataTheme) {
+      root.attr('data-theme', defaultDataTheme);
+      localStorage.setItem('theme', defaultDataTheme);
+  }
+}
+
+function applyLogoBranding(logo_width, logo_height){
+  document.addEventListener("DOMContentLoaded", function() {
+    var appLogo = document.querySelector(".app-logo");
+    if (appLogo) {
+      if (logo_width) {
+        appLogo.setAttribute("width", logo_width);
+      }
+
+      if (logo_height) {
+        appLogo.style.height = logo_height;
+      }
+    }
+  });
+}

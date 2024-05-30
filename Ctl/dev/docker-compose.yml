@@ -10,8 +10,8 @@ services:
       options:
         max-size: 100m
         max-file: "3"
-    ports:
-      - "15432:5432"
+#    ports:
+#      - "15432:5432"
     volumes:
       - ./initdb.d:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data

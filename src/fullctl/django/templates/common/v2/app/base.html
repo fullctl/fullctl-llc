@@ -54,21 +54,17 @@ var True = true, False = false;
 
 fullctl.permissions = {{ permissions|safe }}
 
-const root = document.documentElement;
-const primaryColorValue = "{{ org_branding.css.primary_color }}"
-if (primaryColorValue) {
-  root.style.setProperty('--clr-accent-400', primaryColorValue);
-}
+// Apply color branding
+const primaryColorValue = "{{ org_branding.css.primary_color }}"; // color
+const setHeaderColor = "{{ org_branding.css.set_header_color }}"; // bool
+const buttonTextColor = "{{ org_branding.css.button_text_color }}"; // color
+const defaultDataTheme = "{{ org_branding.css.default_data_theme }}"; // light / dark
+applyColorBranding(primaryColorValue, setHeaderColor, buttonTextColor, defaultDataTheme);
 
-document.addEventListener("DOMContentLoaded", function() {
-    var appLogo = document.querySelector(".app-logo");
-    if (appLogo) {
-        logo_width = "{{ org_branding.css.logo_width }}"
-        if (logo_width) {
-          appLogo.setAttribute("width", logo_width);
-        }
-    }
-});
+// Apply logo size branding
+const logo_width = "{{ org_branding.css.logo_width }}";
+const logo_height = "{{ org_branding.css.logo_height }}";
+applyLogoBranding(logo_width, logo_height)
 
 </script>
 
