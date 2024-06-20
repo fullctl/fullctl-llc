@@ -66,6 +66,26 @@ const logo_width = "{{ org_branding.css.logo_width }}";
 const logo_height = "{{ org_branding.css.logo_height }}";
 applyLogoBranding(logo_width, logo_height)
 
+// store theme for easy reference in other parts of the app
+fullctl.brand = {
+  colors: {
+    primary: primaryColorValue,
+    secondary: "{{ org_branding.css.secondary_color }}" || null,
+    header: setHeaderColor,
+    button_text: buttonTextColor,
+    text: "{{ org_branding.css.text_color }}" || null,
+  },
+  logo: {
+    width: logo_width,
+    height: logo_height,
+    url_dark: "{{ org_branding.dark_logo_url }}" || null,
+    url_light: "{{ org_branding.light_logo_url }}" || null,
+  },
+  graph: {
+    logo_theme: "{{ org_branding.css.graph_logo_theme }}" || null,
+  }
+}
+
 </script>
 
 {% block "header" %}

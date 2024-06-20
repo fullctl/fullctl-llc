@@ -1,6 +1,42 @@
 (function() {
 
+    const colors = {
+        bpsIn: "#d1ff27",        // Color for bps_in line and area fill
+        bpsOut: "#0d6efd",       // Color for bps_out line
+        bpsInPeak: "#20c997",    // Color for bps_in_peak horizontal line
+        bpsOutPeak: "#6f42c1",   // Color for bps_out_peak horizontal line
+        legendText: "#fff"       // Color for legend text and title label text
+    };
+
+    const branding_color_map = {
+        "primary": "bpsIn",
+        "secondary": "bpsOut",
+        "text": "legendText"
+    }
+
     fullctl.graphs = {}
+
+    /** 
+     * override colors from fullctl colors for brending
+     */
+    fullctl.graphs.get_colors = function() {
+
+        // copy the colors object
+        const _colors = {...colors}
+
+        // if brand colors are available, apply them according
+        // to the branding_color_map
+        if(fullctl.brand && fullctl.brand.colors) {
+            // apply branding colors
+            Object.keys(branding_color_map).forEach((key) => {
+                if(fullctl.brand.colors[key]) {
+                    _colors[branding_color_map[key]] = fullctl.brand.colors[key]
+                }
+            })
+        }
+
+        return _colors;
+    }
 
     /**
      * Format the y-axis values using pretty_speed formatter
@@ -105,6 +141,10 @@
         if(!data || !data.length) {
             return;
         }
+
+        // Get the colors for the graph, this will be used to color the lines and legend
+        // also applies branding colors if available
+        const colors = fullctl.graphs.get_colors();
 
         // Set up dimensions and margins for the graph
         const margin = {top: 20, right: 20, bottom: 50, left: 80}; // Increase left margin for traffic numbers and bottom margin for legend
@@ -216,21 +256,21 @@
         svg.append("path")
             .datum(data)
             .attr("fill", "none")
-            .attr("stroke", "#d1ff27")
+            .attr("stroke", colors.bpsIn)
             .attr("stroke-width", 1.5)
             .attr("d", line_in);
 
         // Move the area_in plot to the bottom, so it doesn't cover the bps_out plot
         svg.append("path")
             .datum(data)
-            .attr("fill", "#d1ff27")
+            .attr("fill", colors.bpsIn)
             .attr("d", area_in_updated);
 
         // Add the bps_out path after the bps_in path to ensure it is rendered above the bps_in plot
         svg.append("path")
             .datum(data)
             .attr("fill", "none")
-            .attr("stroke", "#0d6efd")
+            .attr("stroke", colors.bpsOut)
             .attr("stroke-width", 1.5)
             .attr("d", line_out);
 
@@ -241,7 +281,7 @@
             .attr("x2", width)
             .attr("y1", y(bps_in_peak))
             .attr("y2", y(bps_in_peak))
-            .attr("stroke", "#20c997")
+            .attr("stroke", colors.bpsInPeak)
             .attr("stroke-width", 1);
 
         svg.append("line")
@@ -249,7 +289,7 @@
             .attr("x2", width)
             .attr("y1", y(bps_out_peak))
             .attr("y2", y(bps_out_peak))
-            .attr("stroke", "#6f42c1")
+            .attr("stroke", colors.bpsOutPeak)
             .attr("stroke-width", 1);
 
 
@@ -277,13 +317,13 @@
             .attr("fill", function(d) {
                 switch (d.key) {
                     case "bps_in":
-                        return "#d1ff27";
+                        return colors.bpsIn;
                     case "bps_out":
-                        return "#0d6efd";
+                        return colors.bpsOut;
                     case "bps_in_peak":
-                        return "#20c997";
+                        return colors.bpsInPeak;
                     case "bps_out_peak":
-                        return "#6f42c1";
+                        return colors.bpsOutPeak;
                 }
             });
 
@@ -291,22 +331,52 @@
             .attr("x", 24) // Change x position to 24 for left alignment
             .attr("y", 9.5)
             .attr("dy", "0.32em")
-            .attr("fill", "#fff") // Set legend font color to #fff
+            .attr("fill", colors.legendText) // Set legend font color to #fff
             .text(function(d) { return d.label; });;
 
         // Add logo
-        const logoPath = document.querySelector("img.app-logo").getAttribute("src");
+
+        // default path read from the logo in the app
+        let logo_path = document.querySelector("img.app-logo").getAttribute("src");
+        let logo_height = height * 0.15;
+        // min height 75px, max height 150px
+        logo_height = Math.max(75, logo_height);
+        logo_height = Math.min(150, logo_height);
+
+        // if brand logo is available, use that
+        if(fullctl.brand && fullctl.brand.logo) {
+            // currently selected theme
+            let theme = document.documentElement.getAttribute("data-theme") || "dark";
+
+            // does brand have a logo theme, if so use that
+            if(fullctl.brand.graph.logo_theme) {
+                theme = fullctl.brand.graph.logo_theme;
+            }
+            
+            // get the logo path for the theme
+            let brandLogoPath = fullctl.brand.logo[`url_${theme}`];
+
+            // if logo path is not available, use the default logo
+            if(brandLogoPath) {
+                logo_path = brandLogoPath;
+            }
+        }
+
+        function set_logo_position() {
+            // Get the width of the logo after it has been appended to the SVG
+            const logoWidth = logo.node().getBBox().width;
+
+            // Update the x position of the logo to sit snug against the right border of the graph
+            logo.attr("x", width - logoWidth - 10);
+        }
+
         const logo = svg.append("image")
-            .attr("xlink:href", logoPath)
+            .on('load', set_logo_position)
+            .attr("xlink:href", logo_path)
             .attr("x", width) // Temporarily set x position to the width of the graph
-            .attr("y", -((height * 0.15) * 0.5))
-            .attr("height", height * 0.15); // Adjust height of the logo
+            .attr("y", -(logo_height * 0.5))
+            .attr("height", logo_height) // Adjust height of the logo
 
-        // Get the width of the logo after it has been appended to the SVG
-        const logoWidth = logo.node().getBBox().width;
-
-        // Update the x position of the logo to sit snug against the right border of the graph
-        logo.attr("x", width - logoWidth - 10);
 
         // Add title label
         if (titleLabel) {
@@ -316,7 +386,7 @@
                 .attr("text-anchor", "middle") // Center the text
                 .attr("font-family", "sans-serif")
                 .attr("font-size", 16)
-                .attr("fill", "#fff") // Set the font color to white
+                .attr("fill", colors.legendText) // Set the font color to white
                 .text(titleLabel);
         }
 
