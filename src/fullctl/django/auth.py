@@ -103,9 +103,11 @@ class RemotePermissions(django_grainy.remote.Permissions):
                 return
 
             # if the X-User header is present, impersonation is started
-            # but only if the requesting user is a superuser.
-
-            if not request.user.is_superuser:
+            # but only if the requesting user is a superuser or has 
+            # explicit permission to impersonate
+            perms = Permissions(request.user)
+            perms.pset.update(response.json())
+            if not request.user.is_superuser and not perms.check("impersonate", "c"):
                 return
 
             # sometimes the imperesonated user is not in the local database
