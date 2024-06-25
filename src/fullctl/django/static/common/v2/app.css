@@ -1734,9 +1734,11 @@ span.fullctl-sot {
   font-size: 12px;
 }
 
+img.inline-service-logo,
 .cross-promotion img.app-logo {
   height: 18px;
   display: inline;
+  vertical-align: sub;
 }
 
 img.service-link {
