@@ -1,0 +1,23 @@
+{
+    "data": [
+      {
+        "id": 10,
+        "service": 5,
+        "url": "https://peerctl.example.com",
+        "org": "test",
+        "org_name": "Test",
+        "tags": [
+          "ix.pdbctl.1"
+        ],
+        "service_slug": "peerctl",
+        "grainy": null,
+        "status": "ok",
+        "created": "2024-05-30T14:12:33.654496Z",
+        "updated": "2024-06-05T15:03:32.616173Z"
+      }
+    ],
+    "errors": {},
+    "profiling": {
+      "queries": 18
+    }
+  }
