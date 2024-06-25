@@ -259,7 +259,7 @@ button:focus {
 }
 
 .m-info {
-  font-size: --var(--fs-300);
+  font-size: var(--fs-300);
 }
 
 .ux-keep-list-open {
@@ -776,6 +776,7 @@ span.icon {
 span.icon-lg {
   width: 32px;
   height: 32px;
+  mask-size: cover;
 }
 
 span.icon-arrow {
@@ -933,6 +934,21 @@ span.icon-triangle-fill-down {
 span.icon-warning {
   -webkit-mask-image: url(icons/exclamation-triangle.svg);
   mask-image: url(icons/exclamation-triangle.svg);
+}
+
+span.icon-thumbs-down {
+  -webkit-mask-image: url(icons/hand-thumbs-down.svg);
+  mask-image: url(icons/hand-thumbs-down.svg);
+}
+
+span.icon-thumbs-up {
+  -webkit-mask-image: url(icons/hand-thumbs-up.svg);
+  mask-image: url(icons/hand-thumbs-up.svg);
+}
+
+span.icon-exclamation-circle {
+  -webkit-mask-image: url(icons/exclamation-circle.svg);
+  mask-image: url(icons/exclamation-circle.svg);
 }
 
 [data-true] {
