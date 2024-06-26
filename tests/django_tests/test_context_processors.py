@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.http import HttpRequest
+from unittest.mock import patch, MagicMock
 
 from fullctl.django import context_processors
 from fullctl.django.auth import RemotePermissionsError
@@ -25,6 +26,36 @@ def test_account_service(db, dj_account_objects, settings):
     context = context_processors.account_service(request)
 
     assert context["account_service"] == expected
+
+
+@patch("fullctl.django.context_processors.OrganizationBranding")
+def test_account_service_with_branding_org_setting(mock_org_branding, db, dj_account_objects, settings):
+    request = HttpRequest()
+    request.META["SERVER_NAME"] = "dev"
+    request.META["SERVER_PORT"] = "8080"
+    request.org = dj_account_objects.org
+    settings.BRANDING_ORG = dj_account_objects.org.slug
+
+    mock_org_branding_instance = MagicMock()
+    mock_org_branding.return_value = mock_org_branding_instance
+    mock_org_branding_instance.first.return_value = MagicMock(
+        css={'primary_color': 'red'}, org_name=dj_account_objects.org.name
+    )
+
+    expected = {
+        "urls": {
+            "create_org": "localhost/account/",
+            "manage_org": "localhost/account/?org=org_slug",
+            "manage_account": "localhost/account/",
+            "billing_setup": "localhost/billing/setup?org=test",
+        }
+    }
+
+    context = context_processors.account_service(request)
+
+    assert context["account_service"] == expected
+    assert context["org_branding"]["name"] == dj_account_objects.org.name
+    assert context["org_branding"]["css"] == {'primary_color': 'red'}
 
 
 def test_account_service_no_org(db, dj_account_objects, settings):

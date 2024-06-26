@@ -61,50 +61,54 @@ def account_service(request):
         org_slug = ""
 
     local_auth = getattr(settings, "USE_LOCAL_PERMISSIONS", False)
-    branding_org = getattr(settings, "BRANDING_ORG", None)
-    http_host = request.get_host()
+    branding_override = getattr(settings, "BRANDING_ORG", None)
+    branding = None
 
-    try:
-        # TODO: Look into appreach to return org specific branding or default org_branding
-        org_branding = OrganizationBranding().first(org=org_slug)
-        organization = Organization.objects.get(slug=org_slug)
-        custom_org = True
+    # start by setting a default branding
+    context["org_branding"] = DEFAULT_FULLCTL_BRANDING
 
-        if not org_branding:
-            if branding_org:
-                org_branding = OrganizationBranding.objects.filter(
-                    org=branding_org
-                ).first()
-                if org_branding:
-                    organization = Organization.objects.get(slug=branding_org)
-                    css_dict = org_branding.css
-            elif http_host:
-                org_branding = OrganizationBranding.objects.filter(
-                    http_host=http_host
-                ).first()
-                if org_branding:
-                    organization = Organization.objects.get(slug=org_slug)
-                    css_dict = org_branding.css
-        else:
-            css_dict = org_branding.css
+    # if there is a branding_override set in the settings for the instance
+    # use that (this is the highest priority branding setting)
+    if branding_override:
 
-        if org_branding and organization:
-            context["org_branding"] = {
-                "name": organization.name,
-                "html_footer": org_branding.html_footer,
-                "css": css_dict,
-                "dark_logo_url": org_branding.dark_logo_url,
-                "light_logo_url": org_branding.light_logo_url,
-                "custom_org": custom_org,
-                "show_logo": org_branding.show_logo,
-            }
+        # SERVICE OVERRIDES BRANDING GLOBALLY
 
-        if not org_branding and not branding_org and not http_host:
-            context["org_branding"] = DEFAULT_FULLCTL_BRANDING
+        branding = OrganizationBranding().first(org=branding_override)
 
-    except Exception as e:
-        log.error(f"Error fetching org org_branding: {e}")
-        context["org_branding"] = DEFAULT_FULLCTL_BRANDING
+        if not branding:
+            log.warning(f"Using branding override: {branding_override}, but branding does not exist in aaactl")
+
+    # otherwise check if the organization of the request has a branding applied
+    # to it through aaactl (either on the org directly or through a BRANDING_ORG
+    # set in aaactl)
+    elif not branding:
+
+        # AAACTL SELECTS BRANDING
+
+        # using the `best` filter to get the most specific branding
+        # this will either select the org's branding if it has one
+        # or the branding set in the BRANDING_ORG setting
+        branding = OrganizationBranding().first(best=org_slug)
+
+        log.info("Branding AAACTL", branding=branding.json if branding else None, org_slug=org_slug)
+
+    # last if there is no branding set yet, we would check http host
+    # however for this to work some changes need to be made on the aaactl
+    # side to support multiple hostnames (since services will be on different hosts)
+    # TODO: supprt host for branding
+    # http_host = request.get_host()
+
+    # a branding was selected, prepare the context
+    if branding:
+        context["org_branding"] = {
+            "name": branding.org_name,
+            "html_footer": branding.html_footer,
+            "css": branding.css,
+            "dark_logo_url": branding.dark_logo_url,
+            "light_logo_url": branding.light_logo_url,
+            "custom_org": True,
+            "show_logo": branding.show_logo,
+        }
 
     if not context["org_branding"].get("dark_logo_url", None):
         service_logo_dark = f"{settings.SERVICE_TAG}/logo-darkbg.svg"
@@ -183,6 +187,7 @@ def account_service(request):
         }
 
     return context
+
 
 
 def permissions(request):
