@@ -5,34 +5,25 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 # valid IRR source identifiers
-
+# reference: http://www.irr.net/docs/list.html
 IRR_SOURCE = (
     "AFRINIC",
     "ALTDB",
-    "AOLTW",
     "APNIC",
     "ARIN",
-    "ARIN-NONAUTH",
     "BELL",
     "BBOI",
     "CANARIE",
-    "EASYNET",
-    "EPOCH",
-    "HOST",
+    "IDNIC",
     "JPIRR",
     "LACNIC",
     "LEVEL3",
     "NESTEGG",
     "NTTCOM",
-    "OPENFACE",
-    "OTTIX",
     "PANIX",
     "RADB",
     "REACH",
-    "RGNET",
     "RIPE",
-    "RISQ",
-    "ROGERS",
     "TC",
 )
 
