@@ -404,6 +404,7 @@ div.validation-error {
 }
 
 .validation-error-indicator {
+  color: #d2a5a5 !important;
   background-color: #2b0e0e !important;
   border-color: #760505 !important;
 }
