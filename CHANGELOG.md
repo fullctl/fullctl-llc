@@ -2,6 +2,9 @@
 
 
 ## Unreleased
+
+
+## 1.13.0
 ### Added
 - task queue health checks and display
 - task queue auto requeue stuck tasks
