@@ -1,0 +1,23 @@
+{
+    "data": [
+      {
+        "org": 60,
+        "org_name": "Test",
+        "show_logo": true,
+        "html_footer": "",
+        "css": {
+        },
+        "light_logo_url": "",
+        "dark_logo_url": "",
+        "grainy": null,
+        "id": 1,
+        "status": "ok",
+        "created": "2024-04-22T22:40:19.064709Z",
+        "updated": "2024-06-20T15:44:28.033124Z"
+      }
+    ],
+    "errors": {},
+    "profiling": {
+      "queries": 18
+    }
+}   

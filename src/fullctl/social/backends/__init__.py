@@ -26,8 +26,10 @@ class AaactlMixin:
     """
 
     def api_url(self):
-        """Returns the API URL, checks first for AAACTL_URL in env."""
-        return append_slash(os.getenv("AAACTL_URL", self.setting("API_URL")))
+        """Returns the API URL, checks {name}_API_URL first, and falls back to AAACTL_URL."""
+
+        configured_url = self.setting("API_URL")
+        return append_slash(configured_url or os.getenv("AAACTL_URL"))
 
     def authorization_url(self):
         return self._url("authorize/")
