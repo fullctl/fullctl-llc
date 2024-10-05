@@ -1,4 +1,5 @@
 from typing import Callable
+
 try:
     from django.conf import settings
 
@@ -76,11 +77,14 @@ class ServiceApplication(Aaactl):
             return data[0]["can_trial"]
         return False
 
+
 class FederatedServiceURL(Aaactl):
     class Meta(Aaactl.Meta):
         ref_tag = "federated_service_url"
 
-    def federated_services(self, service_slugs:list[str], make_tag:Callable, source_ids:list[str]) -> dict[str, dict[str, AaactlEntity]]:
+    def federated_services(
+        self, service_slugs: list[str], make_tag: Callable, source_ids: list[str]
+    ) -> dict[str, dict[str, AaactlEntity]]:
         """
         Takes a list service bridge source ids - e.g., 'pdbctl:123' or 'ixctl:123'
         and returns a mapping of source id to the federated ixctl instance if it exists.
@@ -97,14 +101,11 @@ class FederatedServiceURL(Aaactl):
 
         # convert from {source}:{id} (source) to ix.{source}.{id} (tag)
         tags = [make_tag(source_id) for source_id in source_ids]
-        
-        federated_service_urls = list(self.objects(
-            tags=tags,
-            slugs=service_slugs
-        ))
+
+        federated_service_urls = list(self.objects(tags=tags, slugs=service_slugs))
 
         result = {}
-        
+
         for source_id in source_ids:
             tag = make_tag(source_id)
             for service_url in federated_service_urls:
@@ -112,7 +113,7 @@ class FederatedServiceURL(Aaactl):
                 if tag in service_url.tags:
                     result[service_url.service_slug][source_id] = service_url
                     break
-        
+
         return result
 
 

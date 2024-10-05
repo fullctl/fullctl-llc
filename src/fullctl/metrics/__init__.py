@@ -30,15 +30,16 @@ import requests
 
 from fullctl.service_bridge.client import url_join
 
-from .schema import QueryResult, Point
+from .schema import Point, QueryResult
 
 try:
     import pytimeparse2
 except ImportError:
     pytimeparse2 = None
 
+
 class Metrics:
-    def __init__(self, url: str, auth:tuple[str, str] | None = None):
+    def __init__(self, url: str, auth: tuple[str, str] | None = None):
 
         """
         Initialize the Metrics client
@@ -81,11 +82,7 @@ class Metrics:
 
     @classmethod
     def build_query_string(
-        cls, 
-        aggregator: str, 
-        metrics: list[str],
-        tags:dict, 
-        time_range:str
+        cls, aggregator: str, metrics: list[str], tags: dict, time_range: str
     ) -> str:
         """
         Build a query string for Victoriametrics
@@ -112,23 +109,26 @@ class Metrics:
 
         # Build the metric selector
         metric_selector = f'__name__=~"{"|".join(metrics)}"'
-        
+
         # Build the tag selectors
-        tag_selectors = ','.join([f'{k}="{v}"' for k, v in tags.items() if v is not None])
-        
+        tag_selectors = ",".join(
+            [f'{k}="{v}"' for k, v in tags.items() if v is not None]
+        )
+
         # Combine metric and tag selectors
-        selector = f'{{{metric_selector}{", " if tag_selectors else ""}{tag_selectors}}}'
-        
+        selector = (
+            f'{{{metric_selector}{", " if tag_selectors else ""}{tag_selectors}}}'
+        )
+
         # Construct the full query
         if aggregator and time_range:
-            query = f'{aggregator}({selector}[{time_range}])'
+            query = f"{aggregator}({selector}[{time_range}])"
         elif aggregator:
-            query = f'{aggregator}({selector})'
+            query = f"{aggregator}({selector})"
         elif time_range:
-            query = f'{selector}[{time_range}]'
+            query = f"{selector}[{time_range}]"
 
         return query
-
 
     def to_line_protocol(
         self,
@@ -171,7 +171,9 @@ class Metrics:
         metrics.write("cpu", {"host": "server1"}, {"usage": 0.5}, timestamp=1609459200)
         """
         url = url_join(self.url, "/write").rstrip("/")
-        requests.post(url, data=self.to_line_protocol(measurement, tags, fields, timestamp))
+        requests.post(
+            url, data=self.to_line_protocol(measurement, tags, fields, timestamp)
+        )
 
     def write_many(
         self,
@@ -192,8 +194,8 @@ class Metrics:
         ]
 
         metrics.write_many(points)
-        
-        or 
+
+        or
 
         points = [
             {"measurement": "cpu", "tags": {"host": "server1"}, "fields": {"usage": 0.5}},
@@ -221,8 +223,7 @@ class Metrics:
         lines = "\n".join(lines)
         requests.post(url, data=lines, auth=self.auth)
 
-
-    def query(self, query: str, keep_metric_names:bool = False) -> QueryResult:
+    def query(self, query: str, keep_metric_names: bool = False) -> QueryResult:
         """
         Query a metric from Victoriametrics
 
@@ -303,12 +304,12 @@ class Metrics:
 
         return QueryResult(**data)
 
-    def delete(self, match:str):
+    def delete(self, match: str):
         """
         Delete a metric from Victoriametrics
 
         Arguments:
-        
+
         - match: The match string to delete the metric
 
         Examples:
@@ -322,4 +323,6 @@ class Metrics:
         params = {"match[]": match}
         response = requests.get(url, params=params, auth=self.auth)
         if response.status_code != 204:
-            raise Exception(f"Failed to delete metric: {response.status_code} {response.text}")
+            raise Exception(
+                f"Failed to delete metric: {response.status_code} {response.text}"
+            )

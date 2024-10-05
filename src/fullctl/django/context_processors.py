@@ -3,8 +3,8 @@ from datetime import datetime
 import structlog
 from django.conf import settings
 from django.http import HttpRequest
+
 from fullctl.django.auth import RemotePermissionsError
-from fullctl.django.models.concrete.account import Organization
 from fullctl.django.util import DEFAULT_FULLCTL_BRANDING
 from fullctl.service_bridge.aaactl import OrganizationBranding, ServiceApplication
 
@@ -53,6 +53,7 @@ def request_can_see_service(request: HttpRequest, service_slug: str) -> bool:
 
     return perms.check(f"service.{service_slug}.{org.permission_id}", "r")
 
+
 def account_service(request):
     context = {}
     org = getattr(request, "org", None)
@@ -79,7 +80,9 @@ def account_service(request):
         branding = OrganizationBranding().first(org=branding_override)
 
         if not branding:
-            log.warning(f"Using branding override: {branding_override}, but branding does not exist in aaactl")
+            log.warning(
+                f"Using branding override: {branding_override}, but branding does not exist in aaactl"
+            )
 
     # otherwise check if the organization of the request has a branding applied
     # to it through aaactl (either on the org directly or through a BRANDING_ORG
@@ -93,7 +96,11 @@ def account_service(request):
         # or the branding set in the BRANDING_ORG setting
         branding = OrganizationBranding().first(best=org_slug)
 
-        log.info("Branding AAACTL", branding=branding.json if branding else None, org_slug=org_slug)
+        log.info(
+            "Branding AAACTL",
+            branding=branding.json if branding else None,
+            org_slug=org_slug,
+        )
 
     # last if there is no branding set yet, we would check http host
     # however for this to work some changes need to be made on the aaactl
@@ -190,7 +197,6 @@ def account_service(request):
         }
 
     return context
-
 
 
 def permissions(request):

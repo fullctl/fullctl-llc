@@ -221,20 +221,16 @@ class SettingsManager(confu.util.SettingsManager):
             "TASK_DEFAULT_PRUNE_STATUS", ["completed", "failed", "cancelled"]
         )
 
-        # The maximum number of parameters that may be received via GET or POST before a 
+        # The maximum number of parameters that may be received via GET or POST before a
         # SuspiciousOperation (TooManyFields) is raised.
         #
         # In our environment, this is only relevant for django-admin, which can have a large
         # number of fields in the user admin forms. Django default is 1000, we set it to 3000.
-        self.set_option(
-            "DATA_UPLOAD_MAX_NUMBER_FIELDS", 3000
-        )
+        self.set_option("DATA_UPLOAD_MAX_NUMBER_FIELDS", 3000)
 
-        # The maximum size in bytes that a request body may be before a SuspiciousOperation 
+        # The maximum size in bytes that a request body may be before a SuspiciousOperation
         # (RequestDataTooBig) is raised. Default is 2.5MB
-        self.set_option(
-            "DATA_UPLOAD_MAX_MEMORY_SIZE", 2621440
-        )
+        self.set_option("DATA_UPLOAD_MAX_MEMORY_SIZE", 2621440)
 
         # eval from default.py file
         filename = os.path.join(os.path.dirname(__file__), "default.py")
@@ -472,7 +468,7 @@ class SettingsManager(confu.util.SettingsManager):
 
         # Timeseries database URL (e.g., http://victoriametrics:8428)
         self.set_option("TIMESERIES_DB_URL", "")
-        
+
         # User and password for timeseries database
         self.set_option("TIMESERIES_DB_USER", "")
         self.set_option("TIMESERIES_DB_PASSWORD", "")

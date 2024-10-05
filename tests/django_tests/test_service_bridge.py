@@ -13,8 +13,8 @@ def test_aaactl_federated_service_url(settings):
     results = [
         aaactl.FederatedServiceURL().federated_services(
             ["peerctl"],
-            lambda source_id: source_id.replace(":","."),
-            ["ix.pdbctl:1", "ix.ixctl:1"]
+            lambda source_id: source_id.replace(":", "."),
+            ["ix.pdbctl:1", "ix.ixctl:1"],
         )
     ]
 

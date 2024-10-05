@@ -850,7 +850,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
         return;
       var i;
       var error_node = $('<div>').addClass("validation-error");
-      
+
       // clicking the error node should close it
       error_node.click(function() {
         $(this).detach();
@@ -931,7 +931,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
           }
         });
       });
-      
+
       $(this).trigger("payload:after", [data]);
 
       return data;

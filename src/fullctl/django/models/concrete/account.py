@@ -148,7 +148,9 @@ class Organization(HandleRefModel):
 
             org_ids.add(ns[1])
 
-        orgs_by_id = {org.remote_id: org for org in cls.objects.filter(remote_id__in=org_ids)}
+        orgs_by_id = {
+            org.remote_id: org for org in cls.objects.filter(remote_id__in=org_ids)
+        }
 
         for org in orgs_by_id.values():
             if org not in related_orgs:

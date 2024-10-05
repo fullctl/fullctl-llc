@@ -4,18 +4,24 @@ from fullctl.django.rest.decorators import serializer_registry
 
 Serializers, register = serializer_registry()
 
+
 class Stats(serializers.Serializer):
     seriesFetched = serializers.CharField()
     executionTimeMsec = serializers.IntegerField()
 
+
 class Result(serializers.Serializer):
     metric = serializers.DictField()
     value = serializers.ListField(child=serializers.FloatField(), required=False)
-    values = serializers.ListField(child=serializers.ListField(child=serializers.FloatField()), required=False)
+    values = serializers.ListField(
+        child=serializers.ListField(child=serializers.FloatField()), required=False
+    )
+
 
 class Data(serializers.Serializer):
     resultType = serializers.ChoiceField(choices=["vector", "matrix"])
     result = Result(many=True)
+
 
 @register
 class QueryResult(serializers.Serializer):
