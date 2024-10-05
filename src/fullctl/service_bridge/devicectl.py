@@ -132,9 +132,7 @@ class Port(Devicectl):
             },
         )
 
-    def set_ports_status(
-            self, pk, status
-    ):
+    def set_ports_status(self, pk, status):
         return self.patch(
             f"data/port/{pk}/status",
             json={
@@ -152,14 +150,20 @@ class VirtualPort(Devicectl):
     class Meta(Devicectl.Meta):
         ref_tag = "virtual_port"
 
-    def traffic(self, pk, start_time:int | str=None, duration:int=None, step:int=None, traffic_source:str="vm_sflow"):
+    def traffic(
+        self,
+        pk,
+        start_time: int | str = None,
+        duration: int = None,
+        step: int = None,
+        traffic_source: str = "vm_sflow",
+    ):
         params = {}
         if start_time:
             params["start_time"] = start_time
 
         if duration:
             params["duration"] = duration
-
 
         if step:
             params["step"] = step
@@ -171,7 +175,15 @@ class VirtualPort(Devicectl):
             params=params,
         )
 
-    def traffic_asn_pair(self, pk:int, asn_src:int, asn_dst:int, start_time:int, duration:int, step:int):
+    def traffic_asn_pair(
+        self,
+        pk: int,
+        asn_src: int,
+        asn_dst: int,
+        start_time: int,
+        duration: int,
+        step: int,
+    ):
         return self.get(
             f"data/virtual_port/{pk}/traffic/asn/{asn_src}/{asn_dst}",
             params={
@@ -181,7 +193,7 @@ class VirtualPort(Devicectl):
             },
         )
 
-    def traffic_asn_table(self, pk:int, start_time:int, duration:int, step:int):
+    def traffic_asn_table(self, pk: int, start_time: int, duration: int, step: int):
         return self.get(
             f"data/virtual_port/{pk}/traffic/asn-table",
             params={
@@ -200,6 +212,7 @@ class VirtualPort(Devicectl):
         return self.get(
             f"data/virtual_port/{pk}/metric_table",
         )
+
 
 class IPAddress(Devicectl):
     class Meta(Devicectl.Meta):

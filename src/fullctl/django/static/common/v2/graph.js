@@ -16,7 +16,7 @@
 
     fullctl.graphs = {}
 
-    /** 
+    /**
      * override colors from fullctl colors for brending
      */
     fullctl.graphs.get_colors = function() {
@@ -357,7 +357,7 @@
             if(fullctl.brand.graph.logo_theme) {
                 theme = fullctl.brand.graph.logo_theme;
             }
-            
+
             // get the logo path for the theme
             let brandLogoPath = fullctl.brand.logo[`url_${theme}`];
 
@@ -406,7 +406,7 @@
     }
 
     // VICTORIA METRICS TRAFFIC (MRTG AND SFLOW)
-    // they currently can be rendered with the same function since we're 
+    // they currently can be rendered with the same function since we're
     // just tracking bps_in and bps_out
 
     fullctl.graphs.render_graph_vm_mrtg_and_sflow = function(data, selector="#graph", titleLabel = "") {
@@ -475,7 +475,7 @@
     fullctl.graphs.RENDERER_BY_TYPE = {
         // legacy mrtg graphs rendered from rrd files
         "rrd_mrtg": fullctl.graphs.render_graph_from_file,
-        
+
         // mrtg graph rendered from victoria metrics data
         "vm_mrtg": fullctl.graphs.render_graph_from_file_vm_mrtg,
 
@@ -486,24 +486,24 @@
     /**
      * Function to show graphs
      * Either port or total traffic
-     * 
+     *
      * get_url is a function that returns the url to fetch the traffic data
      * it takes the graph container and the url attribute as arguments
-     * 
+     *
      * ```
      * function get_url(graph_container, url_attribute) {
      *  return graph_container.data(url_attribute).replace("/0/", "/"+$ctl.ixctl.ix()+"/")
      * }
      * ```
-     * 
-     * Proxy is used to pass the current context which can either be 
+     *
+     * Proxy is used to pass the current context which can either be
      * the total traffic tool or the member details tool
      */
 
     fullctl.graphs.show_graph = function(
         graph_container,
         graph_traffic_source,
-        end_date, 
+        end_date,
         duration,
         title,
         selector,
@@ -515,33 +515,33 @@
         // legacy default
         graph_traffic_source = "rrd_mrtg";
         }
-    
+
         if(proxy.$e.dev_tools) {
         proxy.$e.graph_traffic_source.text(graph_traffic_source);
         }
-    
+
         let renderer_function = fullctl.graphs.RENDERER_BY_TYPE[graph_traffic_source];
-    
+
         // split by underscore and take the first part
         // will be vm or rrd
         let metric_store = graph_traffic_source.split("_")[0];
-    
+
         if(!renderer_function) {
         throw new Error("No renderer function found for graph_traffic_source: " + graph_traffic_source);
         }
-    
+
         let url_attribute = (
-        graph_traffic_source !== "rrd_mrtg" ? 
-        `api-base-${graph_traffic_source.replace('_','-')}` : 
+        graph_traffic_source !== "rrd_mrtg" ?
+        `api-base-${graph_traffic_source.replace('_','-')}` :
         "api-base"
         );
 
         let url = get_url(graph_container, url_attribute)
         let params = [];
-    
+
         if(metric_store == "rrd") {
 
-            // the legacy RRD endpoint expects the following 
+            // the legacy RRD endpoint expects the following
             // parameters
 
             // start_time = unix timestamp of previous date
@@ -588,13 +588,13 @@
         if(prepare_params) {
             prepare_params(params);
         }
-    
+
         if (params.length > 0) {
         url += '?' + params.join('&');
         }
-    
+
         console.log("Requesting traffic data", {url, graph_traffic_source, metric_store});
-    
+
         renderer_function(
         url,
         selector,
@@ -612,7 +612,7 @@
         }
         })
     }
-    
+
 
 
 })();

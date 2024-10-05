@@ -224,7 +224,7 @@ class UrlActionMixin:
             redir = self.make_redirect(obj, action)
             action = self.get_action(action)
             if action:
-                
+
                 # action function found, next check if the user has
                 # permission to perform the action
                 permissions = action[0].allowed_permissions
@@ -232,14 +232,16 @@ class UrlActionMixin:
 
                 # if the user passes any of the permissions, allow the action
                 for perm in permissions:
-                    fn_check_perm  = getattr(self, f"has_{perm}_permission")
+                    fn_check_perm = getattr(self, f"has_{perm}_permission")
                     allowed = fn_check_perm(request)
                     if allowed:
                         break
-                
+
                 if not allowed:
                     # user does not have permission to perform the action
-                    return HttpResponseForbidden("You do not have permission to perform this action")
+                    return HttpResponseForbidden(
+                        "You do not have permission to perform this action"
+                    )
 
                 action[0](self, request, obj)
                 return redir

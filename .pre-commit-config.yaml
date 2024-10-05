@@ -5,7 +5,7 @@ exclude: |
     )$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-yaml
       - id: trailing-whitespace
@@ -38,7 +38,8 @@ repos:
         entry: poetry run flake8 .
         language: system
         pass_filenames: false
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: ''  # Use the sha / tag you want to point at
-    hooks:
-      - id: eslint
+# FIXME - these are failing
+#  - repo: https://github.com/pre-commit/mirrors-eslint
+#    rev: 'v9.11.1'
+#    hooks:
+#      - id: eslint

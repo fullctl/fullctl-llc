@@ -68,6 +68,7 @@ def validate_mac_address(value: str):
     if not re.match(r"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$", value):
         raise ValidationError("Invalid MAC address")
 
+
 def validate_mac_addresses(value: list[str]):
     for mac in value:
         try:

@@ -83,6 +83,7 @@ isort = ">=5.7"
 flake8 = ">=3.8"
 pre-commit = ">=2.13"
 pyupgrade = ">=2.19"
+ruff = ">=0.6"
 
 # docs
 markdown = "*"

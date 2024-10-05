@@ -28,12 +28,9 @@ class MetricModel(HandleRefModel):
         __str__(): Returns a string representation of the Metric instance, usually for debugging or admin interface display.
     """
 
-    data = models.JSONField(
-        help_text="A JSON object containing various metrics."
-    )
+    data = models.JSONField(help_text="A JSON object containing various metrics.")
     timestamp = models.DateTimeField(
-        auto_now=True,
-        help_text="The time at which this metric was recorded."
+        auto_now=True, help_text="The time at which this metric was recorded."
     )
 
     class Meta:
@@ -43,5 +40,6 @@ class MetricModel(HandleRefModel):
         Provides additional information about the Metric model, including:
         - ordering: The default ordering for queries made against this model (by timestamp descending).
         """
+
         abstract = True
-        ordering = ['-timestamp']
+        ordering = ["-timestamp"]
