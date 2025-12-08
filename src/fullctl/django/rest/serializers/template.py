@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 
 class TemplateSerializer(serializers.Serializer):
-
     """
     This serializer can be used to preview templates
     It needs to be instantiated with a TemplateBase

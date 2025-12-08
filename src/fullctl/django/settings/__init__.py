@@ -3,6 +3,7 @@ This file handles the default django settings for fullctl services.
 
 Versioning has been dropped in favor of using separate function names.
 """
+
 import os
 import sys
 from urllib.parse import urljoin
@@ -35,7 +36,6 @@ def read_file(name):
 
 
 class exposed_list(str):
-
     """
     Allows setting a list using a comma delimited string
     TODO: move to confu
@@ -203,8 +203,26 @@ class SettingsManager(confu.util.SettingsManager):
         # MAX_PENDING_TASKS is the maximum number of tasks that can be pending at any time
         self.set_option("MAX_PENDING_TASKS", 100)
 
+        # TASK_TRACK_INTERVAL_SECONDS is the interval in seconds to track task heartbeats
+        self.set_option("TASK_TRACK_INTERVAL_SECONDS", 10)
+
+        # TASK_TRACK_CHECK_INTERVAL is the interval in seconds to check for task heartbeat evaluation
+        # This should be a very small number to allow the worker to be released quickly when the task is complete
+        self.set_option("TASK_TRACK_CHECK_INTERVAL", 0.01)
+
+        # TASK_DB_STATS_INTERVAL_SECONDS is the interval in seconds to log database connection statistics
+        # during task execution
+        self.set_option("TASK_DB_STATS_INTERVAL_SECONDS", 60)
+
+        # HEALTH_CHECK_TASK_INTERVAL_SECONDS is the interval in seconds to track task for health checks
+        # should be greater than TASK_TRACK_INTERVAL_SECONDS
+        self.set_option("HEALTH_CHECK_TASK_INTERVAL_SECONDS", 20)
+
         # TASK_MAX_AGE_THRESHOLD is the maximum hours a task can be pending before it is considered stale
         self.set_option("TASK_MAX_AGE_THRESHOLD", 24)
+
+        # TASK_CLEANUP_INTERVAL_SECONDS is the interval in seconds to perform cleanup of tasks that have reached their max time or are orphaned
+        self.set_option("TASK_CLEANUP_INTERVAL_SECONDS", 30)
 
         # TASK_DEFAULT_MAX_AGE (seconds) is the default maximum age for a task - default is 6 hours
         self.set_option("TASK_DEFAULT_MAX_AGE", 3600 * 6)
@@ -220,25 +238,50 @@ class SettingsManager(confu.util.SettingsManager):
         self.set_option(
             "TASK_DEFAULT_PRUNE_STATUS", ["completed", "failed", "cancelled"]
         )
+        
+        # TASK_ORPHANED_HEARTBEAT_TIMEOUT (seconds) is the default task orphaned heartbeat timeout checks - default is 30 second
+        self.set_option("TASK_ORPHANED_HEARTBEAT_TIMEOUT", 30)
 
-        # The maximum number of parameters that may be received via GET or POST before a 
+        # SERVER_ERROR_CACHE_EXPIRY (Request server error cache expiry - 1 minute for 5xx errors)
+        self.set_option("SERVER_ERROR_CACHE_EXPIRY", 60)
+
+
+        # The maximum number of parameters that may be received via GET or POST before a
         # SuspiciousOperation (TooManyFields) is raised.
         #
         # In our environment, this is only relevant for django-admin, which can have a large
         # number of fields in the user admin forms. Django default is 1000, we set it to 3000.
+        self.set_option("DATA_UPLOAD_MAX_NUMBER_FIELDS", 3000)
+
+        # The maximum size in bytes that a request body may be before a SuspiciousOperation
+        # (RequestDataTooBig) is raised. Default is 2.5MB
+        self.set_option("DATA_UPLOAD_MAX_MEMORY_SIZE", 2621440)
+
+        # Auditctl API action logging
+        # can be set to a list ref tags to log POST / PUT / DELETE actions
+        # to auditctl
+        # export AUDITCTL_LOG_API_ACTIONS="member,ix"
+        # or specific actions
+        # export AUDITCTL_LOG_API_ACTIONS="member:create,member:update"
+        self.set_option("AUDITCTL_LOG_API_ACTIONS", [])
+
+        # Size of chunks for objects when making bridge requests
+        self.set_option("BRIDGE_OBJECTS_CHUNK_SIZE", 50)
+
+        # FEATURE_REQUEST_FORM_CLICKUP_LINK is the link to the feature request form in clickup
         self.set_option(
-            "DATA_UPLOAD_MAX_NUMBER_FIELDS", 3000
+            "FEATURE_REQUEST_FORM_CLICKUP_LINK",
+            "https://forms.clickup.com/14289126/f/dm276-8191/22BRHTR36S1XXC7FG7",
         )
 
-        # The maximum size in bytes that a request body may be before a SuspiciousOperation 
-        # (RequestDataTooBig) is raised. Default is 2.5MB
-        self.set_option(
-            "DATA_UPLOAD_MAX_MEMORY_SIZE", 2621440
-        )
+        # Number of results to return for blank query in autocomplete requests
+        self.set_option("AUTOCOMPLETE_NUM_BLANK_QUERY_RESULTS", 10)
 
         # eval from default.py file
         filename = os.path.join(os.path.dirname(__file__), "default.py")
         self.try_include(filename)
+
+        self.set_option("BRANDING_ORG", None, envvar_type=str)
 
     def set_default_append(self):
         DEBUG = self.get("DEBUG")
@@ -465,6 +508,9 @@ class SettingsManager(confu.util.SettingsManager):
         # timeseries db
         self.set_timeseries_db()
 
+        # redis settings
+        self.set_redis_settings()
+
     def set_timeseries_db(self):
         """
         Sets up variables required for timeseries database integration
@@ -472,10 +518,21 @@ class SettingsManager(confu.util.SettingsManager):
 
         # Timeseries database URL (e.g., http://victoriametrics:8428)
         self.set_option("TIMESERIES_DB_URL", "")
-        
+
         # User and password for timeseries database
         self.set_option("TIMESERIES_DB_USER", "")
         self.set_option("TIMESERIES_DB_PASSWORD", "")
+
+    def set_redis_settings(self):
+        """
+        Sets up variables required for Redis integration
+        """
+        # Redis connection settings
+        self.set_option("REDIS_HOST", "127.0.0.1")
+        self.set_option("REDIS_PORT", "6379")
+        self.set_option("REDIS_PASSWORD", "")
+        self.set_option("REDIS_DB", "0")
+        self.set_option("REDIS_SSL", False)
 
     def set_support(self):
         """
@@ -489,16 +546,28 @@ class SettingsManager(confu.util.SettingsManager):
         # URL to POST Feature Request form to
         self.set_option("POST_FEATURE_REQUEST_URL", "/api/account/user/contact_message")
 
+        # Disable feature request
+        self.set_bool("DISABLE_FEATURE_REQUEST", False)
+
+        # Disable help menu
+        self.set_bool("DISABLE_HELP_MENU", False)
+
+        # Disable contact us link
+        self.set_bool("DISABLE_CONTACT_US", False)
+
         # Docs URL
         self.set_option("DOCS_URL", "https://docs.fullctl.com")
 
         # Legal URL
-        self.set_option("LEGAL_URL", "https://www.fullctl.com/legal")
+        self.set_option("LEGAL_URL", "https://20c.com/legal")
 
         # Terms of Service URL
         self.set_option(
-            "TERMS_OF_SERVICE_URL", "https://www.fullctl.com/legal#section=collapseToS"
+            "TERMS_OF_SERVICE_URL", "https://20c.com/s/20C-TOS.pdf"
         )
+
+        # PDB_OAUTH_PROMPT_LINK
+        self.set_option("PDB_OAUTH_PROMPT_LINK", "no_asn")
 
     # TODO: review implementation
     def set_languages_docs(self):

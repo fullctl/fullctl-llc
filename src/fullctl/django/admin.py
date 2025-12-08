@@ -1,4 +1,5 @@
 import reversion
+from django import forms
 from django.contrib import admin, messages
 from django.http import FileResponse, HttpResponseForbidden
 from django.shortcuts import redirect
@@ -18,10 +19,15 @@ from fullctl.django.models.concrete import (
     Response,
     Task,
     TaskClaim,
+    TaskHeartbeat,
     TaskSchedule,
+    TaskScheduleClaim,
     UserSettings,
 )
-from fullctl.django.models.concrete.service_bridge import ServiceBridgeAction
+from fullctl.django.models.concrete.service_bridge import (
+    ServiceBridgeAction,
+    handler_choices,
+)
 from fullctl.django.tasks import requeue as requeue_task
 
 
@@ -57,6 +63,7 @@ class OrganizationUserInline(admin.TabularInline):
 class OrganizationAdmin(BaseAdmin):
     list_display = ("id", "name", "slug")
     inlines = (OrganizationUserInline,)
+    search_fields = ("name", "slug")
 
 
 @admin.register(OrganizationFile)
@@ -106,6 +113,12 @@ class TaskClaimInline(BaseTabularAdmin):
     extra = 0
 
 
+class TaskHeartbeatInline(BaseTabularAdmin):
+    model = TaskHeartbeat
+    extra = 0
+    readonly_fields = ("task", "timestamp")
+
+
 @admin.register(Task)
 class TaskAdmin(BaseAdmin):
     list_display = (
@@ -130,7 +143,10 @@ class TaskAdmin(BaseAdmin):
     actions = ["requeue_tasks"]
     # auto complete
     raw_id_fields = ("parent", "user", "org")
-    inlines = (TaskClaimInline,)
+    inlines = (
+        TaskClaimInline,
+        TaskHeartbeatInline,
+    )
 
     def requeue_tasks(self, request, queryset):
         """
@@ -173,6 +189,9 @@ class TaskScheduleAdmin(BaseAdmin):
         tasks = obj.tasks.all()[:5]
         return f"{tasks}"
 
+@admin.register(TaskScheduleClaim)
+class TaskScheduleClaimAdmin(BaseAdmin):
+    list_display = ("task_schedule", "worker_id", "schedule_date", "created", "updated")
 
 @admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
@@ -224,7 +243,7 @@ class UrlActionMixin:
             redir = self.make_redirect(obj, action)
             action = self.get_action(action)
             if action:
-                
+
                 # action function found, next check if the user has
                 # permission to perform the action
                 permissions = action[0].allowed_permissions
@@ -232,14 +251,16 @@ class UrlActionMixin:
 
                 # if the user passes any of the permissions, allow the action
                 for perm in permissions:
-                    fn_check_perm  = getattr(self, f"has_{perm}_permission")
+                    fn_check_perm = getattr(self, f"has_{perm}_permission")
                     allowed = fn_check_perm(request)
                     if allowed:
                         break
-                
+
                 if not allowed:
                     # user does not have permission to perform the action
-                    return HttpResponseForbidden("You do not have permission to perform this action")
+                    return HttpResponseForbidden(
+                        "You do not have permission to perform this action"
+                    )
 
                 action[0](self, request, obj)
                 return redir
@@ -264,6 +285,14 @@ class UrlActionMixin:
         return urls
 
 
+class ServiceBridgeActionForm(forms.ModelForm):
+    function = forms.ChoiceField(required=False, widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["function"].choices = self.instance.function_choices
+
+
 @admin.register(ServiceBridgeAction)
 class ServiceBridgeAction(admin.ModelAdmin):
     list_display = (
@@ -276,6 +305,14 @@ class ServiceBridgeAction(admin.ModelAdmin):
         "created",
         "updated",
     )
+
+    form = ServiceBridgeActionForm
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        field = super().formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == "function":
+            field.choices = handler_choices()
+        return field
 
 
 @admin.register(UserSettings)
@@ -328,3 +365,11 @@ class ResponseAdmin(BaseAdmin):
     search_fields = [
         "request__identifier",
     ]
+
+
+@admin.register(TaskHeartbeat)
+class TaskHeartbeatAdmin(BaseAdmin):
+    list_display = ("task", "timestamp")
+    search_fields = ("task__id",)
+    list_filter = ("task__status",)
+    readonly_fields = ("task", "timestamp")

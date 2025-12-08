@@ -242,8 +242,53 @@ manage.py fullctl_promote_user vegu -Q
 
 Fetch and process tasks in the task queue using the `fullctl_poll_tasks` command
 
+## Workers
+
 ```sh
 manage.py fullctl_poll_tasks --workers 4
 ```
 
 This will run forever and automatically fetch and process tasks that the environment is qualified to handle.
+
+## Self selecting workers
+
+```sh
+manage.py fullctl_poll_tasks --processes 4
+```
+
+The difference between `--workers` and `--processes` is that `--processes` will spawn worker processes immediately that will poll for tasks themselves. While --workers will maintain a queue of busy and idle workers and assign tasks to them, spawning processes as tasks are assigned.
+
+`--processes` is faster and will likely replace `--workers` in the future.
+
+When using `--processes`, the `--workers` parameter is automatically set to 0, so you don't need to specify it manually.
+
+### Limiting tasks per worker process
+
+You can specify a maximum number of tasks a self-selecting worker process should handle before it exits and gets respawned. This helps prevent memory leaks or resource issues in long-running worker processes.
+
+```sh
+manage.py fullctl_poll_tasks --processes 4 --max-tasks-per-process 100
+```
+
+Or using the short-form parameter:
+
+```sh
+manage.py fullctl_poll_tasks -p 4 -t 100
+```
+
+This will cause each worker process to automatically exit after processing 100 tasks, and a new worker process will be spawned to replace it. If not specified or set to 0, worker processes will continue running indefinitely.
+
+
+# Task tracking
+
+In `CommandInterface` there is a function `before_run` that runs before the command is run
+
+In the worker `Command` a separate thread is created to track the task processing to avoid blocking the main thread for the command worker
+
+The function of this thread is to update the TaskHeartbeart while the task is running
+
+This is done at intervals of the specified - env var `TASK_TRACK_INTERVAL_SECONDS`
+
+The `timestamp` field in the `TaskHeartbeat` model is used to check if the task is still running and not dead.
+
+This is always checked for all tasks when `/health` is visited

@@ -1,7 +1,7 @@
-import datetime
+import json
 import re
-import sys
 
+import structlog
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 
@@ -13,9 +13,13 @@ from django.utils.http import http_date
 from django.utils.safestring import mark_safe
 
 import fullctl.django.health_check
+import fullctl.service_bridge.aaactl as aaactl
 from fullctl.django.decorators import require_auth
 from fullctl.django.models.concrete.file import OrganizationFile
 from fullctl.django.models.concrete.tasks import Task
+from fullctl.django.util import error_context, load_branding_info
+
+log = structlog.get_logger(__name__)
 
 
 @require_auth()
@@ -38,12 +42,40 @@ def diag(request):
     return HttpResponse(mark_safe(f"<div><pre>Meta:\n{escape(txt)}</pre></div>"))
 
 
+def healthcheck_verbose_response(results: dict) -> HttpResponse:
+    html_lines = []
+    all_ok = True
+
+    for key, value in results.items():
+        status = "ok" if value["ok"] else "failed"
+        if "excluded" in value:
+            html_lines.append(f"[+]{key} excluded: {status}")
+        else:
+            html_lines.append(f"[+]{key} {status}")
+        all_ok = all_ok and value["ok"]
+
+    if all_ok:
+        html_lines.append("health check passed")
+    else:
+        html_lines.append("health check failed")
+
+    html_content = "\n".join(html_lines)
+    return HttpResponse(f"<pre>{html_content}</pre>", content_type="text/html")
+
+
 def healthcheck(request):
     """
     Performs a simple database version query
+    query params:
+        exclude: list of health checks to exclude
+        verbose: if true, return a verbose html response
     """
-    fullctl.django.health_check.check_all()
-    return HttpResponse("")
+    exclude = request.GET.getlist("exclude", [])
+    results = fullctl.django.health_check.check_all(exclude=exclude)
+    verbose = "verbose" in request.GET
+    if not verbose:
+        return HttpResponse(json.dumps(results))
+    return healthcheck_verbose_response(results)
 
 
 def authcheck(request):
@@ -71,28 +103,30 @@ def logout(request):
     return response
 
 
+def fetch_branding(branding_org: str, request) -> aaactl.OrganizationBranding | None:
+    org_branding = aaactl.OrganizationBranding().first(org=branding_org)
+    if not org_branding:
+        if http_host := request.get_host():
+            org_branding = aaactl.OrganizationBranding().first(http_host=http_host)
+
+    return org_branding
+
+
 def handle_error(request, exception, status):
-    if exception:
-        request.error_response = exception
-        exc_type = exception.__class__
-    else:
-        exc_type, exception, tb = sys.exc_info()
-
-    request.error_response = exception
-
     context = {
-        "error": {
-            "status": status,
-            "type_description": f"{exc_type}",
-            "description": f"{exception}",
-            "path": request.path,
-            "ip_address": request.META.get("HTTP_X_FORWARDED_FOR"),
-            "referer": request.META.get("HTTP_REFERER"),
-            "timestamp": datetime.datetime.utcnow(),
-        }
+        "error": error_context(status, exception, request),
+        "org_branding": {},
+        "is_error_page": True,
     }
 
-    response = render(request, f"common/errors/{status}.html", context)
+    branding = load_branding_info(
+        request, getattr(settings, "BRANDING_ORG", None), fetch_branding
+    )
+
+    if branding:
+        context["org_branding"] = branding
+
+    response = render(request, f"common/v2/errors/{status}.html", context)
     response.status_code = status
     return response
 

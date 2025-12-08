@@ -52,7 +52,6 @@ def get_ref_definition(obj):
 
 
 class ReferenceMixin:
-
     """
     Mixin class to use with django models (but also work with other object
     types)
@@ -171,7 +170,6 @@ class SourceOfTruth:
 
 
 class InternetExchange(SourceOfTruth):
-
     """
     Source of truth fetching for internet exchange objects
     from ixctl and pdbctl
@@ -199,7 +197,6 @@ class InternetExchange(SourceOfTruth):
 
 
 class InternetExchangeMember(SourceOfTruth):
-
     """
     Source of truth fetching for internet exchange member objects
     from ixctl and pdbctl (netixlan)

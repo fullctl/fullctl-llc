@@ -16,7 +16,6 @@ class PrefixctlEntity(DataObject):
 
 
 class Prefixctl(Bridge):
-
     """
     Service bridge for prefixctl data retrieval
     """

@@ -21,7 +21,6 @@ from fullctl.django.rest.serializers.aaactl_sync import Serializers
 
 @route
 class User(CachedObjectMixin, viewsets.GenericViewSet):
-
     """
     Sync user information from aaactl using the service bridge
 
@@ -64,7 +63,6 @@ class User(CachedObjectMixin, viewsets.GenericViewSet):
 
 @route
 class Organization(CachedObjectMixin, viewsets.GenericViewSet):
-
     """
     Sync organization information from aaactl using the service
     brdige
@@ -97,7 +95,6 @@ class Organization(CachedObjectMixin, viewsets.GenericViewSet):
 
 @route
 class OrganizationUser(CachedObjectMixin, viewsets.GenericViewSet):
-
     """
     Sync organization<->user relationships from aaactl using the service
     bridge

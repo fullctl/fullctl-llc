@@ -1,6 +1,7 @@
 """
 functions to calculate api usage per org for a metered service
 """
+
 REGISTERED = {}
 
 
@@ -9,7 +10,6 @@ def register(cls):
 
 
 class UsageMetric:
-
     """
     Base usage metric class, all other usage metrics
     should extend this

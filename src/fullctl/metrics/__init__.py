@@ -26,20 +26,33 @@ metrics.query("cpu_usage{host='server1'}")
 metrics.query_range("cpu_usage", "-1d", "1h")
 """
 
+import os
+
 import requests
 
 from fullctl.service_bridge.client import url_join
 
-from .schema import QueryResult, Point
+from .schema import Point, QueryResult
+
+try:
+    from django.conf import settings
+
+    TIMESERIES_DB_URL = settings.TIMESERIES_DB_URL
+    TIMESERIES_DB_USER = settings.TIMESERIES_DB_USER
+    TIMESERIES_DB_PASSWORD = settings.TIMESERIES_DB_PASSWORD
+except ImportError:
+    TIMESERIES_DB_URL = os.getenv("TIMESERIES_DB_URL", "")
+    TIMESERIES_DB_USER = os.getenv("TIMESERIES_DB_USER", "")
+    TIMESERIES_DB_PASSWORD = os.getenv("TIMESERIES_DB_PASSWORD", "")
 
 try:
     import pytimeparse2
 except ImportError:
     pytimeparse2 = None
 
-class Metrics:
-    def __init__(self, url: str, auth:tuple[str, str] | None = None):
 
+class Metrics:
+    def __init__(self, url: str, auth: tuple[str, str] | None = None):
         """
         Initialize the Metrics client
 
@@ -53,13 +66,15 @@ class Metrics:
         self.auth = auth
 
     @classmethod
-    def validate_period(cls, period: str):
+    def validate_period(cls, period: str | int):
         """
         Validate the period string
 
         Arguments:
 
         - period: The period string, e.g. "-1d", "1h", "5m" etc.
+          if an integer is passed, it is considered valid as well
+          and assumed to be in seconds (or nanoseconds)
 
         Raises:
 
@@ -69,6 +84,9 @@ class Metrics:
         if pytimeparse2 is None:
             return
 
+        if isinstance(period, int):
+            return
+
         try:
             pytimeparse2.parse(period.lstrip("-"))
         except ValueError:
@@ -76,11 +94,7 @@ class Metrics:
 
     @classmethod
     def build_query_string(
-        cls, 
-        aggregator: str, 
-        metrics: list[str],
-        tags:dict, 
-        time_range:str
+        cls, aggregator: str, metrics: list[str], tags: dict, time_range: str
     ) -> str:
         """
         Build a query string for Victoriametrics
@@ -107,23 +121,26 @@ class Metrics:
 
         # Build the metric selector
         metric_selector = f'__name__=~"{"|".join(metrics)}"'
-        
+
         # Build the tag selectors
-        tag_selectors = ','.join([f'{k}="{v}"' for k, v in tags.items() if v is not None])
-        
+        tag_selectors = ",".join(
+            [f'{k}="{v}"' for k, v in tags.items() if v is not None]
+        )
+
         # Combine metric and tag selectors
-        selector = f'{{{metric_selector}{", " if tag_selectors else ""}{tag_selectors}}}'
-        
+        selector = (
+            f'{{{metric_selector}{", " if tag_selectors else ""}{tag_selectors}}}'
+        )
+
         # Construct the full query
         if aggregator and time_range:
-            query = f'{aggregator}({selector}[{time_range}])'
+            query = f"{aggregator}({selector}[{time_range}])"
         elif aggregator:
-            query = f'{aggregator}({selector})'
+            query = f"{aggregator}({selector})"
         elif time_range:
-            query = f'{selector}[{time_range}]'
+            query = f"{selector}[{time_range}]"
 
         return query
-
 
     def to_line_protocol(
         self,
@@ -166,7 +183,9 @@ class Metrics:
         metrics.write("cpu", {"host": "server1"}, {"usage": 0.5}, timestamp=1609459200)
         """
         url = url_join(self.url, "/write").rstrip("/")
-        requests.post(url, data=self.to_line_protocol(measurement, tags, fields, timestamp))
+        requests.post(
+            url, data=self.to_line_protocol(measurement, tags, fields, timestamp)
+        )
 
     def write_many(
         self,
@@ -187,8 +206,8 @@ class Metrics:
         ]
 
         metrics.write_many(points)
-        
-        or 
+
+        or
 
         points = [
             {"measurement": "cpu", "tags": {"host": "server1"}, "fields": {"usage": 0.5}},
@@ -216,8 +235,7 @@ class Metrics:
         lines = "\n".join(lines)
         requests.post(url, data=lines, auth=self.auth)
 
-
-    def query(self, query: str, keep_metric_names:bool = False) -> QueryResult:
+    def query(self, query: str, keep_metric_names: bool = False) -> QueryResult:
         """
         Query a metric from Victoriametrics
 
@@ -253,6 +271,7 @@ class Metrics:
         end: str | None = None,
         timeout: str | None = None,
         keep_metric_names: bool = False,
+        max_lookback: str | None = None,
     ) -> QueryResult:
         """
         Query a metric range from Victoriametrics
@@ -267,7 +286,7 @@ class Metrics:
         - end: the ending timestamp of the time range for query evaluation. If the end isn’t set, then the end is automatically set to the current time.
         - timeout: optional query timeout. For example, timeout=5s. Query is canceled when the timeout is reached. By default the timeout is set to the value of -search.maxQueryDuration command-line flag passed to single-node VictoriaMetrics or to vmselect component in VictoriaMetrics cluster.
         - keep_metric_names: If True, the metric names are preserved in the result. If False, the metric names are removed from the result.
-
+        - max_lookback: optional maximum lookback duration for the query. This affects the interpolation of missing data points. A small value like `1s` will for example ensure no data points are interpolated more than 1 second away from the actual data points.
         Examples:
 
         ## Query all cpu_usage metrics for the last day
@@ -290,20 +309,19 @@ class Metrics:
         if timeout:
             params["timeout"] = timeout
 
-        data = requests.get(url, params=params, auth=self.auth).json()
+        if max_lookback:
+            params["max_lookback"] = max_lookback
 
-        print("")
-        print(query)
-        print("")
+        data = requests.get(url, params=params, auth=self.auth).json()
 
         return QueryResult(**data)
 
-    def delete(self, match:str):
+    def delete(self, match: str):
         """
         Delete a metric from Victoriametrics
 
         Arguments:
-        
+
         - match: The match string to delete the metric
 
         Examples:
@@ -317,4 +335,20 @@ class Metrics:
         params = {"match[]": match}
         response = requests.get(url, params=params, auth=self.auth)
         if response.status_code != 204:
-            raise Exception(f"Failed to delete metric: {response.status_code} {response.text}")
+            raise Exception(
+                f"Failed to delete metric: {response.status_code} {response.text}"
+            )
+
+
+def make_metrics():
+    """
+    Creates an instance of the Metrics class
+    Requires the following settings env vars
+        - TIMESERIES_DB_URL
+        - TIMESERIES_DB_USER
+        - TIMESERIES_DB_PASSWORD
+    """
+    return Metrics(
+        TIMESERIES_DB_URL,
+        ((TIMESERIES_DB_USER, TIMESERIES_DB_PASSWORD) if TIMESERIES_DB_USER else None),
+    )

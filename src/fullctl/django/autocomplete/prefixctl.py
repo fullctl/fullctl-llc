@@ -6,7 +6,6 @@ from fullctl.django.models.concrete import Organization
 
 
 class prefixctl_prefix_set(autocomplete.Select2QuerySetView):
-
     """
     Allows an org to search prefix sets by name or slug
     """

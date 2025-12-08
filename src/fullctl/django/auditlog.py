@@ -127,7 +127,6 @@ def is_enabled(model):
 
 
 class Context:
-
     """
     Auditlog context manager
     """
@@ -219,7 +218,6 @@ class Context:
 
 
 class auditlog:
-
     """
     decorator for auditlog context
     """

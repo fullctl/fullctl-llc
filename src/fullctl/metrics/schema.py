@@ -52,6 +52,7 @@ class QueryResult(pydantic.BaseModel):
 
         return self
 
+
 class Point(pydantic.BaseModel):
     measurement: str
     tags: dict[str, str | int | float]

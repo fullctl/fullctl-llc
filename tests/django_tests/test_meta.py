@@ -200,6 +200,47 @@ def test_request_429_cache_expiry(db_request):
 
 
 @pytest.mark.django_db
+def test_request_5xx_cache_expiry(db_request):
+    """
+    Test that if a 5xx response ends up in the cache, it is considered expired after 1 minute (SERVER_ERROR_CACHE_EXPIRY).
+    """
+    with requests_mock.Mocker() as m:
+        m.get("http://testurl.com", status_code=500)
+        request = Request.send("http://testurl.com")
+
+        assert request.http_status == 500
+
+        request._meta.get_field("updated").auto_now = False
+        request.updated = timezone.now() - timedelta(minutes=2)
+        request.save()
+        request._meta.get_field("updated").auto_now = True
+
+        cached_request = Request.get_cache("http://testurl.com")
+        assert cached_request is None
+
+
+@pytest.mark.django_db
+def test_request_5xx_cache_not_expired_within_timeout(db_request):
+    """
+    Test that a 5xx response in the cache is still valid within the SERVER_ERROR_CACHE_EXPIRY timeout.
+    """
+    with requests_mock.Mocker() as m:
+        m.get("http://testurl.com", status_code=502)
+        request = Request.send("http://testurl.com")
+
+        assert request.http_status == 502
+
+        request._meta.get_field("updated").auto_now = False
+        request.updated = timezone.now() - timedelta(seconds=30)
+        request.save()
+        request._meta.get_field("updated").auto_now = True
+
+        cached_request = Request.get_cache("http://testurl.com")
+        assert cached_request is not None
+        assert cached_request.http_status == 502
+
+
+@pytest.mark.django_db
 def test_old_entry_not_overwritten(db_request, db_response):
     """
     Test that if an entry is old enough, it is not overwritten but a new entry is added instead.

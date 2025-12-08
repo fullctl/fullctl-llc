@@ -27,7 +27,6 @@ class base:
 
 
 class load_object(base):
-
     """
     Will load an object and pass it to the view handler
     for `model` Model as argument `argname`
@@ -72,7 +71,6 @@ class load_object(base):
 
 
 class grainy_endpoint_response(grainy_rest_viewset_response):
-
     """
     Override of grainy_rest_viewset_response so we can
     toggle permission application to responses on or off
@@ -193,6 +191,124 @@ class grainy_endpoint(base):
         return outer
 
 
+class grainy_file_endpoint_response(grainy_endpoint_response):
+    """
+    TODO: Move grainy_file_endpoint_response to the django-grainy library
+    Override of grainy_endpoint_response to handle file responses
+    instead of JSON responses
+    """
+
+    def apply_perms(self, request, response, view_function, view):
+        """
+        For file responses, we don't need to apply perms to the response content
+        as we're sending a file instead of JSON. However, we still need to check
+        if the user has permissions to access the file.
+
+        For FileResponse, StreamingHttpResponse or other file-like responses,
+        we simply pass through the response after the permission check is done
+        in the grainy_endpoint decorator.
+        """
+        # File responses don't need content modification,
+        # permissions are checked before reaching this point
+        return response
+
+
+class grainy_file_response(grainy_endpoint):
+    """
+    A decorator for endpoints that return file responses
+    
+    This is similar to grainy_endpoint but designed to work with
+    file responses (FileResponse, StreamingHttpResponse, etc.)
+    instead of JSON responses.
+    """
+    
+    def __call__(self, fn):
+        decorator = self
+
+        local_auth = getattr(settings, "USE_LOCAL_PERMISSIONS", False)
+
+        if local_auth:
+            permissions_cls = Permissions
+        else:
+            permissions_cls = RemotePermissions
+
+        @grainy_file_endpoint_response(
+            namespace=decorator.namespace,
+            namespace_instance=decorator.namespace,
+            explicit=decorator.explicit,
+            ignore_grant_all=True,
+            permissions_cls=permissions_cls,
+            enable_apply_perms=decorator.enable_apply_perms,
+            **decorator.kwargs,
+        )
+        def inner(self, request, *args, **kwargs):
+            """
+            inner wrapper, called after grainy permissioning logic ran
+
+            handles auth requirement, loading of organization instance
+            and opening of reversion context
+            """
+
+            if decorator.require_auth and not request.user.is_authenticated:
+                return Response(status=401)
+
+            if decorator.instance_class:
+                decorator.load_org_instance(request, kwargs)
+
+            # if an api key is set, that should become the permission
+            # holder
+
+            if hasattr(request, "api_key"):
+                request.perms = permissions_cls(APIKey(request.api_key))
+
+            # check if the request is permissioned to access
+            # the fullctl service
+
+            if not request.perms.check(
+                f"service.{settings.SERVICE_TAG}.{request.org.permission_id}",
+                "r",
+                ignore_grant_all=True,
+            ):
+                return Response(status=403)
+
+            with reversion.create_revision():
+                if isinstance(request.user, get_user_model()):
+                    reversion.set_user(request.user)
+                else:
+                    reversion.set_comment(f"{request.user}")
+
+                if local_auth:
+                    return fn(self, request, *args, **kwargs)
+                else:
+                    with ServiceBridgeContext(request.org):
+                        return fn(self, request, *args, **kwargs)
+
+        inner.__name__ = fn.__name__
+
+        @wraps(fn)
+        def outer(self, request, *args, **kwargs):
+            """
+            outer wrapper, called before grainy permissioning logic runs
+
+            handles superuser imitation for sufficiently provisioned api keys
+            """
+
+            as_user = request.headers.get("X-User")
+            if as_user and hasattr(request, "api_key"):
+                if permissions_cls(APIKey(request.api_key)).check(
+                    f"superuser.{as_user}", "c"
+                ):
+                    request.user = get_user_model().objects.get(
+                        social_auth__uid=as_user
+                    )
+
+            return inner(self, request, *args, **kwargs)
+
+        outer.__name__ = fn.__name__
+
+        return outer
+
+
 class _aaactl:
     @property
     def connected(self):
@@ -203,7 +319,6 @@ class _aaactl:
 
 
 class billable(_aaactl):
-
     """
     Will use the aaactl service bridge to determine
     if the specified product/service has accumulated

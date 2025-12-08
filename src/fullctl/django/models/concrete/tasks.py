@@ -6,17 +6,23 @@ import time
 import traceback
 from io import StringIO
 
+import pydantic
+import structlog
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
-from django.db import models
+from django.db import IntegrityError, models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import fullctl.django.tasks
+import fullctl.django.tasks.extensions as extensions
+import fullctl.service_bridge.aaactl as aaactl
+import fullctl.service_bridge.auditctl as auditctl
 from fullctl.django.models.abstract.base import HandleRefModel
+from fullctl.django.tasks.context import task_execution_context
 from fullctl.django.tasks.qualifiers import Dynamic
 from fullctl.django.tasks.util import worker_id
 
@@ -27,11 +33,16 @@ __all__ = [
     "TaskLimitError",
     "TaskAlreadyStarted",
     "ParentTaskNotFinished",
+    "TaskCancelledException",
     "Task",
     "TaskClaim",
+    "TaskHeartbeat",
     "TaskSchedule",
+    "TaskScheduleClaim",
     "CallCommand",
 ]
+
+log = structlog.get_logger(__name__)
 
 
 class LimitAction:
@@ -42,6 +53,13 @@ class LimitAction:
 class TaskClaimed(IOError):
     def __init__(self, task):
         super().__init__(f"Task already claimed by another worker: {task}")
+
+
+class TaskScheduleClaimed(IOError):
+    def __init__(self, task_schedule):
+        super().__init__(
+            f"Task schedule already claimed by another worker: {task_schedule}"
+        )
 
 
 class WorkerUnqualified(IOError):
@@ -87,6 +105,14 @@ class TaskMaxAgeError(IOError):
     pass
 
 
+class TaskHeartbeatError(IOError):
+    """
+    Raised when a running/pending task heartbeat is not updated
+    """
+
+    pass
+
+
 class ParentTaskNotFinished(IOError):
     """
     Raised when trying to work a child task
@@ -96,8 +122,32 @@ class ParentTaskNotFinished(IOError):
     pass
 
 
-class Task(HandleRefModel):
+class TaskCancelledException(IOError):
+    """
+    Raised when a task is cancelled during execution.
 
+    This allows graceful termination of task execution. The task execution
+    framework catches this exception and:
+    - Does NOT mark the task as failed
+    - Preserves the cancelled status
+    - Does NOT trigger error notifications
+
+    This exception should be raised by task.check_cancelled() when it
+    detects that the task status has been set to "cancelled".
+    """
+
+    def __init__(self, task):
+        super().__init__(f"Task was cancelled: {task.id}")
+        self.task = task
+
+
+class ErrorNotificationConfig(pydantic.BaseModel):
+    subject: str
+    message: str
+    category: str
+
+
+class Task(HandleRefModel):
     """
     Describes an asynchronous task
 
@@ -200,6 +250,13 @@ class Task(HandleRefModel):
         indexes = [
             models.Index(fields=["status"]),
             models.Index(fields=["op"]),
+            models.Index(fields=["created"]),
+            models.Index(fields=["queue_id"]),
+            models.Index(
+                fields=["status", "-requeued", "created"],
+                condition=models.Q(queue_id__isnull=True),
+                name="idx_poll_next_tasks",
+            ),
         ]
 
     class HandleRef:
@@ -337,6 +394,12 @@ class Task(HandleRefModel):
         """
         if self.status == "completed":
             typ = self.task_meta_property("result_type", str)
+            # handle json on dict type
+            if typ == dict:
+                if not self.output:
+                    return {}
+                return json.loads(self.output)
+
             return typ(self.output)
         return None
 
@@ -482,15 +545,105 @@ class Task(HandleRefModel):
         self.status = "cancelled"
         self.save()
 
+    def check_cancelled(self):
+        """
+        Check if the task has been cancelled and raise TaskCancelledException if so.
+
+        This method should be called periodically during long-running task execution
+        to allow for graceful cancellation. It refreshes the task status from the
+        database to check for cancellation requests.
+
+        Raises:
+            TaskCancelledException: If the task status is 'cancelled'
+
+        Usage example:
+            def run(self, *args, **kwargs):
+                for item in large_collection:
+                    self.check_cancelled()  # Check before processing each item
+                    process(item)
+
+        Note:
+            In most cases, you should use check_task_cancelled() from
+            fullctl.django.tasks.context instead of calling this directly.
+            The context function works anywhere in the call stack.
+        """
+        # Refresh status from database to get latest value
+        self.refresh_from_db(fields=["status"])
+
+        if self.status == "cancelled":
+            raise TaskCancelledException(self)
+
     def _complete(self, output):
+
+        # if result is a dict we need to json encode it
+        if (
+            isinstance(output, dict)
+            and self.task_meta_property("result_type") == dict
+            and output
+        ):
+            output = json.dumps(output)
+
         self.output = output
         self.status = "completed"
         self.save()
 
-    def _fail(self, error):
-        self.error = error
+    def _fail(self, error_traceback: str, exc: Exception):
+        self.error = error_traceback
         self.status = "failed"
         self.save()
+        try:
+            self.handle_error_notification(exc)
+        except Exception as exc:
+            log.exception("Failed to send task error notification", exc=exc)
+
+    def handle_error_notification(self, exc: Exception):
+        """
+        First checks if the task has an error_notification
+        configured through the TaskMeta class, if so it
+        will send an email to the recipients specified
+        in aaactl.PointOfContact
+        """
+
+        error_notification_config: dict | ErrorNotificationConfig | None = (
+            self.task_meta_property("error_notification", None)
+        )
+
+        if not error_notification_config:
+            return
+
+        if isinstance(error_notification_config, dict):
+            error_notification_config = ErrorNotificationConfig(
+                **error_notification_config
+            )
+
+        recipients = aaactl.PointOfContact().get_recipients(
+            self.org,
+            settings.SERVICE_TAG,
+            delivery_type="email",
+            poc_type="error_notifications",
+        )
+
+        if not recipients:
+            log.debug(
+                "Task failed, error notification configured, but no recipients found.",
+                org=self.org.slug,
+                delivery_type="email",
+                poc_type="error_notifications",
+            )
+            return
+
+        compiled_message = "\n\n".join(
+            [error_notification_config.message, str(exc), f"Task ID: {self.id}"]
+        )
+
+        auditctl.Event().send_error_email(
+            self.org.slug,
+            settings.SERVICE_TAG,
+            category=error_notification_config.category,
+            subject=error_notification_config.subject,
+            message=compiled_message,
+            recipients=recipients,
+        )
 
     def _run(self):
         if self.status != "pending":
@@ -504,12 +657,32 @@ class Task(HandleRefModel):
         t_start = time.time()
         try:
             param = self.param
-            output = self.run(*param["args"], **param["kwargs"])
+            extensions.call(self, "before_run", *param["args"], **param["kwargs"])
+
+            # Wrap task execution in context so task can be accessed
+            # from anywhere in the call stack via check_task_cancelled()
+            with task_execution_context(self):
+                output = self.run(*param["args"], **param["kwargs"])
+
+            extensions.call(self, "after_run", result=output)
             t_end = time.time()
             self.time = t_end - t_start
             self._complete(output)
-        except Exception:
-            self._fail(traceback.format_exc())
+        except TaskCancelledException:
+            # Task was cancelled during execution - this is expected behavior
+            # Status is already set to "cancelled" by the cancel() call
+            # We don't call _fail() to avoid marking it as an error
+            t_end = time.time()
+            self.time = t_end - t_start
+            self.save()
+            log.info(
+                "Task cancelled during execution",
+                task_id=self.id,
+                task_op=self.op,
+                execution_time=self.time,
+            )
+        except Exception as exc:
+            self._fail(traceback.format_exc(), exc)
 
     def run(self, *args, **kwargs):
         """extend in proxy model"""
@@ -520,8 +693,26 @@ class Task(HandleRefModel):
         subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-class TaskClaim(HandleRefModel):
+class TaskHeartbeat(models.Model):
+    task = models.OneToOneField(
+        Task, related_name="heartbeat", on_delete=models.CASCADE
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = "fullctl_task_heartbeat"
+        verbose_name = _("Task Heartbeat")
+        verbose_name_plural = _("Task Heartbeats")
+
+        indexes = [
+            models.Index(fields=["timestamp"]),
+        ]
+
+    def __str__(self):
+        return f"{self.task.id} - {self.timestamp}"
+
+
+class TaskClaim(HandleRefModel):
     """
     Used by a worker to claim a task
 
@@ -546,7 +737,6 @@ class TaskClaim(HandleRefModel):
 
 
 class TaskSchedule(HandleRefModel):
-
     """
     Implements delayed and repeated task execution
     """
@@ -645,26 +835,59 @@ class TaskSchedule(HandleRefModel):
         if self.are_limited_tasks_pending():
             return []
 
+        # try to create a claim for the schedule
+        try:
+            schedule_claim = TaskScheduleClaim.objects.create(
+                task_schedule=self,
+                worker_id=worker_id(),
+                schedule_date=self.schedule,
+            )
+        except IntegrityError:
+            raise TaskScheduleClaimed(self)
+
+        # clear old claims
+        TaskScheduleClaim.objects.filter(task_schedule=self).exclude(
+            id=schedule_claim.id
+        ).delete()
+
         for task in self.tasks.all():
             if task.status in ["pending", "running"]:
                 raise TaskAlreadyStarted()
 
-        tasks = fullctl.django.tasks.create_tasks_from_json(
-            self.task_config,
-            user=self.user,
-            org=self.org,
-        )
+        try:
+            tasks = fullctl.django.tasks.create_tasks_from_json(
+                self.task_config,
+                user=self.user,
+                org=self.org,
+            )
 
-        if self.repeat:
-            self.reschedule()
-        else:
-            self.status = "deactivated"
-            self.save()
-
-        for task in tasks:
-            self.tasks.add(task)
+            for task in tasks:
+                self.tasks.add(task)
+        finally:
+            # ALWAYS reschedule the schedule, otherwise a failure in task creation
+            # can cause the schedule to get stuck (a task schedule claim will exist)
+            if self.repeat:
+                self.reschedule()
+            else:
+                self.status = "deactivated"
+                self.save()
 
         return tasks
+
+
+class TaskScheduleClaim(HandleRefModel):
+    task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE)
+    worker_id = models.CharField(max_length=255)
+    schedule_date = models.DateTimeField()
+
+    class Meta:
+        db_table = "fullctl_task_schedule_claim"
+        verbose_name = _("Task Schedule Claim")
+        verbose_name_plural = _("Task Schedule Claims")
+        unique_together = ("task_schedule", "schedule_date")
+
+    class HandleRef:
+        tag = "task_schedule_claim"
 
 
 class Monitor(HandleRefModel):
@@ -728,7 +951,6 @@ class Monitor(HandleRefModel):
 
 @fullctl.django.tasks.register
 class CallCommand(Task):
-
     """
     Django management tasks
     """

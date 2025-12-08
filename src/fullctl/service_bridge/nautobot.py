@@ -16,7 +16,6 @@ class NautobotObject(DataObject):
 
 
 class Nautobot(Bridge):
-
     """
     Service bridge for nautobot data retrieval
     """

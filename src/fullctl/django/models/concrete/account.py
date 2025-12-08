@@ -59,7 +59,6 @@ class UserSettings(HandleRefModel):
 @reversion.register()
 @grainy_model(namespace="org", namespace_instance="org.{instance.permission_id}")
 class Organization(HandleRefModel):
-
     """
     Describes an organization
     """
@@ -148,7 +147,9 @@ class Organization(HandleRefModel):
 
             org_ids.add(ns[1])
 
-        orgs_by_id = {org.remote_id: org for org in cls.objects.filter(remote_id__in=org_ids)}
+        orgs_by_id = {
+            org.remote_id: org for org in cls.objects.filter(remote_id__in=org_ids)
+        }
 
         for org in orgs_by_id.values():
             if org not in related_orgs:
@@ -226,7 +227,6 @@ class Organization(HandleRefModel):
 
 @grainy_model(namespace="org")
 class Instance(HandleRefModel):
-
     """
     app instance, one per org per app
 
@@ -267,7 +267,6 @@ class Instance(HandleRefModel):
 @reversion.register()
 @grainy_model(namespace="org")
 class OrganizationUser(HandleRefModel):
-
     """
     Describes a user -> organization relationship
     """

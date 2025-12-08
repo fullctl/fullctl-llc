@@ -70,6 +70,15 @@ def test_fullctl_work_task(db, dj_account_objects):
     assert int(task.output) == 3
 
 
+def test_fullctl_work_task_self_select(db, dj_account_objects):
+    task = models.TestTask.create_task(1, 2)
+    management.call_command("fullctl_work_task", "--once")
+    task = specify_task(Task.objects.get(id=1))
+
+    assert task.status == "completed"
+    assert int(task.output) == 3
+
+
 @patch("fullctl.django.management.commands.fullctl_work_task.Command.run")
 def test_fullctl_work_task_error_handling_in_run(mock_run, db, dj_account_objects):
     # test error handling of errors in `run` call
@@ -81,6 +90,23 @@ def test_fullctl_work_task_error_handling_in_run(mock_run, db, dj_account_object
 
     assert task.status == "failed"
     assert "Test exception" in task.error
+
+
+@patch("fullctl.django.management.commands.fullctl_work_task.Command.poll_tasks")
+def test_fullctl_work_task_error_handling_in_poll_tasks(
+    mock_poll_tasks, db, dj_account_objects
+):
+    # test error handling of errors in `poll_tasks` call
+    task = models.TestTask.create_task(1, 2)
+    mock_poll_tasks.side_effect = Exception("Test exception")
+
+    management.call_command("fullctl_work_task", "--once")
+    task = specify_task(Task.objects.get(id=1))
+
+    # poll task failed, so task should be pending still and
+    # not have a queue_id
+    assert task.status == "pending"
+    assert task.queue_id is None
 
 
 @patch("fullctl.django.management.commands.base.CommandInterface.handle")

@@ -1,9 +1,9 @@
 from dal import autocomplete
+from django.conf import settings
 from django.utils import html
 
 import fullctl.service_bridge.devicectl as devicectl
 from fullctl.django.models.concrete import Organization
-
 
 class devicectl_port(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -16,7 +16,14 @@ class devicectl_port(autocomplete.Select2QuerySetView):
             return []
 
         if not self.q:
-            return []
+            # with a blank query we load the first N ports with IPs
+            return [
+                o for o in devicectl.Port().objects(
+                    org_slug=org.slug,
+                    has_ips=1, 
+                    limit=settings.AUTOCOMPLETE_NUM_BLANK_QUERY_RESULTS
+                )
+            ]
 
         qs = [o for o in devicectl.Port().objects(org_slug=org.slug, q=self.q)]
         return qs

@@ -13,7 +13,6 @@ __all__ = ["AuditLog"]
 
 
 class AuditLog(models.Model):
-
     """
     timestamp
     """

@@ -20,6 +20,11 @@
 - `PEERCTL_URL` - host url for peerctl service (e.g., "https://peer.fullctl.com")
 - `PREFIXCTL_URL` - host url for prefixctl service (e.g., "https://prefix.fullctl.com")
 - `DEVICECTL_URL` - host url for devicectl service (e.g., "https://device.fullctl.com")
+- `BRIDGE_OBJECTS_CHUNK_SIZE` - Size of chunks for objects when making bridge requests
+
+### Logging
+
+- `AUDITCTL_LOG_API_ACTIONS` - set up logging of REST api actions to auditctl. Should be a comma separated list of ref tags or ref_tag:action pairs. For example, `ix` or `ix,member` or `ix:create,ix:delete,member:delete`.
 
 ### Operational
 
@@ -42,3 +47,19 @@
 - `BILLING_INTEGRATIOON` - if False will disable all billing checks
 - `SERVICE_TAG` - should be the service reference tag (e.g., 'ixctl')
 - `USE_LOCAL_PERMISSIONS` - if `True` permissions will be handled locally instead of through aaactl.
+
+### Support
+
+- `CONTACT_US_EMAIL` - email address to send contact us messages to, defaults to `SUPPORT_EMAIL`
+- `SUPPORT_EMAIL` - email address to send support messages to, defaults to `SERVER_EMAIL`
+- `POST_FEATURE_REQUEST_URL` - url to post feature requests to
+- `DISABLE_FEATURE_REQUEST` - if `True` will disable the feature request form
+- `DISABLE_HELP_MENU` - if `True` will disable the help menu in the lower right corner
+- `DISABLE_CONTACT_US` - if `True` will disable the contact us form and link
+- `DOCS_URL` - url to the documentation
+- `LEGAL_URL` - url to the legal page
+- `TERMS_OF_SERVICE_URL` - url to the terms of service page
+- `PDB_OAUTH_PROMPT_LINK` - controls how call to action for linking a peeringdb account is displayed
+    - `never` - never show the call to action
+    - `no_asn` - only show if there are no ASN authorizations
+    - `always` - always show if there are no linked PeeringDB accounts

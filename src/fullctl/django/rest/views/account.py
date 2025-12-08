@@ -14,7 +14,6 @@ from fullctl.django.util import verified_asns
 
 @route
 class Organization(viewsets.GenericViewSet):
-
     """
     Manage user's organizations
     """

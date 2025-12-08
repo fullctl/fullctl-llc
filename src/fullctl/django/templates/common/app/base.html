@@ -75,7 +75,11 @@ fullctl.permissions = {{ permissions|safe }}
       {% block "header_left" %}
       <div class="app-switcher" data-element="app_switcher">
         <div class="selected {{ request.app_id }}">
-          <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ service_tag }}">
+          {% if org_branding.custom_org %}
+            <img class="app-logo" src="{{ org_branding.dark_logo_url }}" alt="{{ org_branding.name }}">
+          {% else %}
+            <img class="app-logo" src="{% static service_logo_dark %}" alt="{{ service_tag }}">
+          {% endif %}
         <span class="icon {{ request.app_id }} icon-caret-down"></span>
         <div class="others" style="display:none">
           {% for service_app in service_applications %}

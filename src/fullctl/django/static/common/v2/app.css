@@ -204,6 +204,11 @@ button:focus {
   width: 50px;
 }
 
+div.dt-processing>div {
+  display: none;
+}
+
+div.dt-processing,
 .loading-indicator,
 .loading-shim:after {
   content: '';
@@ -212,6 +217,26 @@ button:focus {
   height: 84%;
   width: 100%;
   max-height: 84px;
+  position: inherit;
+  top: 0;
+}
+
+.task-status-row {
+  padding-left: 30px;
+  position: relative;
+}
+
+.task-status-row .status,
+.task-status-row .loading-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.task-status-row .result {
+  font-size: 14px;
 }
 
 .loading-indicator-container.fixed {
@@ -308,6 +333,11 @@ button {
   }
 }
 
+div.validation-error-hint > div {
+  padding: 5px;
+  margin: 5px;
+}
+
 div.validation-error {
   position: absolute;
   top: 3px;
@@ -350,6 +380,18 @@ div.loading-anim {
 
 .marg-bot-sm {
   margin-bottom: 5px;
+}
+
+.marg-right-sm {
+  margin-right: 5px;
+}
+
+.marg-right-md {
+  margin-right: 12px;
+}
+
+.marg-right-lg {
+  margin-right: 24px;
 }
 
 .marg-sm {
@@ -773,6 +815,26 @@ span.icon {
   -webkit-mask-repeat: no-repeat;
 }
 
+div.hierarchy div.item span.icon,
+div.legend span.icon {
+  width: 16px;
+  height: 16px;
+  mask-size: cover;
+  vertical-align: middle;
+}
+
+span.icon-sm {
+  width: 16px;
+  height: 16px;
+  mask-size: cover;
+}
+
+span.icon-md {
+  width: 24px;
+  height: 24px;
+  mask-size: cover;
+}
+
 span.icon-lg {
   width: 32px;
   height: 32px;
@@ -822,6 +884,11 @@ span.icon-theme-switcher {
 span.icon-help {
   -webkit-mask-image: url(icons/help.svg);
   mask-image: url(icons/help.svg);
+}
+
+span.icon-info {
+  -webkit-mask-image: url(icons/info.svg);
+  mask-image: url(icons/info.svg);
 }
 
 span.icon-caret-y {
@@ -908,6 +975,21 @@ span.icon-location {
 span.icon-report {
   -webkit-mask-image: url(icons/file-earmark-text.svg);
   mask-image: url(icons/file-earmark-text.svg);
+}
+
+span.icon-device {
+  -webkit-mask-image: url(icons/device.svg);
+  mask-image: url(icons/device.svg);
+}
+
+span.icon-logical {
+  -webkit-mask-image: url(icons/logical.svg);
+  mask-image: url(icons/logical.svg);
+}
+
+span.icon-processor {
+  -webkit-mask-image: url(icons/processor.svg);
+  mask-image: url(icons/processor.svg);
 }
 
 span.icon-as {
@@ -1128,6 +1210,12 @@ div.menu .button {
 
 .list-table.small td {
   padding: var(--size-50) var(--size-425);
+}
+
+
+.list-table th.checkbox-cell,
+.list-table td.checkbox-cell {
+  width: 50px;
 }
 
 button.solid-active,
@@ -1430,6 +1518,7 @@ div.modal-body div.border-top-seperator {
 div.controls select.form-control,
 div.controls input[type="text"],
 div.controls input[type="password"],
+div.controls input[type="number"],
 div.controls textarea,
 div.controls select {
   font-size: 14px;
@@ -1445,6 +1534,7 @@ div.controls .select2-container--default .select2-selection--single:disabled,
 div.controls textarea:disabled,
 div.controls input[type="text"]:disabled,
 div.controls input[type="password"]:disabled,
+div.controls input[type="number"]:disabled,
 div.controls select:disabled {
   padding: 0px;
 }
@@ -1454,6 +1544,8 @@ div.controls input[type="text"],
 div.controls input[type="text"]:disabled,
 div.controls input[type="password"],
 div.controls input[type="password"]:disabled,
+div.controls input[type="number"],
+div.controls input[type="number"]:disabled,
 div.controls select.form-control {
   padding: 15px 16px;
   height: auto;
@@ -1463,15 +1555,24 @@ div.controls textarea {
   padding: 6px 8px;
 }
 
+div.controls h6,
 div.controls label {
   font-size: 14px;
   line-height: 16px;
+  font-weight: normal;
   letter-spacing: 2.4px;
   margin-bottom: 12px;
 }
 
 div.controls .form-check {
   margin-bottom: 15px;
+}
+
+div.controls input[type="radio"]~label {
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-left: 5px;
 }
 
 div.controls input[type="checkbox"]~label {
@@ -1673,7 +1774,7 @@ footer div[type="button"]:is(:hover, :focus){
   display: block;
   padding: 1rem;
   text-decoration: none;
-  color: var(--foreground);
+  color: var(--foreground) !important;
 }
 
 .help-box.js-hide {
@@ -1779,7 +1880,7 @@ img.service-link ~ span.icon {
  */
 
 .select2-selection__placeholder {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 div.autocomplete-item {
@@ -1834,6 +1935,11 @@ div.autocomplete-controls {
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   right: 4px;
   top: initial;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding-bottom: 3px;
+  padding-top: 3px;
 }
 
 /* table display */
@@ -2000,4 +2106,97 @@ button.badge-btn:disabled {
 }
 .right {
     text-align: right;
+}
+
+.up .icon-triangle-fill-up {
+  background-color: green;
+}
+
+.down .icon-triangle-fill-down {
+  background-color: red;
+}
+
+.warn .icon-triangle-fill-down {
+  background-color: yellow;
+}
+
+.bgp_stat_v6, .bgp_stat_v4, .bgp_stat_aggregate {
+  margin-top: 5px;
+  text-wrap: nowrap;
+  cursor: default;
+}
+
+.light_level_stat {
+  text-wrap: nowrap;
+  cursor: default;
+}
+
+div.legend {
+  font-size: 14px;
+}
+
+div.legend span.legend-label {
+  margin-right: 5px;
+}
+
+div.hierachy {
+  font-size: 14px;
+}
+
+div.hierarchy div.item input[type="checkbox"] {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+div.hierarchy div.item.l0 {
+  margin-left: 0px;
+}
+
+div.hierarchy div.item.l1 {
+  margin-left: 20px;
+}
+
+div.hierarchy div.item.l2 {
+  margin-left: 40px;
+}
+
+.port_is_hot {
+  cursor: default;
+}
+
+.form_feature_request {
+  height: 100%;
+}
+
+#modal_feature_request>div.modal-dialog {
+  height: 96%;
+}
+
+#modal_feature_request>div.modal-dialog>div.modal-content {
+  height: inherit;
+}
+
+.list-th.sortable-button {
+  width: fit-content;
+}
+
+
+div.tip {
+  font-size: 11px;
+  padding: 5px;
+}
+.small-header {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 12px;
+  max-width: 125px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.small-header.decent {
+  margin-bottom: -5px;
 }

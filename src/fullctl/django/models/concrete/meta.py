@@ -63,7 +63,6 @@ class Response(BaseResponse):
 
 
 class Attachment(BaseAttachment):
-
     """
     file attachment model
     """

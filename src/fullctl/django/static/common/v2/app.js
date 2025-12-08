@@ -143,16 +143,24 @@ fullctl.util.is_valid_ip4 = (ip) => {
 }
 
 fullctl.formatters.pretty_speed = (value) => {
+
+  if(value === null || value === undefined)
+    return "-";
+
   if(value >= 1000000)
     value = parseInt(value / 1000000)+"T";
   else if(value >= 1000)
     value = parseInt(value / 1000)+"G";
   else
-    value = value+"M";
+    value = parseInt(value)+"M";
   return value
 }
 
 fullctl.formatters.pretty_speed_bits = (value) => {
+
+  if(value === null || value === undefined)
+    return "-";
+
   if(value >= 1e13)
     value = parseInt(value / 1e12)+"T";
   else if(value >= 1e10)
@@ -162,7 +170,7 @@ fullctl.formatters.pretty_speed_bits = (value) => {
   else if(value >= 1e4)
     value = parseInt(value / 1e3)+"K";
   else
-    value = value+"";
+    value = parseInt(value)+"";
   return value
 }
 
@@ -587,6 +595,10 @@ fullctl.application.Modal = $tc.extend(
 
     set_title : function(title) {
       this.jquery.find('.modal-title').text(title);
+    },
+
+    set_subtitle : function(subtitle) {
+      this.jquery.find('.modal-subtitle').text(subtitle);
     },
 
     set_content : function(content) {
@@ -1409,12 +1421,7 @@ fullctl.application.ModalFeatureRequest = $tc.extend(
       });
 
       // construct modal
-
-      this.Modal("save", (!title ? "Feature Request" : title), form.element);
-
-      // wire form to modal's submit button
-
-      form.wire_submit(this.$e.button_submit);
+      this.Modal("feature_request", (!title ? "Feature Request" : title), form.element);
     }
   },
   fullctl.application.Modal

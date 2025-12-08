@@ -25,7 +25,6 @@ def reset_auto_fields():
 
 
 class AccountObjects:
-
     """
     Sets up users and orgs for testing
     """

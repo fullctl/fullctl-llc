@@ -1,11 +1,19 @@
 """
 Context manager for a service bridge context owned by a specific organization
 """
+
 import dataclasses
 from contextvars import ContextVar
 from importlib import import_module
 
 from .aaactl import ServiceApplication
+
+__all__ = [
+    "ServiceBridgeContext",
+    "service_bridge_context",
+    "ServiceBridgeContextState",
+    "service_available",
+]
 
 
 @dataclasses.dataclass
@@ -95,3 +103,22 @@ class ServiceBridgeContext:
     def __exit__(self, *exc):
         service_bridge_context.reset(self.token)
         return False
+
+
+def service_available(org: object, service_slug: str) -> bool:
+    """
+    Returns whether or not the specified service is available for the
+    provided `Organization`.
+
+    This will work both if the service is set up as a federated service
+    specifically for the org, or if the service is available to the org
+    through global service availability.
+
+    Arguments:
+        org {Organization} -- Organization object
+        service_slug {str} -- Service slug
+    """
+    with ServiceBridgeContext(org):
+        ctx = service_bridge_context.get()
+        fnt_svc = ctx.get_service(service_slug)
+        return fnt_svc is not None

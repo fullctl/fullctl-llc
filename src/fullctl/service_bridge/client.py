@@ -153,6 +153,10 @@ class Bridge:
 
         data = self._data(requests.get(url, **self._requests_kwargs(**kwargs)))
 
+        # uncomment to debug non-cached request performance in all bridges
+        # process_time = time.time() - now
+        # print(f"SERVICE BRIDGE GET: {url} {params} - {process_time:.2f}s")
+
         if self.cache is not None:
             self.cache.setdefault(url, {})[params] = (data, now)
 
@@ -263,7 +267,6 @@ class Bridge:
 
 
 class AaaCtl(Bridge):
-
     """
     Service bridge to aaactl
 

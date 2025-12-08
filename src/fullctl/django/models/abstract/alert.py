@@ -11,7 +11,6 @@ ALERT_RECIPIENT_TYPE = (("email", _("Email")),)
 
 
 class AlertGroup(HandleRefModel):
-
     """
     Describes a group of recipients for alert notifications
     """
@@ -65,7 +64,6 @@ class AlertGroup(HandleRefModel):
 
 
 class AlertRecipient(HandleRefModel):
-
     """
     Describes a recipient for an alert notification.
 

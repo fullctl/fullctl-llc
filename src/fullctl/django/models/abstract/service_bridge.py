@@ -11,7 +11,6 @@ __all__ = [
 
 
 class ServiceBridgeReferenceModel(HandleRefModel):
-
     """
     Enables a model to have a main reference at another service
     supported by the fullctl service bridge
@@ -160,7 +159,6 @@ class ServiceBridgeReferenceModel(HandleRefModel):
                     pass
 
                 changed = True
-                print(f"{src_field} changed from {src_value} to {dest_value}")
                 setattr(self, src_field, dest_value)
 
         # print("sync from reference", self, changed)

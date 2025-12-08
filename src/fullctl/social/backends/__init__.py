@@ -3,6 +3,7 @@ Social Auth backends for aaaCtl OAuth2.
 
 Replaces the deprecated `fullctl.django.social.backends` module.
 """
+
 import os
 
 from social_core.backends.oauth import BaseOAuth2

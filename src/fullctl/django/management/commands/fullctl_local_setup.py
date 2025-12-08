@@ -11,7 +11,6 @@ from fullctl.django.models.concrete.account import Organization, OrganizationUse
 
 
 class Command(CommandInterface):
-
     """
     if `USE_LOCAL_PERMISSIONS` is set to True, this command will
     guide the user through setting up a local organization and

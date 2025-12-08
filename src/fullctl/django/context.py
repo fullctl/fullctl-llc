@@ -52,7 +52,6 @@ def current_request(request=None):
 
 
 class ServiceBridgeSync:
-
     """
     Context object for service bridge sync
 

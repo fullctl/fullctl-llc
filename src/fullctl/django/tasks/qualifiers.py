@@ -14,7 +14,6 @@ __all__ = [
 
 
 class Base:
-
     """
     Base task qualifier interface
 
@@ -72,7 +71,6 @@ class Setting(Base):
 
 
 class SettingUnset(Base):
-
     """
     Requires a specific setting to be UNSET
     """
@@ -92,7 +90,6 @@ class SettingUnset(Base):
 
 
 class ConcurrencyLimit(Base):
-
     """
     Limits how many instance of the task can be worked on at
     the same time

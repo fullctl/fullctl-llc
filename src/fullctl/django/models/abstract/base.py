@@ -56,7 +56,6 @@ class SlugModel(HandleRefModel):
 
 
 class GeoModel(models.Model):
-
     """
     Mixin class to use on models that need to store a geo location
     """
@@ -83,7 +82,6 @@ class GeoModel(models.Model):
 
 
 class PdbRefModel(HandleRefModel):
-
     """
     Base class for models that reference a peeringdb model
     """

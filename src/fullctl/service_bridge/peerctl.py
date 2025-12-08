@@ -16,7 +16,6 @@ class PeerctlEntity(DataObject):
 
 
 class Peerctl(Bridge):
-
     """
     Service bridge for peerctl data retrieval
     """
@@ -45,3 +44,13 @@ class Network(Peerctl):
     class Meta(Peerctl.Meta):
         ref_tag = "net"
         data_object_cls = NetworkObject
+
+
+class PortInfoObject(PeerctlEntity):
+    description = "Port Info Object"
+
+
+class PortInfo(Peerctl):
+    class Meta(Peerctl.Meta):
+        ref_tag = "port_info"
+        data_object_cls = PortInfoObject

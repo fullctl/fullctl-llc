@@ -1,7 +1,6 @@
-from datetime import datetime
+from unittest.mock import MagicMock, patch
 
 from django.http import HttpRequest
-from unittest.mock import patch, MagicMock
 
 from fullctl.django import context_processors
 from fullctl.django.auth import RemotePermissionsError
@@ -29,7 +28,9 @@ def test_account_service(db, dj_account_objects, settings):
 
 
 @patch("fullctl.django.context_processors.OrganizationBranding")
-def test_account_service_with_branding_org_setting(mock_org_branding, db, dj_account_objects, settings):
+def test_account_service_with_branding_org_setting(
+    mock_org_branding, db, dj_account_objects, settings
+):
     request = HttpRequest()
     request.META["SERVER_NAME"] = "dev"
     request.META["SERVER_PORT"] = "8080"
@@ -39,7 +40,7 @@ def test_account_service_with_branding_org_setting(mock_org_branding, db, dj_acc
     mock_org_branding_instance = MagicMock()
     mock_org_branding.return_value = mock_org_branding_instance
     mock_org_branding_instance.first.return_value = MagicMock(
-        css={'primary_color': 'red'}, org_name=dj_account_objects.org.name
+        css={"primary_color": "red"}, org_name=dj_account_objects.org.name
     )
 
     expected = {
@@ -55,7 +56,7 @@ def test_account_service_with_branding_org_setting(mock_org_branding, db, dj_acc
 
     assert context["account_service"] == expected
     assert context["org_branding"]["name"] == dj_account_objects.org.name
-    assert context["org_branding"]["css"] == {'primary_color': 'red'}
+    assert context["org_branding"]["css"] == {"primary_color": "red"}
 
 
 def test_account_service_no_org(db, dj_account_objects, settings):
@@ -137,13 +138,18 @@ def test_conf(db, dj_account_objects, settings):
         "google_analytics_id": None,
         "cloudflare_analytics_id": "asdf",
         "support_email": "support@localhost",
-        "no_reply_email": "noreply@localhost",
         "contact_us_email": "hello@localhost",
+        "no_reply_email": "noreply@localhost",
         "post_feature_request_url": "test://new-feature",
+        "disable_feature_request": False,
+        "disable_help_menu": False,
+        "disable_contact_us": False,
         "docs_url": "test://docs",
+        "service_docs_url": None,
         "legal_url": "test://legal",
         "terms_of_service_url": "test://terms-of-service",
-        "current_year": datetime.now().year,
+        "current_year": 2025,
+        "feature_request_form_clickup_link": "test://clickup",
     }
 
     conf = context_processors.conf(request)

@@ -1,5 +1,5 @@
 import time
-
+import structlog
 from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from fullctl.django.rest.serializers.service_bridge import (
     StatusSerializer,
 )
 
-
+log = structlog.get_logger(__name__)
 class MethodFilter:
     def __init__(self, name):
         self.name = name
@@ -128,7 +128,11 @@ class DataViewSet(viewsets.ModelViewSet):
         return self._list(request, *args, **kwargs)
 
     def _list(self, request, *args, **kwargs):
-        qset = self.filter(self.get_queryset(), request)
+
+        try:
+            qset = self.filter(self.get_queryset(), request)
+        except ValueError:
+            return BadRequest(_("Invalid filters"))
 
         if not self.filtered and not self.allow_unfiltered:
             return BadRequest(_("Unfiltered listing not allowed for this endpoint"))

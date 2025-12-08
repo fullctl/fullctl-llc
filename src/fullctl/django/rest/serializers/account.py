@@ -53,7 +53,6 @@ class ASN(serializers.Serializer):
 
 @register
 class ContactMessage(serializers.Serializer):
-
     """
     Prepares a contact message for submission to the aaactl service bridge
     for the support contact backend.

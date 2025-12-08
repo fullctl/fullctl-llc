@@ -3,8 +3,8 @@ from datetime import datetime
 import structlog
 from django.conf import settings
 from django.http import HttpRequest
+
 from fullctl.django.auth import RemotePermissionsError
-from fullctl.django.models.concrete.account import Organization
 from fullctl.django.util import DEFAULT_FULLCTL_BRANDING
 from fullctl.service_bridge.aaactl import OrganizationBranding, ServiceApplication
 
@@ -19,10 +19,19 @@ def conf(request):
         "contact_us_email": settings.CONTACT_US_EMAIL,
         "no_reply_email": settings.NO_REPLY_EMAIL,
         "post_feature_request_url": settings.POST_FEATURE_REQUEST_URL,
+        "disable_feature_request": getattr(settings, "DISABLE_FEATURE_REQUEST", False),
+        "disable_help_menu": getattr(settings, "DISABLE_HELP_MENU", False),
+        "disable_contact_us": getattr(settings, "DISABLE_CONTACT_US", False),
         "docs_url": settings.DOCS_URL,
+        "service_docs_url": getattr(
+            settings, f"{settings.SERVICE_TAG.upper()}_DOCS_URL", None
+        ),
         "legal_url": settings.LEGAL_URL,
         "terms_of_service_url": settings.TERMS_OF_SERVICE_URL,
         "current_year": datetime.now().year,
+        "feature_request_form_clickup_link": getattr(
+            settings, "FEATURE_REQUEST_FORM_CLICKUP_LINK"
+        ),
     }
 
 
@@ -50,6 +59,7 @@ def request_can_see_service(request: HttpRequest, service_slug: str) -> bool:
 
     return perms.check(f"service.{service_slug}.{org.permission_id}", "r")
 
+
 def account_service(request):
     context = {}
     org = getattr(request, "org", None)
@@ -76,7 +86,9 @@ def account_service(request):
         branding = OrganizationBranding().first(org=branding_override)
 
         if not branding:
-            log.warning(f"Using branding override: {branding_override}, but branding does not exist in aaactl")
+            log.warning(
+                f"Using branding override: {branding_override}, but branding does not exist in aaactl"
+            )
 
     # otherwise check if the organization of the request has a branding applied
     # to it through aaactl (either on the org directly or through a BRANDING_ORG
@@ -90,7 +102,11 @@ def account_service(request):
         # or the branding set in the BRANDING_ORG setting
         branding = OrganizationBranding().first(best=org_slug)
 
-        log.info("Branding AAACTL", branding=branding.json if branding else None, org_slug=org_slug)
+        log.info(
+            "Branding AAACTL",
+            branding=branding.json if branding else None,
+            org_slug=org_slug,
+        )
 
     # last if there is no branding set yet, we would check http host
     # however for this to work some changes need to be made on the aaactl
@@ -106,6 +122,9 @@ def account_service(request):
             "css": branding.css,
             "dark_logo_url": branding.dark_logo_url,
             "light_logo_url": branding.light_logo_url,
+            # using getattr for backwards compatibility with
+            # old aaactl versions
+            "favicon_url": getattr(branding, "favicon_url", None),
             "custom_org": True,
             "show_logo": branding.show_logo,
         }
@@ -177,9 +196,11 @@ def account_service(request):
 
     if local_auth:
         context["service_info"] = {
-            "name": f"{settings.SERVICE_TAG} {context['org_branding']['name']}"
-            if context["org_branding"].get("name", None)
-            else settings.SERVICE_TAG,
+            "name": (
+                f"{settings.SERVICE_TAG} {context['org_branding']['name']}"
+                if context["org_branding"].get("name", None)
+                else settings.SERVICE_TAG
+            ),
             "slug": settings.SERVICE_TAG,
             "description": "Local permissions",
             "org_has_access": True,
@@ -187,7 +208,6 @@ def account_service(request):
         }
 
     return context
-
 
 
 def permissions(request):

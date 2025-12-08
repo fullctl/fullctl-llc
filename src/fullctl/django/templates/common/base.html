@@ -5,7 +5,11 @@
     <title>{% block "title" %}{{org_branding.name}}{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/ico" href="{% static "common/favicon.ico" %}">
+    {% if org_branding.custom_org and org_branding.favicon_url %}
+      <link rel="shortcut icon" type="image/ico" href="{{ org_branding.favicon_url }}">
+    {% else %}
+      <link rel="shortcut icon" type="image/ico" href="{% static "common/favicon.ico" %}">
+    {% endif %}
 
     {% block "js" %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

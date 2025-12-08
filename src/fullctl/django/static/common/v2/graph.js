@@ -16,7 +16,7 @@
 
     fullctl.graphs = {}
 
-    /** 
+    /**
      * override colors from fullctl colors for brending
      */
     fullctl.graphs.get_colors = function() {
@@ -112,21 +112,40 @@
       let selected_value = container.find('#date_range_select').val();
 
       if (selected_value === 'custom') {
-        let start_date = new Date(container.find(`#${dp_id_prefix}start_date`).val()).getTime() / 1000;
-        end_date = new Date(container.find(`#${dp_id_prefix}end_date`).val()).getTime() / 1000;
-        duration = end_date - start_date;
+        let start_date_str = container.find(`#${dp_id_prefix}start_date`).val();
+        let end_date_str = container.find(`#${dp_id_prefix}end_date`).val();
+
+        let start_date = new Date(start_date_str);
+        start_date.setHours(0, 0, 0, 0);
+
+        let end_date_obj = new Date(end_date_str);
+        end_date_obj.setHours(23, 59, 59, 999);
+
+        let start_timestamp = Math.floor(start_date.getTime() / 1000);
+        end_date = Math.floor(end_date_obj.getTime() / 1000);
+
+        duration = end_date - start_timestamp;
+
       } else if (selected_value === 'current_month') {
         let now = new Date();
         let start_of_month = new Date(now.getFullYear(), now.getMonth(), 1);
-        duration = end_date - start_of_month.getTime() / 1000;
+        start_of_month.setHours(0, 0, 0, 0);
+
+        duration = end_date - Math.floor(start_of_month.getTime() / 1000);
+
       } else if (selected_value === 'last_month') {
         let now = new Date();
         let start_of_last_month = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        start_of_last_month.setHours(0, 0, 0, 0);
+
         let end_of_last_month = new Date(now.getFullYear(), now.getMonth(), 0);
-        duration = end_of_last_month.getTime() / 1000 - start_of_last_month.getTime() / 1000;
-        end_date = end_of_last_month.getTime() / 1000;
+        end_of_last_month.setHours(23, 59, 59, 999);
+
+        duration = Math.floor(end_of_last_month.getTime() / 1000) - Math.floor(start_of_last_month.getTime() / 1000);
+        end_date = Math.floor(end_of_last_month.getTime() / 1000);
+
       } else {
-        duration = selected_value * 60 * 60;
+        duration = parseInt(selected_value) * 60 * 60;
       }
 
       return { end_date, duration };
@@ -175,8 +194,13 @@
             .x(function(d) { return x(d.timestamp * 1000); }) // Multiply by 1000 to convert unix timestamp to JavaScript timestamp
             .y(function(d) { return y(d.bps_out); });
 
-        // Calculate bps_in_peak and bps_out_low
+        // Calculate bps_in_peak and bps_out_peak
         const {bps_in_peak, bps_out_peak} = calculate_peak(data);
+
+        // Get the most recent bps_in and bps_out values
+        const lastDataPoint = data.length > 0 ? data[data.length - 1] : null;
+        const currentBpsIn = lastDataPoint ? lastDataPoint.bps_in || 0 : 0;
+        const currentBpsOut = lastDataPoint ? lastDataPoint.bps_out || 0 : 0;
 
         // Calculate the maximum data value
         const maxDataValue = d3.max(data, function(d) { return Math.max(d.bps_in, d.bps_out); });
@@ -293,6 +317,11 @@
             .attr("stroke-width", 1);
 
 
+        // calculate legend spacing based on total width and number of items
+        // with a min width of 120
+
+        let legendSpacing = Math.max(120, width / 4);
+
         // Add legend
         const legend = svg.append("g")
             .attr("font-family", "sans-serif")
@@ -301,13 +330,13 @@
             .attr("transform", "translate(0," + (height + margin.bottom - 20) + ")") // Move legend to the bottom
             .selectAll("g")
             .data([
-                {key: "bps_in", label: "bps IN"},
-                {key: "bps_out", label: "bps OUT"},
+                {key: "bps_in", label: "bps IN: " + format_y_axis(currentBpsIn)},
+                {key: "bps_out", label: "bps OUT: " + format_y_axis(currentBpsOut)},
                 {key: "bps_in_peak", label: "IN Peak: " + format_y_axis(bps_in_peak)},
                 {key: "bps_out_peak", label: "OUT Peak: " + format_y_axis(bps_out_peak)}
             ])
             .enter().append("g")
-            .attr("transform", function(d, i) { return "translate(" + (i * 120) + ",0)"; }); // Make legend horizontal
+            .attr("transform", function(d, i) { return "translate(" + (i * legendSpacing) + ",0)"; }); // Make legend horizontal
 
 
         legend.append("rect")
@@ -352,7 +381,7 @@
             if(fullctl.brand.graph.logo_theme) {
                 theme = fullctl.brand.graph.logo_theme;
             }
-            
+
             // get the logo path for the theme
             let brandLogoPath = fullctl.brand.logo[`url_${theme}`];
 
@@ -401,7 +430,7 @@
     }
 
     // VICTORIA METRICS TRAFFIC (MRTG AND SFLOW)
-    // they currently can be rendered with the same function since we're 
+    // they currently can be rendered with the same function since we're
     // just tracking bps_in and bps_out
 
     fullctl.graphs.render_graph_vm_mrtg_and_sflow = function(data, selector="#graph", titleLabel = "") {
@@ -470,7 +499,7 @@
     fullctl.graphs.RENDERER_BY_TYPE = {
         // legacy mrtg graphs rendered from rrd files
         "rrd_mrtg": fullctl.graphs.render_graph_from_file,
-        
+
         // mrtg graph rendered from victoria metrics data
         "vm_mrtg": fullctl.graphs.render_graph_from_file_vm_mrtg,
 
@@ -481,61 +510,62 @@
     /**
      * Function to show graphs
      * Either port or total traffic
-     * 
+     *
      * get_url is a function that returns the url to fetch the traffic data
      * it takes the graph container and the url attribute as arguments
-     * 
+     *
      * ```
      * function get_url(graph_container, url_attribute) {
      *  return graph_container.data(url_attribute).replace("/0/", "/"+$ctl.ixctl.ix()+"/")
      * }
      * ```
-     * 
-     * Proxy is used to pass the current context which can either be 
+     *
+     * Proxy is used to pass the current context which can either be
      * the total traffic tool or the member details tool
      */
 
     fullctl.graphs.show_graph = function(
         graph_container,
         graph_traffic_source,
-        end_date, 
+        end_date,
         duration,
         title,
         selector,
         get_url,
-        proxy
+        proxy,
+        prepare_params = (params) => {}
     ) {
         if(!graph_traffic_source) {
         // legacy default
         graph_traffic_source = "rrd_mrtg";
         }
-    
+
         if(proxy.$e.dev_tools) {
         proxy.$e.graph_traffic_source.text(graph_traffic_source);
         }
-    
+
         let renderer_function = fullctl.graphs.RENDERER_BY_TYPE[graph_traffic_source];
-    
+
         // split by underscore and take the first part
         // will be vm or rrd
         let metric_store = graph_traffic_source.split("_")[0];
-    
+
         if(!renderer_function) {
         throw new Error("No renderer function found for graph_traffic_source: " + graph_traffic_source);
         }
-    
+
         let url_attribute = (
-        graph_traffic_source !== "rrd_mrtg" ? 
-        `api-base-${graph_traffic_source.replace('_','-')}` : 
+        graph_traffic_source !== "rrd_mrtg" ?
+        `api-base-${graph_traffic_source.replace('_','-')}` :
         "api-base"
         );
 
         let url = get_url(graph_container, url_attribute)
         let params = [];
-    
+
         if(metric_store == "rrd") {
 
-            // the legacy RRD endpoint expects the following 
+            // the legacy RRD endpoint expects the following
             // parameters
 
             // start_time = unix timestamp of previous date
@@ -563,7 +593,7 @@
                 // and describes the total time period between start and end
 
                 if(duration <= 3600) {
-                    params.push('step=60');
+                    params.push('step=300');
                 } else if(duration <= 86400) {
                     params.push('step=300');
                 } else if(duration <= 86400 * 30) {
@@ -571,20 +601,25 @@
                 } else {
                     params.push('step=86400');
                 }
-                params.push('start=-'+duration+'s');
+                params.push('start='+(end_date-duration));
+                params.push('end='+end_date);
 
             } else {
                 params.push('step=300');
                 params.push('start=-24h');
             }
         }
-    
+
+        if(prepare_params) {
+            prepare_params(params);
+        }
+
         if (params.length > 0) {
         url += '?' + params.join('&');
         }
-    
+
         console.log("Requesting traffic data", {url, graph_traffic_source, metric_store});
-    
+
         renderer_function(
         url,
         selector,
@@ -602,7 +637,7 @@
         }
         })
     }
-    
+
 
 
 })();

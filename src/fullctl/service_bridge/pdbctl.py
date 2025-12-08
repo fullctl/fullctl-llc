@@ -2,8 +2,17 @@ try:
     from django.conf import settings
 
     DEFAULT_SERVICE_KEY = settings.SERVICE_KEY
-except ImportError:
+except Exception:
+    # Improperly configured or django not installed
+    # Improperly configured will be raised elsewhere in the app, so we can
+    # ignore it here
+    #
+    # this allows us to use the service bridge in non-django environments
     DEFAULT_SERVICE_KEY = ""
+
+    class settings:
+        PDBCTL_URL = ""
+
 
 from fullctl.service_bridge.client import Bridge, DataObject, url_join
 
@@ -16,7 +25,6 @@ class PeeringDBEntity(DataObject):
 
 
 class Pdbctl(Bridge):
-
     """
     Service bridge to pdbctl for peeringdb data
     retrieval

@@ -27,7 +27,7 @@
  */
 
 function replace_urls_with_links(jQueryResult) {
-  jQueryResult.contents().filter(function() {
+  jQueryResult.contents().find(function() {
     return this.nodeName != "A";
   }).each(function() {
     const text = $(this).text();
@@ -835,6 +835,35 @@ twentyc.rest.Widget = twentyc.cls.extend(
     clear_errors : function() {
       this.element.find('.validation-error').detach();
       this.element.find('.validation-error-indicator').removeClass("validation-error-indicator");
+      this.clear_error_hint();
+    },
+
+    /**
+     * Render general error hint. Reminding the user that there are errors
+     * and that they need to scroll up to see them.
+     *
+     * This is rendered into the .validation-error-hint element if it exists.
+     *
+     * @method render_error_hint
+     */
+
+    render_error_hint : function() {
+      if(this.element.find('.error-hint').length)
+        return;
+
+      const MESSAGE = "There are errors with your submission. Please scroll up to see them.";
+
+      this.element.find('.validation-error-hint').append($('<div>').addClass('error-hint').text(MESSAGE));
+    },
+
+    /**
+     * Clears the error hint
+     *
+     * @method clear_error_hint
+     */
+
+    clear_error_hint : function() {
+      this.element.find('.error-hint').detach();
     },
 
     /**
@@ -845,18 +874,45 @@ twentyc.rest.Widget = twentyc.cls.extend(
      * @param {Array} errors list of error strings
      */
 
-    render_error : function(key, errors) {
+    render_error : function(key, errors, group_selector) {
       if(!errors)
         return;
       var i;
       var error_node = $('<div>').addClass("validation-error");
-      var input = this.element.find('[name="'+key+'"]');
+
+      this.render_error_hint();
+
+      // clicking the error node should close it
+      error_node.click(function() {
+        $(this).detach();
+      });
+
+      // error node cursor should be a pointer
+      error_node.css("cursor", "pointer");
+
+      // key may be a sub group
+      if(!group_selector && this.element.find(`[data-validation-group="${key}"]`).length) {
+        let error_field_prefix = this.element.find(`[data-validation-group="${key}"]`).data("validation-group-field-prefix");
+        for(field_name in errors) {
+          this.render_error(`${error_field_prefix}${field_name}`, errors[field_name], `[data-validation-group="${key}"]`);
+        }
+        return;
+      }
+
+      if(!group_selector)
+        var input = this.element.find('[name="'+key+'"]');
+      else
+        var input = this.element.find(group_selector).find('[name="'+key+'"]');
+
       input.addClass("validation-error-indicator")
       for(i = 0; i < errors.length; i++) {
         error_node.append($('<p>').text(errors[i]))
       }
       if(input.attr("type") != "checkbox")
         error_node.insertAfter(input);
+
+      // move error node so bottom is aligned flush with top of input
+      error_node.css("top", (input.offset().top - error_node.outerHeight() - error_node.offset().top) + "px");
     },
 
     /**
@@ -867,6 +923,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
      */
 
     render_non_field_errors : function(errors) {
+      this.render_error_hint();
       error_node = $('<div>').addClass("alert alert-danger validation-error non-field-errors");
       for(let i = 0; i < errors.length; i++) {
         $(twentyc.rest).trigger("non-field-error", [errors[i], errors, i, error_node, this]);
@@ -919,7 +976,7 @@ twentyc.rest.Widget = twentyc.cls.extend(
           }
         });
       });
-      
+
       $(this).trigger("payload:after", [data]);
 
       return data;

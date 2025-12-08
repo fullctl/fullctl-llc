@@ -6,7 +6,6 @@ __all__ = [
 
 
 class ContactMessage(SimpleRateThrottle):
-
     """
     Rate limiting for contact messages to support.
     """

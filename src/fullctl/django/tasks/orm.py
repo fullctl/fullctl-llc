@@ -5,6 +5,7 @@ ORM based task delegation
 import time
 from datetime import timedelta
 
+import structlog
 from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.utils import timezone
@@ -13,13 +14,16 @@ from fullctl.django.models import (
     Task,
     TaskAlreadyStarted,
     TaskClaimed,
+    TaskHeartbeat,
     TaskSchedule,
     WorkerUnqualified,
 )
-from fullctl.django.models.concrete.tasks import TaskClaim, TaskLimitError
+from fullctl.django.models.concrete.tasks import TaskClaim, TaskLimitError, TaskScheduleClaimed
 from fullctl.django.tasks import requeue as requeue_task
 from fullctl.django.tasks import specify_task
 from fullctl.django.tasks.util import worker_id
+
+log = structlog.get_logger(__name__)
 
 # (Task, timestamp)
 # tasks that are in the recheck stack are not
@@ -84,9 +88,49 @@ def tasks_max_time_reached():
             continue
 
         time_delta = timedelta(seconds=task.max_run_time)
-        if (task.created + time_delta) < timezone.now():
+        if (task.updated + time_delta) < timezone.now():
             task.cancel("max run time reached")
             requeue_task(task)
+
+
+def cleanup_orphaned_running_tasks():
+    """
+    Marks running tasks as failed if their TaskHeartbeat has stopped
+    for longer than the configured threshold.
+    
+    This handles edge cases where tasks crash due to DB connection loss
+    or other failures and remain stuck in 'running' status indefinitely.
+    """
+    heartbeat_timeout = getattr(settings, "TASK_ORPHANED_HEARTBEAT_TIMEOUT", 30)
+    
+    cutoff_time = timezone.now() - timedelta(seconds=heartbeat_timeout)
+
+    running_tasks = Task.objects.filter(status="running", updated__lt=cutoff_time)
+    stale_heartbeats = TaskHeartbeat.objects.filter(
+        timestamp__lt=cutoff_time,
+        task__in=running_tasks
+    ).select_related("task")
+
+    if not stale_heartbeats.exists():
+        # we don't have stale hearbeats, if there are any running tasks
+        # we still need to check if they have a heartbeat at all. If not,
+        # we mark the task as failed. (Heartbeats should be created within the first couple of seconds of a task being started.)
+        for task in running_tasks:
+            if not TaskHeartbeat.objects.filter(task=task).exists():
+                task_age = timezone.now() - task.created
+                error_msg = f"Task {task.id} orphaned - task still `running` but no heartbeat was ever received. This should not happen. Task age: {task_age}"
+                log.info(error_msg)
+                set_task_as_failed(task, error_msg)
+
+        return
+
+    for heartbeat in stale_heartbeats:
+        task = specify_task(heartbeat.task)
+        if task:
+            error_msg = f"Task {task.id} orphaned - no heartbeat detected for {heartbeat_timeout} seconds. Last heartbeat: {heartbeat.timestamp}"
+            log.info(error_msg)
+            set_task_as_failed(task, error_msg)
+            heartbeat.delete()
 
 
 def fetch_tasks(limit=1, **filters):
@@ -201,7 +245,8 @@ def claim_task(task):
         task.save()
         return claim
     except IntegrityError as exc:
-        print(exc)
+        if not str(exc).startswith("duplicate key value violates unique constraint"):
+            log.error(exc)
         raise TaskClaimed(task)
 
 
@@ -227,5 +272,7 @@ def progress_schedules(**filters):
 
     try:
         schedule.spawn_tasks()
+    except TaskScheduleClaimed as exc:
+        log.info(f"Task schedule already claimed by another worker: {exc}")
     except (TaskAlreadyStarted, TaskLimitError):
         schedule.reschedule()

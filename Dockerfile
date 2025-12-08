@@ -1,6 +1,6 @@
 ARG python_ver=3.11
 ARG base_repo=python
-ARG base_tag=${python_ver}-alpine
+ARG base_tag=${python_ver}-alpine3.20
 
 ARG install_to=/srv/service
 ARG poetry_pin="==1.5.1"

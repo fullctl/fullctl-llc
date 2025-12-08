@@ -87,6 +87,27 @@
   </div>
 </div>
 
+
+<div class="modal" role="dialog" data-component="modal_no_button_lg_subtitle">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex flex-column flex-grow-1">
+          <h5 class="modal-title" data-element="title"></h5>
+          <p class="modal-subtitle mb-0 mt-1" data-element="subtitle"></p>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body controls" data-element="body">
+      </div>
+      <div class="modal-footer" data-element="footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="modal" role="dialog" data-component="modal_no_button_xl">
   <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
     <div class="modal-content">
@@ -169,6 +190,46 @@
   </div>
 </div>
 
+<div class="modal fade in modal-right" role="dialog" data-component="modal_continue_right">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-element="title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body controls d-flex p-0" data-element="body">
+      </div>
+      <div class="modal-footer row" data-element="footer">
+        <button type="button" data-element="button_submit" class="btn-submit submit primary col btn">
+          <span class="label">{% trans "Continue" %}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in modal-right" role="dialog" data-component="modal_delete_right">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-element="title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body controls d-flex p-0" data-element="body">
+      </div>
+      <div class="modal-footer row" data-element="footer">
+        <button type="button" data-element="button_submit" class="btn-submit submit primary col btn">
+          <span class="label">{% trans "Delete" %}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="modal" role="dialog" data-component="modal_save_lg">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
     <div class="modal-content">
@@ -209,3 +270,19 @@
 </div>
 
 
+<div class="modal" role="dialog" id="modal_feature_request" data-component="modal_feature_request">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-element="title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body controls" data-element="body">
+      </div>
+      <div class="modal-footer" data-element="footer">
+      </div>
+    </div>
+  </div>
+</div>

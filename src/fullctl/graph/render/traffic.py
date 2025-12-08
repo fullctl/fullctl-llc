@@ -89,6 +89,10 @@ def render_graph(data, selector="#graph", title_label="", service=None, save_pat
 
     # Calculate bps_in_peak and bps_out_peak
     bps_in_peak, bps_out_peak = calculate_peak(df)
+    
+    # Get current (most recent) bps_in and bps_out values
+    bps_in_current = df["bps_in"].iloc[-1]
+    bps_out_current = df["bps_out"].iloc[-1]
 
     # Plot bps_in and bps_out
     ax.plot(df["timestamp"], df["bps_in_smooth"], color="#d1ff27", linewidth=1.5)
@@ -127,8 +131,8 @@ def render_graph(data, selector="#graph", title_label="", service=None, save_pat
 
     # Add legend
     legend_elements = [
-        Line2D([0], [0], color="#d1ff27", lw=2, label="bps IN"),
-        Line2D([0], [0], color="#0d6efd", lw=2, label="bps OUT"),
+        Line2D([0], [0], color="#d1ff27", lw=2, label=f"bps IN: {format_y_axis(bps_in_current)}"),
+        Line2D([0], [0], color="#0d6efd", lw=2, label=f"bps OUT: {format_y_axis(bps_out_current)}"),
         Line2D(
             [0],
             [0],
@@ -184,6 +188,8 @@ def render_graph(data, selector="#graph", title_label="", service=None, save_pat
     # Save the resized image to a BytesIO object
     buf_resized = io.BytesIO()
     img_resized.save(buf_resized, format="png")
+    # close figure to prevent memory leak
+    plt.close(fig)
     buf_resized.seek(0)
 
     return buf_resized.getvalue()

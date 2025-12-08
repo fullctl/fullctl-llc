@@ -7,7 +7,7 @@ def sync_organizations(backend, details, response, uid, user, *args, **kwargs):
         organizations = social.extra_data.get("organizations", [])
 """
 
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group as GroupBase
 
 
 def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
@@ -53,6 +53,8 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
         return
 
     # add user to group
+    # get group model from user.groups meta
+    Group: GroupBase = user.groups.model
 
     for role in roles:
 
@@ -63,8 +65,7 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
         # only add user if they are not already in the group
 
         if group not in user.groups.all():
-
-            group.user_set.add(user)
+            user.groups.add(group)
 
     # remove user from groups they are not in anymore
 
@@ -78,7 +79,7 @@ def roles_to_groups(backend, details, response, uid, user, *args, **kwargs):
             continue
 
         if group.name not in roles:
-            group.user_set.remove(user)
+            user.groups.remove(group)
 
     # finally check org.is_admin and toggle user.is_staff and
     # user.is_superuser accordingly

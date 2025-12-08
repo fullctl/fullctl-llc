@@ -99,7 +99,6 @@ class OrganizationUser(serializers.Serializer):
 
 @register
 class ExpireSession(serializers.Serializer):
-
     """
     not implemented yet
     """

@@ -3,7 +3,6 @@ import logging
 
 from django.apps import apps
 from django.db import models
-from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
 from fullctl.django.models.abstract import HandleRefModel
@@ -34,7 +33,6 @@ def handler_choices():
 
 
 class service_bridge_action:
-
     """
     Decorates a function to be a service bridge action handler
 
@@ -58,7 +56,6 @@ class service_bridge_action:
 
 @register
 class ServiceBridgeActionTask(Task):
-
     """
     Task handler for ServiceBridgeAction
     """
@@ -83,7 +80,6 @@ class ServiceBridgeActionTask(Task):
 
 
 class ServiceBridgeAction(HandleRefModel):
-
     """
     Maps a service bridge class to a fullctl handle-ref model for either
     push or pull operations in a configurable fashion.
@@ -102,9 +98,7 @@ class ServiceBridgeAction(HandleRefModel):
     action = models.CharField(
         max_length=8, choices=(("pull", _("Pull")), ("push", _("Push"))), default="pull"
     )
-    function = models.CharField(
-        max_length=255, choices=lazy(handler_choices, list)(), null=True, blank=True
-    )
+    function = models.CharField(max_length=255, null=True, blank=True)
     data_map = models.JSONField(
         null=True,
         blank=True,
@@ -121,6 +115,10 @@ class ServiceBridgeAction(HandleRefModel):
         db_table = "fullctl_service_bridge_action"
         verbose_name = _("Service Bridge Action")
         verbose_name_plural = _("Service Bridge Actions")
+
+    @property
+    def function_choices(self):
+        return handler_choices()
 
     @property
     def target_model(self):
@@ -274,3 +272,11 @@ class ServiceBridgeAction(HandleRefModel):
                 )
                 return
             fn("pull", obj)
+
+    def clean(self):
+
+        # validate function choice
+
+        if self.function:
+            if self.function not in handlers:
+                raise models.ValidationError({"function": _("Unknown function choice")})

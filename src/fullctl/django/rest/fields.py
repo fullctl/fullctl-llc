@@ -2,7 +2,6 @@ from rest_framework.fields import ChoiceField
 
 
 class DynamicChoiceField(ChoiceField):
-
     """
     A rest serializer field that allows for dynamic choice values
     """

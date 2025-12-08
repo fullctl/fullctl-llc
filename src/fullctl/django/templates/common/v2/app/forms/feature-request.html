@@ -1,11 +1,14 @@
 {% load static i18n %}
 <form data-template="form_feature_request"
-  data-api-base="{% url "fullctl_account_api:user-contact-support" %}"
-  data-api-method="POST"
-  class="container-fluid"
+  data-api-base=""
+  class="container-fluid form_feature_request"
 >
-  <div class="form-group" data-api-submit="yes">
-    <label for="message">{% trans "Message" %}:</label>
-    <textarea class="form-control" placeholder="Message" id="message" name="message" style="height: 132px"></textarea>
-  </div>
+  <iframe class="clickup-embed clickup-dynamic-height"
+    src="{{ feature_request_form_clickup_link }}" onwheel=""
+    width="100%"
+    height="100%"
+    style="background: transparent; border: 1px solid #ccc;"
+  >
+    <script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
+  </iframe>
 </form>

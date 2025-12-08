@@ -11,7 +11,6 @@ from fullctl.django.models import Instance, Organization
 
 
 class require_auth:
-
     """
     decorate a view to require auth
     """
@@ -39,7 +38,6 @@ class require_auth:
 
 
 class load_instance:
-
     """
     decorator that loads the instance for the selected
     org.

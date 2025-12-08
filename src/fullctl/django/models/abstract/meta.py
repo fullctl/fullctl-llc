@@ -2,6 +2,7 @@
 Abstract classes to facilitate the fetching, caching and retrieving of meta data
 sourced from third party sources.
 """
+
 import json
 import re
 import time
@@ -48,7 +49,6 @@ class DataMixin:
 
 
 class Data(HandleRefModel):
-
     """
     Normalized object meta data
     """
@@ -90,7 +90,6 @@ class Data(HandleRefModel):
 
 
 class Request(HandleRefModel):
-
     """
     Handles logic for requesting and rate-throttling third party meta data
     """
@@ -372,6 +371,14 @@ class Request(HandleRefModel):
                 # older than the normal cache expiry we will ignore it and send a new request
                 return None
 
+        if cached.http_status >= 500:
+            server_error_cache_expiry = getattr(settings, "SERVER_ERROR_CACHE_EXPIRY", 60)
+            
+            if tdiff > server_error_cache_expiry:
+                # if the cached request is a 5xx error and it's older than the configured time
+                # we will ignore it and send a new request
+                return None
+
         return cached
 
     @classmethod
@@ -425,7 +432,6 @@ class Request(HandleRefModel):
 
 
 class Response(HandleRefModel):
-
     """
     Maintains a cache for third party data responses
     """
